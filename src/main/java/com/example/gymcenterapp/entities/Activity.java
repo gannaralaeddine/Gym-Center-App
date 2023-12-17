@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,5 +30,13 @@ public class Activity implements Serializable
 
     private String actImage;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "categoryId",referencedColumnName = "catId")
+    private Category category;
+
+    @ElementCollection
+    @OneToMany(mappedBy = "activity")
+    private  List<Subscription> actSubscriptions;
+    
     //private List<Coach> actCoaches;
 }

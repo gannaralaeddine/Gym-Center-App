@@ -24,9 +24,11 @@ public class Subscription implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long subId;
 
-    @ElementCollection
-    private List<Category> subCategories;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "activityId",referencedColumnName = "actId")
+    private Activity activity;
 
-    @ElementCollection
-    private  List<Activity> subActivities;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "categoryId",referencedColumnName = "catId")
+    private Category category;
 }

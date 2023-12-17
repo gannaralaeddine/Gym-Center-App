@@ -4,9 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
+import java.util.List;
 import java.io.Serializable;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -28,4 +29,12 @@ public class Category implements Serializable
     private String catDescription;
 
     private String catImage;
+
+    @ElementCollection
+    @OneToMany(mappedBy = "category")
+    private List<Activity> catActivities;
+
+    @ElementCollection
+    @OneToMany(mappedBy = "category")
+    private List<Subscription> catSubscriptions;
 }

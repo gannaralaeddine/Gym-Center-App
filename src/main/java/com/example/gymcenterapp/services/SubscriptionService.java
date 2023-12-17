@@ -37,8 +37,8 @@ public class SubscriptionService implements ISubscriptionService
 
         if (existingSubscription != null)
         {
-            existingSubscription.setSubCategories(subscription.getSubCategories());
-            existingSubscription.setSubActivities(subscription.getSubActivities());
+            existingSubscription.setCategory(subscription.getCategory());
+            existingSubscription.setActivity(subscription.getActivity());
             return subscriptionRepository.save(existingSubscription);
         }
 
