@@ -1,10 +1,13 @@
 package com.example.gymcenterapp.controllers;
 
+import com.example.gymcenterapp.entities.Role;
 import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.repositories.UserRepository;
+import com.example.gymcenterapp.services.RoleServiceImpl;
 import com.example.gymcenterapp.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,12 +15,13 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/user")
-@CrossOrigin(origins = "http://localhost:35729")
 public class UserController
 {
     @Autowired
     UserService userService;
 
+    @Autowired
+    RoleServiceImpl roleService;
 
     @GetMapping("/retrieve-all-users")
     @ResponseBody
@@ -33,9 +37,18 @@ public class UserController
     }
 
 
-    @PostMapping(value = "/add-user")
+    @PostMapping(value = "/register-user")
     @ResponseBody
-    public User addUser(@RequestBody User user) {
+    public User addUser(@RequestBody User user)
+    {
         return userService.addUser(user);
+    }
+
+
+
+    @PostMapping(value = "/add-role")
+    @ResponseBody
+    public Role addURole(@RequestBody Role role) {
+        return roleService.addRole(role);
     }
 }

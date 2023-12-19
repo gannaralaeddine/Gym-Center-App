@@ -1,15 +1,14 @@
 package com.example.gymcenterapp.entities;
 
-import com.example.gymcenterapp.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,12 +21,13 @@ public class User implements Serializable
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     private String userEmail;
 
-    private String userName;
+    private String username;
 
     private Date userBirthDate;
 
@@ -51,6 +51,11 @@ public class User implements Serializable
 
     private String userPassword;
 
-    @ElementCollection
-    private List<Role> userRoles;
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "user_roles",
+        joinColumns = {@JoinColumn (name = "fk_user_id", referencedColumnName = "user_id")},
+            inverseJoinColumns = { @JoinColumn(name = "fk_role_id", referencedColumnName = "role_id") }
+    )
+    private Set<Role> roles = new HashSet<>();
+
 }
