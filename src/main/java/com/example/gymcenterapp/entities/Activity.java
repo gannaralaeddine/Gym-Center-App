@@ -15,19 +15,22 @@ import java.util.List;
 @Entity
 @Table(name = "Activité")
 @Embeddable
-
 public class Activity implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JoinColumn(name = "activityId")
     private Long actId;
 
+    @JoinColumn(name = "activityName")
     private String actName;
 
+    @JoinColumn(name = "activityDescription")
     private String actDescription;
 
+    @JoinColumn(name = "activityImage")
     private String actImage;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -37,6 +40,12 @@ public class Activity implements Serializable
     @ElementCollection
     @OneToMany(mappedBy = "activity")
     private  List<Subscription> actSubscriptions;
-    
-    //private List<Coach> actCoaches;
+
+    @ElementCollection
+    @OneToMany(mappedBy = "sessionActivity")
+    private  List<Session> actSessions;
+
+    @ElementCollection
+    @ManyToMany(mappedBy = "coachSpecialities")
+    private List<Coach> actCoaches;
 }
