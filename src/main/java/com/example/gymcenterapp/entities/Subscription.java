@@ -26,12 +26,12 @@ public class Subscription implements Serializable
 
     @JoinColumn(name = "subscriptionPrice")
     private float subPrice;
-    
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "activityId",referencedColumnName = "actId")
     private Activity activity;
 
-    @ElementCollection
+
     @ManyToMany(mappedBy = "memberSubscriptions")
     private List<Member> subscriptionMembers;
 }

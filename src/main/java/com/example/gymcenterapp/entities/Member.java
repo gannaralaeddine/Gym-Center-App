@@ -1,16 +1,8 @@
 package com.example.gymcenterapp.entities;
 
 import java.util.List;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,25 +17,21 @@ import lombok.Setter;
 @Embeddable
 public class Member extends User
 {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberId;
 
-    @ElementCollection
-    @ManyToMany(mappedBy = "subscriptionMembers")
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-        name = "members_subscriptions",
-        joinColumns = @JoinColumn(name = "memberId",referencedColumnName = "memberId"),
-        inverseJoinColumns = @JoinColumn(name = "subscriptionId",referencedColumnName = "subId")
+            name = "members_subscriptions",
+            joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "subscriptionId",referencedColumnName = "subId")
     )
     private List<Subscription> memberSubscriptions;
 
-    @ElementCollection
-    @ManyToMany(mappedBy = "sessionMembers")
+
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-        name = "members_sessions",
-        joinColumns = @JoinColumn(name = "memberId",referencedColumnName = "memberId"),
-        inverseJoinColumns = @JoinColumn(name = "sessionId",referencedColumnName = "sessionId")
+            name = "members_sessions",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "sessionId",referencedColumnName = "sessionId")
     )
     private List<Session> memberSessions;
 }

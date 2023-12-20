@@ -37,15 +37,15 @@ public class Activity implements Serializable
     @JoinColumn(name = "categoryId",referencedColumnName = "catId")
     private Category category;
 
-    @ElementCollection
+
     @OneToMany(mappedBy = "activity")
     private  List<Subscription> actSubscriptions;
 
-    @ElementCollection
+
     @OneToMany(mappedBy = "sessionActivity")
     private  List<Session> actSessions;
 
-    @ElementCollection
+
     @ManyToMany(mappedBy = "coachSpecialities")
     private List<Coach> actCoaches;
 }

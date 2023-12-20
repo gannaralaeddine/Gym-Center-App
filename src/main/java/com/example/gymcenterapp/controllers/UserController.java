@@ -2,12 +2,10 @@ package com.example.gymcenterapp.controllers;
 
 import com.example.gymcenterapp.entities.Role;
 import com.example.gymcenterapp.entities.User;
-import com.example.gymcenterapp.repositories.UserRepository;
 import com.example.gymcenterapp.services.RoleServiceImpl;
 import com.example.gymcenterapp.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

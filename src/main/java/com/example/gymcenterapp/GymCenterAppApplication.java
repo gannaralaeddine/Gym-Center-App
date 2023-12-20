@@ -4,7 +4,6 @@ import com.example.gymcenterapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -59,6 +58,11 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/user/retrieve-all-users").hasAnyRole("ADMIN")
                 .antMatchers("/user/register-user").permitAll()
                 .antMatchers("/user/add-role").permitAll()
+
+                .antMatchers("/category/add-category").permitAll()
+
+                .antMatchers("/activity/add-activity").permitAll()
+
                 .anyRequest().authenticated().and().httpBasic();
     }
 }

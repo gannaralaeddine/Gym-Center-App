@@ -26,17 +26,17 @@ public class Session
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long sessionId; 
+    private Long sessionId;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "activityId",referencedColumnName = "actId")
     private Activity sessionActivity;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "coachId",referencedColumnName = "coachId")
+    @JoinColumn(name = "user_id",referencedColumnName = "user_id")
     private Coach sessionCoach;
 
-    @ElementCollection
+
     @ManyToMany(mappedBy = "memberSessions")
-    private List<Member> sessionMembers; 
+    private List<Member> sessionMembers;
 }

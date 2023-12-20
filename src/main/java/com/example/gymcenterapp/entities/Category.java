@@ -33,7 +33,7 @@ public class Category implements Serializable
     @JoinColumn(name = "categoryImage")
     private String catImage;
 
-    @ElementCollection
+
     @OneToMany(mappedBy = "category")
     private List<Activity> catActivities;
 }
