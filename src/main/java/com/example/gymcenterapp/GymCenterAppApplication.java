@@ -55,12 +55,16 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/user/retrieve-all-users").hasAnyRole("ADMIN")
+                .antMatchers("/user/retrieve-all-users").permitAll()//.hasAnyRole("ADMIN")
                 .antMatchers("/user/register-user").permitAll()
                 .antMatchers("/user/add-role").permitAll()
 
                 .antMatchers("/category/add-category").permitAll()
+                .antMatchers("/category/retrieve-all-categories").permitAll()
 
+
+                .antMatchers("/activity/retrieve-all-activities").permitAll()
+                .antMatchers("/activity/assignCategoryToActivity/{category-id}/{activity-id}").permitAll()
                 .antMatchers("/activity/add-activity").permitAll()
 
                 .anyRequest().authenticated().and().httpBasic();

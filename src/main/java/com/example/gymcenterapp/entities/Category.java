@@ -1,12 +1,15 @@
 package com.example.gymcenterapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.io.Serializable;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,7 +36,7 @@ public class Category implements Serializable
     @JoinColumn(name = "categoryImage")
     private String catImage;
 
-
+    @JsonIgnore
     @OneToMany(mappedBy = "category")
     private List<Activity> catActivities;
 }
