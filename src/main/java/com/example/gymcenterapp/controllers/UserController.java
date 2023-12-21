@@ -4,6 +4,7 @@ import com.example.gymcenterapp.entities.Role;
 import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.services.RoleServiceImpl;
 import com.example.gymcenterapp.services.UserService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,13 +13,13 @@ import java.util.List;
 
 @RestController
 @Slf4j
+@AllArgsConstructor
 @RequestMapping("/user")
 public class UserController
 {
-    @Autowired
+
     UserService userService;
 
-    @Autowired
     RoleServiceImpl roleService;
 
     @GetMapping("/retrieve-all-users")

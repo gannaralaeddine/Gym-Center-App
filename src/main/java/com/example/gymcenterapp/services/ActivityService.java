@@ -36,7 +36,7 @@ public class ActivityService implements IActivityService
             existingActivity.setActName(activity.getActName());
             existingActivity.setActDescription(activity.getActDescription());
             existingActivity.setActImage(activity.getActImage());
-            //existingActivity.setActCoaches(activity.getActCoaches());
+            existingActivity.setCategory(activity.getCategory());
             return activityRepository.save(existingActivity);
         }
 

@@ -1,6 +1,7 @@
 package com.example.gymcenterapp.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,6 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "Catégorie")
 @Embeddable
 public class Category implements Serializable
 {
@@ -36,7 +36,9 @@ public class Category implements Serializable
     @JoinColumn(name = "categoryImage")
     private String catImage;
 
+
     @JsonIgnore
-    @OneToMany(mappedBy = "category")
-    private List<Activity> catActivities;
+    @OneToMany
+    @JoinColumn(name = "categoryId")
+    private List<Activity> categoryActivities;
 }

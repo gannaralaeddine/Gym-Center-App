@@ -5,7 +5,7 @@ import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.interfaces.IUserService;
 import com.example.gymcenterapp.repositories.RoleRepository;
 import com.example.gymcenterapp.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,14 +16,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@AllArgsConstructor
 @Service
 public class UserService implements IUserService, UserDetailsService
 {
 
-    @Autowired
     UserRepository userRepository;
 
-    @Autowired
     RoleRepository roleRepository;
 
     @Override
@@ -37,8 +36,9 @@ public class UserService implements IUserService, UserDetailsService
             System.out.println("user roles: " + role.getRoleId());
             if (role.getRoleId() != null)
             {
-                Role newRole = roleRepository.findById(role.getRoleId()).get();
+                Role newRole = roleRepository.findById(role.getRoleId()).orElse(null);
 
+                assert newRole != null;
                 newRole.getUsers().add(user);
 
                 roles.add(newRole);

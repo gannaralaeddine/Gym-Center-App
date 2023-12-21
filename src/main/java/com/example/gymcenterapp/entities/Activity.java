@@ -1,5 +1,6 @@
 package com.example.gymcenterapp.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,8 +34,9 @@ public class Activity implements Serializable
     @JoinColumn(name = "activityImage")
     private String actImage;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "categoryId",referencedColumnName = "catId")
+
+    @ManyToOne
+    @JoinColumn(name = "categoryId")
     private Category category;
 
 
