@@ -5,12 +5,10 @@ import com.example.gymcenterapp.repositories.ActivityRepository;
 import com.example.gymcenterapp.repositories.CategoryRepository;
 import com.example.gymcenterapp.services.ActivityService;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@Slf4j
 @RequestMapping("/activity")
 @AllArgsConstructor
 
@@ -43,6 +41,4 @@ public class ActivityController
 
     @DeleteMapping(value = "/delete-activity/{activity-id}")
     public void deleteActivity(@PathVariable("activity-id") Long activityId) { activityService.deleteActivity(activityId); }
-
-
 }

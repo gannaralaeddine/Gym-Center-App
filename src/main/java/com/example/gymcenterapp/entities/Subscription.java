@@ -13,7 +13,6 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "Abonnement")
 @Embeddable
 public class Subscription implements Serializable
 {

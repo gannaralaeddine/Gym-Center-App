@@ -13,7 +13,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "Membre")
 @Embeddable
 public class Member extends User
 {

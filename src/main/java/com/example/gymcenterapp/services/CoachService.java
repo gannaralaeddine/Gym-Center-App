@@ -33,6 +33,20 @@ public class CoachService implements ICoachService
 
         if (existingCoach != null)
         {
+            existingCoach.setUserEmail(coach.getUserEmail());
+            existingCoach.setUsername(coach.getUsername());
+            existingCoach.setUserBirthDate(coach.getUserBirthDate());
+            existingCoach.setUserPhoneNumber(coach.getUserPhoneNumber());
+            existingCoach.setUserCity(coach.getUserCity());
+            existingCoach.setUserState(coach.getUserCountry());
+            existingCoach.setUserCountry(coach.getUserCountry());
+            existingCoach.setUserGender(coach.getUserGender());
+            existingCoach.setUserHeight(coach.getUserHeight());
+            existingCoach.setUserWeight(coach.getUserWeight());
+            existingCoach.setUserPicture(coach.getUserPicture());
+            existingCoach.setUserZipCode(coach.getUserZipCode());
+            existingCoach.setUserPassword(coach.getUserPassword());
+            existingCoach.setRoles(coach.getRoles());
             existingCoach.setCoachSessions(coach.getCoachSessions());
             existingCoach.setCoachSpecialities(coach.getCoachSpecialities());
             return coachRepository.save(existingCoach);

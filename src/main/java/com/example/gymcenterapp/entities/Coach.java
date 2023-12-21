@@ -2,6 +2,8 @@ package com.example.gymcenterapp.entities;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +15,6 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "Coach")
 @Embeddable
 public class Coach extends User
 {
@@ -28,6 +29,7 @@ public class Coach extends User
 
 
     @OneToMany(mappedBy = "sessionCoach")
+    @JsonIgnore
     private List<Session> coachSessions;
 
 }

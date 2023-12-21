@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -13,7 +16,6 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "Activité")
 @Embeddable
 public class Activity implements Serializable
 {
@@ -40,10 +42,12 @@ public class Activity implements Serializable
 
 
     @OneToMany(mappedBy = "activity")
+    @JsonIgnore
     private  List<Subscription> actSubscriptions;
 
 
     @OneToMany(mappedBy = "sessionActivity")
+    @JsonIgnore
     private  List<Session> actSessions;
 
 

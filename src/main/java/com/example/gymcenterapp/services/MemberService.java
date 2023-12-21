@@ -33,6 +33,20 @@ public class MemberService implements IMemberService
 
         if (existingMember != null)
         {
+            existingMember.setUserEmail(member.getUserEmail());
+            existingMember.setUsername(member.getUsername());
+            existingMember.setUserBirthDate(member.getUserBirthDate());
+            existingMember.setUserPhoneNumber(member.getUserPhoneNumber());
+            existingMember.setUserCity(member.getUserCity());
+            existingMember.setUserState(member.getUserCountry());
+            existingMember.setUserCountry(member.getUserCountry());
+            existingMember.setUserGender(member.getUserGender());
+            existingMember.setUserHeight(member.getUserHeight());
+            existingMember.setUserWeight(member.getUserWeight());
+            existingMember.setUserPicture(member.getUserPicture());
+            existingMember.setUserZipCode(member.getUserZipCode());
+            existingMember.setUserPassword(member.getUserPassword());
+            existingMember.setRoles(member.getRoles());
             existingMember.setMemberSessions(member.getMemberSessions());
             existingMember.setMemberSubscriptions(member.getMemberSubscriptions());
             return memberRepository.save(existingMember);

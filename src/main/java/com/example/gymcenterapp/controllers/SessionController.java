@@ -34,6 +34,6 @@ public class SessionController
     public Session updateSession(@PathVariable("session-id") Long sessionId,@RequestBody Session session) { return sessionService.updateSession(sessionId,session); }
 
 
-    @DeleteMapping(value = "/delete-Session/{Session-id}")
+    @DeleteMapping(value = "/delete-session/{Session-id}")
     public void deleteSession(@PathVariable("Session-id") Long SessionId) { sessionService.deleteSession(SessionId); }
 }

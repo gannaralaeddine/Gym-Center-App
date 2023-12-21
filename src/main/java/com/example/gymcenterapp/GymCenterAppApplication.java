@@ -60,8 +60,34 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/user/add-role").permitAll()
 
                 .antMatchers("/category/add-category").permitAll()
+                .antMatchers("/category/update-category/{id}").permitAll()
+                .antMatchers("/category/delete-category/{id}").permitAll()
+                .antMatchers("/category/retrieve-category/{id}").permitAll()    
                 .antMatchers("/category/retrieve-all-categories").permitAll()
 
+                .antMatchers("/coach/add-coach").permitAll()
+                .antMatchers("/coach/update-coach/{coach-id}").permitAll()
+                .antMatchers("/coach/delete-coach/{coach-id}").permitAll()
+                .antMatchers("/coach/retrieve-coach/{coach-id}").permitAll()    
+                .antMatchers("/coach/retrieve-all-coaches").permitAll()
+
+                .antMatchers("/member/add-member").permitAll()
+                .antMatchers("/member/update-member/{member-id}").permitAll()
+                .antMatchers("/member/delete-member/{member-id}").permitAll()
+                .antMatchers("/member/retrieve-member/{member-id}").permitAll()    
+                .antMatchers("/member/retrieve-all-members").permitAll()
+
+                .antMatchers("/session/add-session").permitAll()
+                .antMatchers("/session/update-session/{session-id}").permitAll()
+                .antMatchers("/session/delete-session/{session-id}").permitAll()
+                .antMatchers("/session/retrieve-session/{session-id}").permitAll()    
+                .antMatchers("/session/retrieve-all-sessions").permitAll()
+
+                .antMatchers("/subscription/add-subscription").permitAll()
+                .antMatchers("/subscription/update-subscription/{subscription-id}").permitAll()
+                .antMatchers("/subscription/delete-subscription/{subscription-id}").permitAll()
+                .antMatchers("/subscription/retrieve-subscription/{subscription-id}").permitAll()    
+                .antMatchers("/subscription/retrieve-all-subscriptions").permitAll()
 
                 .antMatchers("/activity/retrieve-all-activities").permitAll()
                 .antMatchers("/activity/add-activity").permitAll()
