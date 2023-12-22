@@ -36,7 +36,7 @@ public class Activity implements Serializable
     private String actImage;
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "categoryId")
     private Category category;
 

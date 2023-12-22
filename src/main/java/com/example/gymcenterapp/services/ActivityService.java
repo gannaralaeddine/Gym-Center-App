@@ -47,16 +47,6 @@ public class ActivityService implements IActivityService
     @Override
     public List<Activity> getCategoryActivities(Long categoryId) 
     {
-        /*List<Activity> assignedActivities = new ArrayList<Activity>();
-        List<Activity> listActivities = activityRepository.findAll();
-        for (Activity activity : listActivities) 
-        {
-            if (activity.getCategory().getCatId() == categoryId)
-                assignedActivities.add(activity);
-            
-        }
-        return assignedActivities;  */
-
         return activityRepository.getCategoryActivities(categoryId);
     }
 
