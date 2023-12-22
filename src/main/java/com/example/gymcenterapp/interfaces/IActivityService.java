@@ -1,8 +1,8 @@
 package com.example.gymcenterapp.interfaces;
 
 import com.example.gymcenterapp.entities.Activity;
-
 import java.util.List;
+
 
 public interface IActivityService
 {
@@ -15,4 +15,6 @@ public interface IActivityService
     void deleteActivity(Long id);
 
     Activity updateActivity(Long id, Activity activity);
+
+    List<Activity> assignActivitiesToCategory(Long categoryId);
 }

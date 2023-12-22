@@ -5,7 +5,11 @@ import com.example.gymcenterapp.interfaces.IActivityService;
 import com.example.gymcenterapp.repositories.ActivityRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -42,4 +46,20 @@ public class ActivityService implements IActivityService
 
         return null;
     }
+
+    @Override
+    public List<Activity> assignActivitiesToCategory(Long categoryId) 
+    {
+        List<Activity> assignedActivities = new ArrayList<Activity>();// = new HashSet<Activity>();
+        List<Activity> listActivities = activityRepository.findAll();
+        for (Activity activity : listActivities) 
+        {
+            if (activity.getCategory().getCatId() == categoryId)
+                assignedActivities.add(activity);
+            
+        }
+        return assignedActivities;
+    }
+
+
 }

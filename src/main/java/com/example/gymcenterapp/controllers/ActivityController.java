@@ -41,4 +41,8 @@ public class ActivityController
 
     @DeleteMapping(value = "/delete-activity/{activity-id}")
     public void deleteActivity(@PathVariable("activity-id") Long activityId) { activityService.deleteActivity(activityId); }
+
+    @PutMapping(value = "/assign-activities/{categoryId}")
+    @ResponseBody
+    public List<Activity> assignActivitiesToCategory(@PathVariable Long categoryId) { return activityService.assignActivitiesToCategory(categoryId); }
 }

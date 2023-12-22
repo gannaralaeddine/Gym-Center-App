@@ -35,7 +35,7 @@ public class Category implements Serializable
 
 
     @JsonIgnore
-    @OneToMany
-    @JoinColumn(name = "categoryId")
+    @OneToMany(mappedBy = "category")
+    //@JoinColumn(name = "categoryId")
     private List<Activity> categoryActivities;
 }

@@ -36,7 +36,7 @@ public class Activity implements Serializable
     private String actImage;
 
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "categoryId")
     private Category category;
 
