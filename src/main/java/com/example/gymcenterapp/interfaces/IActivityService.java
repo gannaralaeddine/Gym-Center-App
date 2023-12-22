@@ -16,5 +16,5 @@ public interface IActivityService
 
     Activity updateActivity(Long id, Activity activity);
 
-    List<Activity> assignActivitiesToCategory(Long categoryId);
+    List<Activity> getCategoryActivities(Long categoryId);
 }
