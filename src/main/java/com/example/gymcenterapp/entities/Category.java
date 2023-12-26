@@ -30,9 +30,11 @@ public class Category implements Serializable
     @JoinColumn(name = "categoryDescription")
     private String catDescription;
 
-    @JoinColumn(name = "categoryImage")
     private String catImage;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "imageCategory")
+    private List<ImageData> categoryImages;
 
     @JsonIgnore
     @OneToMany(mappedBy = "category")

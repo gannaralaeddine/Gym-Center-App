@@ -1,10 +1,17 @@
 package com.example.gymcenterapp.services;
 
 import com.example.gymcenterapp.entities.Category;
+import com.example.gymcenterapp.entities.ImageData;
 import com.example.gymcenterapp.interfaces.ICategoryService;
 import com.example.gymcenterapp.repositories.CategoryRepository;
+import com.example.gymcenterapp.repositories.ImageDataRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -12,11 +19,21 @@ import java.util.List;
 
 public class CategoryService implements ICategoryService
 {
+
+    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\categories\\";
+
     CategoryRepository categoryRepository;
 
+    ImageDataRepository imageDataRepository;
 
     @Override
-    public Category addCategory(Category category) { return categoryRepository.save(category); }
+    public ImageData addCategory(Category category, MultipartFile file) throws IOException {
+
+
+        Category cat = categoryRepository.save(category);
+
+        return uploadImage(file, cat);
+    }
 
     @Override
     public List<Category> retrieveAllCategories() { return categoryRepository.findAll(); }
@@ -39,10 +56,34 @@ public class CategoryService implements ICategoryService
         {
             existingCategory.setCatName(category.getCatName());
             existingCategory.setCatDescription(category.getCatDescription());
-            existingCategory.setCatImage(category.getCatImage());
             return categoryRepository.save(existingCategory);
         }
 
         return null;
     }
+
+    @Override
+    public ImageData uploadImage(MultipartFile image, Category category) throws IOException {
+
+        String filePath = directory+image.getOriginalFilename();
+
+
+        ImageData imageData = ImageData.builder()
+                .imageName(image.getOriginalFilename())
+                .imageType(image.getContentType())
+                .imageSize((image.getSize()))
+                .imageUrl(filePath)
+                .build();
+
+        image.transferTo(new File(filePath));
+
+        imageData.setImageCategory(category);
+
+        category.setCatImage(filePath);
+        categoryRepository.save(category);
+
+        return imageDataRepository.save(imageData);
+    }
+
+
 }
