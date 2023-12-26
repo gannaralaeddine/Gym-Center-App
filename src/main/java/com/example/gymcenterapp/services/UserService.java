@@ -63,8 +63,23 @@ public class UserService implements IUserService, UserDetailsService
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
+    public int numberOfUsers() {
+        return userRepository.numberOfUsers();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException
     {
-        return new UserDetailsPrincipal(userRepository.findByUsername(username));
+        User user = userRepository.findByEmail(email);
+        if (user != null)
+        {
+            return new UserDetailsPrincipal(userRepository.findByEmail(email));
+        }
+        else
+        {
+            System.out.println("User by email is null " );
+            return null;
+        }
+
     }
 }

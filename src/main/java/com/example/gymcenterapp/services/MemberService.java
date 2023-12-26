@@ -34,7 +34,6 @@ public class MemberService implements IMemberService
         if (existingMember != null)
         {
             existingMember.setUserEmail(member.getUserEmail());
-            existingMember.setUsername(member.getUsername());
             existingMember.setUserBirthDate(member.getUserBirthDate());
             existingMember.setUserPhoneNumber(member.getUserPhoneNumber());
             existingMember.setUserCity(member.getUserCity());

@@ -34,7 +34,6 @@ public class CoachService implements ICoachService
         if (existingCoach != null)
         {
             existingCoach.setUserEmail(coach.getUserEmail());
-            existingCoach.setUsername(coach.getUsername());
             existingCoach.setUserBirthDate(coach.getUserBirthDate());
             existingCoach.setUserPhoneNumber(coach.getUserPhoneNumber());
             existingCoach.setUserCity(coach.getUserCity());

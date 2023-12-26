@@ -26,7 +26,9 @@ public class User implements Serializable
 
     private String userEmail;
 
-    private String username;
+    private String userFirstName;
+
+    private String userLastName;
 
     private Date userBirthDate;
 
@@ -50,7 +52,7 @@ public class User implements Serializable
 
     private String userPassword;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
         joinColumns = {@JoinColumn (name = "fk_user_id", referencedColumnName = "user_id")},
             inverseJoinColumns = { @JoinColumn(name = "fk_role_id", referencedColumnName = "role_id") }

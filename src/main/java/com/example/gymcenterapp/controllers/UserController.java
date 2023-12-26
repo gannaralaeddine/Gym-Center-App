@@ -49,4 +49,11 @@ public class UserController
     public Role addURole(@RequestBody Role role) {
         return roleService.addRole(role);
     }
+
+    @GetMapping(value = "/number-of-users")
+    @ResponseBody
+    public int numberOfUsers() {
+        return userService.numberOfUsers();
+    }
+
 }

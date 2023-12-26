@@ -1,10 +1,12 @@
 package com.example.gymcenterapp;
 
 import com.example.gymcenterapp.services.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,11 +21,11 @@ import org.springframework.web.filter.CorsFilter;
 import java.util.Arrays;
 
 @EnableWebSecurity
+@AllArgsConstructor
 @SpringBootApplication//(exclude = { SecurityAutoConfiguration.class })
 public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
 {
 
-    @Autowired
     UserService userService;
 
     public static void main(String[] args) {
@@ -44,6 +46,13 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
     }
 
     @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception
+    {
+        return super.authenticationManagerBean();
+    }
+
+    @Bean
     DaoAuthenticationProvider daoAuthenticationProvider ()
     {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -60,9 +69,13 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
         http
                 .csrf().disable()
                 .authorizeRequests()
+
+                .antMatchers("/auth/login").permitAll()
+
                 .antMatchers("/user/retrieve-all-users").permitAll()//.hasAnyRole("ADMIN")
                 .antMatchers("/user/register-user").permitAll()
                 .antMatchers("/user/add-role").permitAll()
+                .antMatchers("/user/number-of-users").permitAll()
 
                 .antMatchers("/category/add-category").permitAll()
                 .antMatchers("/category/update-category/{id}").permitAll()

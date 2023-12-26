@@ -25,7 +25,10 @@ public class CategoryService implements ICategoryService
     public Category retrieveCategory(Long id) { return categoryRepository.findById(id).orElse(null); }
 
     @Override
-    public void deleteCategory(Long id) { categoryRepository.deleteById(id);}
+    public void deleteCategory(Long id)
+    {
+        categoryRepository.deleteById(id);
+    }
 
     @Override
     public Category updateCategory(Long id, Category category)

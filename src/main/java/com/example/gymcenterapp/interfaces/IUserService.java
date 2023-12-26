@@ -11,4 +11,6 @@ public interface IUserService
     List<User> retrieveAllUsers();
 
     User retrieveUser(Long id);
+
+    int numberOfUsers();
 }
