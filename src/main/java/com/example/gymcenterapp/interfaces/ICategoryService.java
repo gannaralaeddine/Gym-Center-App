@@ -10,7 +10,10 @@ import java.util.List;
 
 public interface ICategoryService
 {
-    ImageData addCategory(Category category, MultipartFile file) throws IOException;
+
+    Category addCategory(Category category);
+
+    ImageData addCategoryWithImage(Category category, MultipartFile file) throws IOException;
 
     List<Category> retrieveAllCategories();
 

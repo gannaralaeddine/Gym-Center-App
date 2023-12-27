@@ -6,6 +6,9 @@ import com.example.gymcenterapp.repositories.ImageDataRepository;
 import com.example.gymcenterapp.services.CategoryService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,10 +33,17 @@ public class CategoryController
     @GetMapping("/retrieve-category/{id}")
     @ResponseBody
     public Category retrieveCategory(@PathVariable("id") Long idCategory) { return categoryService.retrieveCategory(idCategory);}
-    
+
     @PostMapping(value = "/add-category")
     @ResponseBody
-    public ImageData addCategory(@RequestParam("catImage") String catImage,
+    public Category addCategory(@RequestBody Category category)  {
+
+        return categoryService.addCategory(category);
+    }
+
+    @PostMapping(value = "/add-category-with-image")
+    @ResponseBody
+    public ImageData addCategoryWithImage(@RequestParam("catImage") String catImage,
                                 @RequestParam("catName") String catName,
                                 @RequestParam("catDescription") String catDescription,
                                 @RequestParam("file")MultipartFile file) throws IOException {
@@ -42,7 +52,7 @@ public class CategoryController
         category.setCatName(catName);
         category.setCatDescription(catDescription);
 
-        return categoryService.addCategory(category, file);
+        return categoryService.addCategoryWithImage(category, file);
     }
 
     @PutMapping(value= "/update-category/{id}")
@@ -56,5 +66,13 @@ public class CategoryController
     @PostMapping("/upload-image")
     public ImageData uploadImage(@RequestBody ImageData data) throws IOException {
         return imageDataRepository.save(data);
+    }
+
+    @GetMapping("/get-image/{image-name}")
+    public ResponseEntity<?> getImage(@PathVariable("image-name") String imageName) throws IOException {
+
+        byte[] imageData = categoryService.getImage(imageName);
+
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png")).body(imageData);
     }
 }

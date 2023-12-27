@@ -11,8 +11,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -27,8 +29,13 @@ public class CategoryService implements ICategoryService
     ImageDataRepository imageDataRepository;
 
     @Override
-    public ImageData addCategory(Category category, MultipartFile file) throws IOException {
+    public Category addCategory(Category category)
+    {
+        return categoryRepository.save(category);
+    }
 
+    @Override
+    public ImageData addCategoryWithImage(Category category, MultipartFile file) throws IOException {
 
         Category cat = categoryRepository.save(category);
 
@@ -85,5 +92,14 @@ public class CategoryService implements ICategoryService
         return imageDataRepository.save(imageData);
     }
 
+    public byte[] getImage(String imageName) throws IOException {
+        Optional<ImageData> imageData = imageDataRepository.findByName(imageName);
+
+        String filePath = imageData.get().getImageUrl();
+
+        byte[] image = Files.readAllBytes(new File(filePath).toPath());
+
+        return image;
+    }
 
 }
