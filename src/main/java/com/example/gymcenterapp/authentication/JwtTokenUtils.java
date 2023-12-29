@@ -19,8 +19,8 @@ public class JwtTokenUtils
     public String generateAccessToken(UserDetailsPrincipal user)
     {
         return Jwts.builder()
-                .setSubject(user.getUserId() + "," + user.getUserEmail())
-                .setIssuer("Gym-Center")
+                .setSubject(user.getUserId() + "," + user.getUserEmail() + "," + user.getAuthorities())
+                .setIssuer(new Date().toString())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_DURATION))
                 .signWith(SignatureAlgorithm.HS512, secretKey)

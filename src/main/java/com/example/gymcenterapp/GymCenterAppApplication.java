@@ -39,7 +39,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception
+    protected void configure(AuthenticationManagerBuilder auth)
     {
         auth.authenticationProvider(daoAuthenticationProvider());
 
@@ -84,6 +84,9 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/category/retrieve-all-categories").permitAll()
                 .antMatchers("/category/upload-image").permitAll()
                 .antMatchers("/category/get-image/{image-name}").permitAll()
+                .antMatchers("/category/add-category-with-path/{catName}/{catDescription}").permitAll()
+                .antMatchers("/category/create-category").permitAll()
+                .antMatchers("/category/create-one-category").permitAll()
 
                 .antMatchers("/coach/add-coach").permitAll()
                 .antMatchers("/coach/update-coach/{coach-id}").permitAll()

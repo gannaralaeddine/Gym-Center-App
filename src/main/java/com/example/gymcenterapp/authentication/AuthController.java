@@ -1,7 +1,7 @@
 package com.example.gymcenterapp.authentication;
 
 import com.example.gymcenterapp.services.UserDetailsPrincipal;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,12 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
+@AllArgsConstructor
 public class AuthController
 {
-    @Autowired
     AuthenticationManager authenticationManager;
 
-    @Autowired
     JwtTokenUtils jwtTokenUtils;
 
     @PostMapping("/auth/login")
@@ -33,14 +32,10 @@ public class AuthController
                     new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
             );
 
-            System.out.println("authRequest: " + authRequest.getEmail());
-
             UserDetailsPrincipal user = (UserDetailsPrincipal) authentication.getPrincipal();
 
-            System.out.println("user: " + user.getUserEmail());
-
             String token = jwtTokenUtils.generateAccessToken(user);
-            AuthResponse authResponse = new AuthResponse(user.getUserEmail(), token);
+            AuthResponse authResponse = new AuthResponse(user.getUserEmail(), token, user.getAuthorities());
 
             return ResponseEntity.ok(authResponse);
         }

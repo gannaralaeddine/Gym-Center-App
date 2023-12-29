@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImageData
+public class ImageModel
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +25,4 @@ public class ImageData
 
     private String imageUrl;
 
-
-    @ManyToOne
-    @JoinColumn(name = "categoryId")
-    private Category imageCategory;
 }
