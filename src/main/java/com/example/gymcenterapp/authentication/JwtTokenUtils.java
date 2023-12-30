@@ -1,6 +1,5 @@
 package com.example.gymcenterapp.authentication;
 
-import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.services.UserDetailsPrincipal;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

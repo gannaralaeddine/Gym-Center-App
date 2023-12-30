@@ -2,7 +2,6 @@ package com.example.gymcenterapp;
 
 import com.example.gymcenterapp.services.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -82,11 +81,9 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/category/delete-category/{id}").permitAll()
                 .antMatchers("/category/retrieve-category/{id}").permitAll()    
                 .antMatchers("/category/retrieve-all-categories").permitAll()
-                .antMatchers("/category/upload-image").permitAll()
                 .antMatchers("/category/get-image/{image-name}").permitAll()
-                .antMatchers("/category/add-category-with-path/{catName}/{catDescription}").permitAll()
                 .antMatchers("/category/create-category").permitAll()
-                .antMatchers("/category/create-one-category").permitAll()
+                .antMatchers("/category/add-images-to-category").permitAll()
 
                 .antMatchers("/coach/add-coach").permitAll()
                 .antMatchers("/coach/update-coach/{coach-id}").permitAll()
