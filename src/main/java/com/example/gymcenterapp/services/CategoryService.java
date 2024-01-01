@@ -4,17 +4,13 @@ import com.example.gymcenterapp.entities.Category;
 import com.example.gymcenterapp.entities.ImageModel;
 import com.example.gymcenterapp.interfaces.ICategoryService;
 import com.example.gymcenterapp.repositories.CategoryRepository;
-import com.example.gymcenterapp.repositories.ImageModelRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -27,7 +23,7 @@ public class CategoryService implements ICategoryService
 
     CategoryRepository categoryRepository;
 
-    ImageModelRepository imageModelRepository;
+    ImageModelService imageModelService;
 
 
     @Override
@@ -89,20 +85,7 @@ public class CategoryService implements ICategoryService
     }
 
 
-    public byte[] getImage(String imageName) throws IOException {
-        Optional<ImageModel> imageModel = imageModelRepository.findByName(imageName);
 
-        if (imageModel.isPresent())
-        {
-            String filePath = imageModel.get().getImageUrl();
-            return Files.readAllBytes(new File(filePath).toPath());
-        }
-        else
-        {
-            return null;
-        }
-
-    }
 
 
     @Override
@@ -113,7 +96,7 @@ public class CategoryService implements ICategoryService
             Category category = categoryRepository.findById(catId).orElse(null);
 
             assert category != null;
-            Set<ImageModel> images =  prepareFiles(files, category.getImages());
+            Set<ImageModel> images =  imageModelService.prepareFiles(files, category.getImages(), directory);
 
             category.setImages(images);
 
@@ -126,25 +109,5 @@ public class CategoryService implements ICategoryService
         }
     }
 
-    public Set<ImageModel> prepareFiles(MultipartFile[] files, Set<ImageModel> images) throws IOException {
-
-
-        for (MultipartFile file: files)
-        {
-            String filePath = directory+file.getOriginalFilename();
-
-            ImageModel imageModel = new ImageModel();
-            imageModel.setImageName(file.getOriginalFilename());
-            imageModel.setImageType(file.getContentType());
-            imageModel.setImageSize(file.getSize());
-            imageModel.setImageUrl(file.getOriginalFilename());
-
-            images.add(imageModel);
-
-            file.transferTo(new File(filePath));
-        }
-
-        return images;
-    }
 
 }

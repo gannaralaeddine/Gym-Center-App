@@ -2,6 +2,7 @@ package com.example.gymcenterapp.controllers;
 
 import com.example.gymcenterapp.entities.Category;
 import com.example.gymcenterapp.services.CategoryService;
+import com.example.gymcenterapp.services.ImageModelService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,8 @@ public class CategoryController
 {
 
     CategoryService categoryService;
+
+    ImageModelService imageModelService;
 
 
     @GetMapping("/retrieve-all-categories")
@@ -50,7 +53,7 @@ public class CategoryController
     @GetMapping("/get-image/{image-name}")
     public ResponseEntity<?> getImageByName(@PathVariable("image-name") String imageName) throws IOException {
 
-        byte[] imageData = categoryService.getImage(imageName);
+        byte[] imageData = imageModelService.getImage(imageName);
 
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png")).body(imageData);
     }
