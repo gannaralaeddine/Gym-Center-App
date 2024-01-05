@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.security.RolesAllowed;
 import java.io.IOException;
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class ActivityController
 
     @GetMapping("/retrieve-all-activities")
     @ResponseBody
+//    @RolesAllowed({ "ROLE_COACH", "ROLE_USER" })
     public List<Activity> getAllActivities() { return activityService.retrieveAllActivities(); }
 
 

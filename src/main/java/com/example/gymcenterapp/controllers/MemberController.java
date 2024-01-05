@@ -25,9 +25,9 @@ public class MemberController
     public Member retrieveMember(@PathVariable("member-id") Long memberId) { return memberService.retrieveMember(memberId); }
 
 
-    @PostMapping(value = "/add-member")
+    @PostMapping(value = "/register-member")
     @ResponseBody
-    public Member addMember(@RequestBody Member member) { return memberService.addMember(member); }
+    public Member registerMember(@RequestBody Member member) { return memberService.registerMember(member); }
 
     @PutMapping(value = "/update-member/{member-id}")
     @ResponseBody

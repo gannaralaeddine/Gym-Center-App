@@ -37,11 +37,11 @@ public class AuthController
             String token = jwtTokenUtils.generateAccessToken(user);
             AuthResponse authResponse = new AuthResponse(user.getUserEmail(), token, user.getAuthorities());
 
-            return ResponseEntity.ok(authResponse);
+            return new ResponseEntity<>(authResponse, HttpStatus.OK);
         }
         catch (BadCredentialsException exception)
         {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
 
     }

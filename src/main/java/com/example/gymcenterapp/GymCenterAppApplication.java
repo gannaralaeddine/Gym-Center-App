@@ -1,5 +1,6 @@
 package com.example.gymcenterapp;
 
+import com.example.gymcenterapp.authentication.JwtTokenFilter;
 import com.example.gymcenterapp.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.SpringApplication;
@@ -8,24 +9,34 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 
 @EnableWebSecurity
 @AllArgsConstructor
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true,
+        securedEnabled = false,
+        jsr250Enabled = true
+)
 @SpringBootApplication//(exclude = { SecurityAutoConfiguration.class })
 public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
 {
 
     UserService userService;
+
+    JwtTokenFilter jwtTokenFilter;
 
     public static void main(String[] args) {
         SpringApplication.run(GymCenterAppApplication.class, args);
@@ -65,48 +76,58 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
     @Override
     protected void configure(HttpSecurity http) throws Exception
     {
+        http.exceptionHandling().authenticationEntryPoint( (request, response, exception) -> {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, exception.getMessage());
+        } );
+
+        http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
         http
                 .csrf().disable()
                 .authorizeRequests()
 
                 .antMatchers("/auth/login").permitAll()
 
+//                .anyRequest().authenticated();
+
                 .antMatchers("/user/retrieve-all-users").permitAll()//.hasAnyRole("ADMIN")
                 .antMatchers("/user/register-user").permitAll()
                 .antMatchers("/user/add-role").permitAll()
                 .antMatchers("/user/number-of-users").permitAll()
+                .antMatchers("/user/retrieve-all-roles").permitAll()
+                .antMatchers("/user/retrieve-user-by-email/{email}").permitAll()
 
                 .antMatchers("/category/add-category").permitAll()
                 .antMatchers("/category/update-category/{id}").permitAll()
                 .antMatchers("/category/delete-category/{id}").permitAll()
-                .antMatchers("/category/retrieve-category/{id}").permitAll()    
+                .antMatchers("/category/retrieve-category/{id}").permitAll()
                 .antMatchers("/category/retrieve-all-categories").permitAll()
                 .antMatchers("/category/get-image/{image-name}").permitAll()
                 .antMatchers("/category/create-category").permitAll()
                 .antMatchers("/category/add-images-to-category").permitAll()
 
-                .antMatchers("/coach/add-coach").permitAll()
+                .antMatchers("/coach/register-coach").permitAll()
                 .antMatchers("/coach/update-coach/{coach-id}").permitAll()
                 .antMatchers("/coach/delete-coach/{coach-id}").permitAll()
-                .antMatchers("/coach/retrieve-coach/{coach-id}").permitAll()    
+                .antMatchers("/coach/retrieve-coach/{coach-id}").permitAll()
                 .antMatchers("/coach/retrieve-all-coaches").permitAll()
 
-                .antMatchers("/member/add-member").permitAll()
+                .antMatchers("/member/register-member").permitAll()
                 .antMatchers("/member/update-member/{member-id}").permitAll()
                 .antMatchers("/member/delete-member/{member-id}").permitAll()
-                .antMatchers("/member/retrieve-member/{member-id}").permitAll()    
+                .antMatchers("/member/retrieve-member/{member-id}").permitAll()
                 .antMatchers("/member/retrieve-all-members").permitAll()
 
                 .antMatchers("/session/add-session").permitAll()
                 .antMatchers("/session/update-session/{session-id}").permitAll()
                 .antMatchers("/session/delete-session/{session-id}").permitAll()
-                .antMatchers("/session/retrieve-session/{session-id}").permitAll()    
+                .antMatchers("/session/retrieve-session/{session-id}").permitAll()
                 .antMatchers("/session/retrieve-all-sessions").permitAll()
 
                 .antMatchers("/subscription/add-subscription").permitAll()
                 .antMatchers("/subscription/update-subscription/{subscription-id}").permitAll()
                 .antMatchers("/subscription/delete-subscription/{subscription-id}").permitAll()
-                .antMatchers("/subscription/retrieve-subscription/{subscription-id}").permitAll()    
+                .antMatchers("/subscription/retrieve-subscription/{subscription-id}").permitAll()
                 .antMatchers("/subscription/retrieve-all-subscriptions").permitAll()
 
                 .antMatchers("/activity/retrieve-all-activities").permitAll()

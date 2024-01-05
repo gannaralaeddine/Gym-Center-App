@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ICoachService
 {
-    Coach addCoach(Coach coach);
+    Coach registerCoach(Coach coach);
 
     List<Coach> retrieveAllCoaches();
 

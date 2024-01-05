@@ -29,4 +29,10 @@ public class Role
     @ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
     private Set<User> users = new HashSet<>();
 
+
+    public Role(String roleName)
+    {
+        super();
+        this.roleName = roleName;
+    }
 }

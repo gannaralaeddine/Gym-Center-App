@@ -15,7 +15,7 @@ public class CoachService implements ICoachService
     CoachRepository coachRepository;
 
     @Override
-    public Coach addCoach(Coach coach) { return coachRepository.save(coach); }
+    public Coach registerCoach(Coach coach) { return coachRepository.save(coach); }
 
     @Override
     public List<Coach> retrieveAllCoaches() { return coachRepository.findAll(); }

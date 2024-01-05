@@ -15,7 +15,7 @@ public class MemberService implements IMemberService
     MemberRepository memberRepository;
 
     @Override
-    public Member addMember(Member member) { return memberRepository.save(member); }
+    public Member registerMember(Member member) { return memberRepository.save(member); }
 
     @Override
     public List<Member> retrieveAllMembers() { return memberRepository.findAll(); }

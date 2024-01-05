@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IMemberService
 {
-    Member addMember(Member member);
+    Member registerMember(Member member);
 
     List<Member> retrieveAllMembers();
 

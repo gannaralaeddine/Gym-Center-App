@@ -82,4 +82,10 @@ public class UserService implements IUserService, UserDetailsService
         }
 
     }
+
+
+    public User retrieveUserByEmail(String email)
+    {
+        return userRepository.findByEmail(email);
+    }
 }

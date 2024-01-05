@@ -6,7 +6,9 @@ import com.example.gymcenterapp.services.RoleServiceImpl;
 import com.example.gymcenterapp.services.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 
@@ -23,6 +25,7 @@ public class UserController
 
     @GetMapping("/retrieve-all-users")
     @ResponseBody
+//    @RolesAllowed({ "ROLE_ADMIN" })
     public List<User> getAllUser() {
         return userService.retrieveAllUsers();
     }
@@ -44,11 +47,7 @@ public class UserController
 
 
 
-    @PostMapping(value = "/add-role")
-    @ResponseBody
-    public Role addURole(@RequestBody Role role) {
-        return roleService.addRole(role);
-    }
+
 
     @GetMapping(value = "/number-of-users")
     @ResponseBody
@@ -56,4 +55,30 @@ public class UserController
         return userService.numberOfUsers();
     }
 
+
+    @GetMapping("/retrieve-user-by-email/{email}")
+    @ResponseBody
+    public User retrieveUserByEmail(@PathVariable("email") String email) {
+        User userDetails = userService.retrieveUserByEmail(email);
+
+        System.out.println(userDetails);
+        return userDetails;
+    }
+
+
+
+
+// Manage roles
+    @PostMapping(value = "/add-role")
+    @ResponseBody
+    public Role addURole(@RequestBody Role role) {
+        return roleService.addRole(role);
+    }
+
+    @GetMapping("/retrieve-all-roles")
+    @ResponseBody
+//    @RolesAllowed({ "ROLE_ADMIN" })
+    public List<Role> getAllRoles() {
+        return roleService.retrieveAllRoles();
+    }
 }
