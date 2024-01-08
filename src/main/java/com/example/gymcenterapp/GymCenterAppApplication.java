@@ -38,9 +38,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
 
     JwtTokenFilter jwtTokenFilter;
 
-    public static void main(String[] args) {
-        SpringApplication.run(GymCenterAppApplication.class, args);
-    }
+    public static void main(String[] args) { SpringApplication.run(GymCenterAppApplication.class, args); }
 
     @Bean
     PasswordEncoder bcryptPasswordEncoder()
@@ -98,6 +96,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/user/retrieve-user-by-email/{email}").permitAll()
 
                 .antMatchers("/category/add-category").permitAll()
+                .antMatchers("/category/update-category").permitAll()
                 .antMatchers("/category/update-category/{id}").permitAll()
                 .antMatchers("/category/delete-category/{id}").permitAll()
                 .antMatchers("/category/retrieve-category/{id}").permitAll()

@@ -17,6 +17,7 @@ public interface ICategoryService
 
     void deleteCategory(Long id);
 
-    Category updateCategory(Long id, Category category);
+    Category updateCategoryData(Long id, Category category);
 
+    Category updateCategory( Category category, MultipartFile[] file);
 }

@@ -8,11 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.security.RolesAllowed;
 import java.io.IOException;
 import java.util.List;
 
@@ -42,8 +40,8 @@ public class CategoryController
 
     @PutMapping(value= "/update-category/{id}")
     @ResponseBody
-    public Category updateCategory(@PathVariable("id") Long idCategory, @RequestBody Category category) {
-        return categoryService.updateCategory(idCategory, category);
+    public Category updateCategoryData(@PathVariable("id") Long idCategory, @RequestBody Category category) {
+        return categoryService.updateCategoryData(idCategory, category);
     }
 
     @DeleteMapping(value = "/delete-category/{id}")
@@ -52,7 +50,7 @@ public class CategoryController
 
 
 // Get category image
-//--------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
     @GetMapping("/get-image/{image-name}")
     public ResponseEntity<?> getImageByName(@PathVariable("image-name") String imageName) throws IOException {
@@ -64,7 +62,7 @@ public class CategoryController
 
 
 // Add Category with one image
-//--------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(value = { "/create-category" }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public Category addCategoryWithOneImage(@RequestPart("category") Category category,
@@ -75,7 +73,7 @@ public class CategoryController
 
 
 // Add Images to Category
-//--------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
     @PutMapping(value = { "/add-images-to-category" }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public Category addImagesToCategory(@RequestPart("category") Category category,
@@ -83,4 +81,15 @@ public class CategoryController
     {
         return categoryService.addImagesToCategory(category.getCatId(), images);
     }
+
+
+// Update Category
+//----------------------------------------------------------------------------------------------------------------------
+    @PutMapping(value = { "/update-category" }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public Category updateCategory(@RequestPart("category") Category category,
+                                   @RequestPart("imageFile") MultipartFile[] images)
+    {
+        return categoryService.updateCategory(category, images);
+    }
+
 }
