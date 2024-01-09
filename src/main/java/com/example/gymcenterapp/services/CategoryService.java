@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.File;
 import java.util.HashSet;
 import java.util.List;
@@ -29,12 +30,14 @@ public class CategoryService implements ICategoryService
     @Override
     public Category addCategoryWithOneImage( Category category, MultipartFile[] file)
     {
-        String filePath = directory+file[0].getOriginalFilename();
+        String[] imageType = file[0].getContentType().split("/");
+        String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
+        String filePath = directory + uniqueName;
 
         try
         {
             ImageModel imageModel = new  ImageModel();
-            imageModel.setImageName( file[0].getOriginalFilename() );
+            imageModel.setImageName( uniqueName );
             imageModel.setImageType( file[0].getContentType() );
             imageModel.setImageSize( file[0].getSize() );
             imageModel.setImageUrl( filePath );
@@ -42,7 +45,7 @@ public class CategoryService implements ICategoryService
             HashSet<ImageModel> images = new HashSet<>();
             images.add(imageModel);
 
-            category.setCatImage(file[0].getOriginalFilename());
+            category.setCatImage(uniqueName);
             category.setImages(images);
 
             file[0].transferTo(new File(filePath));
@@ -70,7 +73,7 @@ public class CategoryService implements ICategoryService
     }
 
     @Override
-    public Category updateCategory(Long id, Category category)
+    public Category updateCategoryData(Long id, Category category)
     {
         Category existingCategory = categoryRepository.findById(id).orElse(null);
 
@@ -80,12 +83,58 @@ public class CategoryService implements ICategoryService
             existingCategory.setCatDescription(category.getCatDescription());
             return categoryRepository.save(existingCategory);
         }
-
         return null;
     }
 
 
+    @Override
+    public Category updateCategory( Category category, MultipartFile[] file)
+    {
+        Category existingCategory = categoryRepository.findById(category.getCatId()).orElse(null);
 
+        if (existingCategory != null)
+        {
+            existingCategory.setCatName(category.getCatName());
+            existingCategory.setCatDescription(category.getCatDescription());
+
+            String[] imageType = file[0].getContentType().split("/");
+            String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
+            String filePath = directory + uniqueName;
+
+            try
+            {
+                ImageModel imageModel = new ImageModel();
+                imageModel.setImageName( uniqueName );
+                imageModel.setImageType(file[0].getContentType());
+                imageModel.setImageSize(file[0].getSize());
+                imageModel.setImageUrl(filePath);
+
+                HashSet<ImageModel> images = new HashSet<>();
+                images.add(imageModel);
+
+                imageModelService.removeFile(directory, existingCategory.getCatImage());
+                deleteImageFromDataBase(category);
+
+                existingCategory.setCatImage( uniqueName );
+                existingCategory.setImages(images);
+
+                file[0].transferTo(new File(filePath));
+
+                return categoryRepository.save(existingCategory);
+            }
+            catch (Exception e)
+            {
+                System.out.println("Error in update category: " + e.getMessage());
+                return null;
+            }
+
+        }
+        else
+        {
+            return null;
+        }
+
+    }
 
 
     @Override
@@ -110,4 +159,21 @@ public class CategoryService implements ICategoryService
     }
 
 
+    @Transactional
+    public void deleteImageFromDataBase(Category category)
+    {
+        Category existingCategory = categoryRepository.findById(category.getCatId()).orElse(null);
+
+        if (existingCategory != null)
+        {
+            ImageModel imageModel = imageModelService.findImageByName(existingCategory.getCatImage());
+
+            existingCategory.getImages().remove(imageModel);
+
+
+            categoryRepository.save(existingCategory);
+
+
+        }
+    }
 }

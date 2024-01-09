@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface ImageModelRepository extends JpaRepository<ImageModel, Long>
 {
     @Query("SELECT img FROM ImageModel img WHERE img.imageName = :imageName")
-    Optional<ImageModel> findByName(String imageName);
+    ImageModel findByName(String imageName);
 }

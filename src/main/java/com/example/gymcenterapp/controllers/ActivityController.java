@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.security.RolesAllowed;
 import java.io.IOException;
 import java.util.List;
 
@@ -67,6 +66,8 @@ public class ActivityController
     public ResponseEntity<?> getImageByName(@PathVariable("image-name") String imageName) throws IOException {
 
         byte[] imageData = imageModelService.getImage(imageName);
+
+        System.out.println("activity image Data: " + imageData);
 
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png")).body(imageData);
     }
