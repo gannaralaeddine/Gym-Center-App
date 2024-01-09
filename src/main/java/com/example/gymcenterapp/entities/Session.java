@@ -2,6 +2,7 @@ package com.example.gymcenterapp.entities;
 
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,6 +25,9 @@ public class Session
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sessionId;
+
+    @Column(name = "session_name")
+    private String sessionName;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "activityId",referencedColumnName = "actId")

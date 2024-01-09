@@ -18,7 +18,7 @@ public class CoachController
 
     @GetMapping("/retrieve-all-coaches")
     @ResponseBody
-    public List<Coach> getAllActivities() { return coachService.retrieveAllCoaches(); }
+    public List<Coach> getAllCoaches() { return coachService.retrieveAllCoaches(); }
 
 
     @GetMapping("/retrieve-coach/{coach-id}")
