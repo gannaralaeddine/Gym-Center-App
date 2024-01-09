@@ -23,5 +23,7 @@ public interface IActivityService
 
     Activity updateActivity(Long id, Activity activity);
 
+    Activity updateActivity( Activity activity, MultipartFile[] file);
+
     List<Activity> getCategoryActivities(Long categoryId);
 }

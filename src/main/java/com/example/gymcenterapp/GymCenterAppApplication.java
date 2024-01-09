@@ -134,6 +134,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/activity/retrieve-all-activities").permitAll()
                 .antMatchers("/activity/add-activity").permitAll()
                 .antMatchers("/activity/update-activity/{activity-id}").permitAll()
+                .antMatchers("/activity/update-activity").permitAll()
                 .antMatchers("/activity/delete-activity/{activity-id}").permitAll()
                 .antMatchers("/activity/retrieve-activity/{activity-id}").permitAll()
                 .antMatchers("/activity/get-category-activities/{id}").permitAll()

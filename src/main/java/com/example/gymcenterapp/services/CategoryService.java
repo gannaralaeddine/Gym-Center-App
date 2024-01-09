@@ -57,7 +57,6 @@ public class CategoryService implements ICategoryService
             System.out.println("Error in create category: " + e.getMessage());
             return null;
         }
-
     }
 
     @Override
@@ -172,8 +171,6 @@ public class CategoryService implements ICategoryService
 
 
             categoryRepository.save(existingCategory);
-
-
         }
     }
 }

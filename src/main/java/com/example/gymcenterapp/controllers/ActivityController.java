@@ -1,6 +1,7 @@
 package com.example.gymcenterapp.controllers;
 
 import com.example.gymcenterapp.entities.Activity;
+import com.example.gymcenterapp.entities.Category;
 import com.example.gymcenterapp.repositories.ActivityRepository;
 import com.example.gymcenterapp.repositories.CategoryRepository;
 import com.example.gymcenterapp.services.ActivityService;
@@ -63,11 +64,9 @@ public class ActivityController
 //--------------------------------------------------------------------------------------------------------------------------
 
     @GetMapping("/get-image/{image-name}")
-    public ResponseEntity<?> getImageByName(@PathVariable("image-name") String imageName) throws IOException {
-
+    public ResponseEntity<?> getImageByName(@PathVariable("image-name") String imageName) throws IOException
+    {
         byte[] imageData = imageModelService.getImage(imageName);
-
-        System.out.println("activity image Data: " + imageData);
 
         return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png")).body(imageData);
     }
@@ -84,7 +83,7 @@ public class ActivityController
     }
 
 
-// Add Images to Category
+// Add Images to Activity
 //--------------------------------------------------------------------------------------------------------------------------
 
     @PutMapping(value = { "/add-images-to-activity" }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
@@ -92,5 +91,15 @@ public class ActivityController
                                         @RequestPart("imageFile") MultipartFile[] images)
     {
         return activityService.addImagesToActivity(activity.getActId(), images);
+    }
+
+
+// Update Category
+//----------------------------------------------------------------------------------------------------------------------
+    @PutMapping(value = { "/update-activity" }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public Activity updateCategory(@RequestPart("activity") Activity activity,
+                                   @RequestPart("imageFile") MultipartFile[] images)
+    {
+        return activityService.updateActivity(activity, images);
     }
 }

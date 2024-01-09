@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,12 +29,14 @@ public class ActivityService implements IActivityService
     @Override
     public Activity addActivityWithOneImage(Activity activity, MultipartFile[] file)
     {
-        String filePath = directory+file[0].getOriginalFilename();
+        String[] imageType = file[0].getContentType().split("/");
+        String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
+        String filePath = directory + uniqueName;
 
         try
         {
             ImageModel imageModel = new  ImageModel();
-            imageModel.setImageName( file[0].getOriginalFilename() );
+            imageModel.setImageName( uniqueName );
             imageModel.setImageType( file[0].getContentType() );
             imageModel.setImageSize( file[0].getSize() );
             imageModel.setImageUrl( filePath );
@@ -41,7 +44,7 @@ public class ActivityService implements IActivityService
             HashSet<ImageModel> images = new HashSet<>();
             images.add(imageModel);
 
-            activity.setActImage(file[0].getOriginalFilename());
+            activity.setActImage(uniqueName);
             activity.setActivityImages(images);
 
             file[0].transferTo(new File(filePath));
@@ -78,12 +81,16 @@ public class ActivityService implements IActivityService
         {
             existingActivity.setActName(activity.getActName());
             existingActivity.setActDescription(activity.getActDescription());
-            existingActivity.setActImage(activity.getActImage());
             existingActivity.setCategory(activity.getCategory());
             return activityRepository.save(existingActivity);
         }
+        else
+        {
+            System.out.println("Cannot find activity(update method)!!!");
+            return null;
+        }
 
-        return null;
+
     }
 
     @Override
@@ -114,5 +121,66 @@ public class ActivityService implements IActivityService
         }
     }
 
+    @Override
+    public Activity updateActivity( Activity activity, MultipartFile[] file)
+    {
+        Activity existingActivity = activityRepository.findById(activity.getActId()).orElse(null);
 
+        if (existingActivity != null)
+        {
+            existingActivity.setActName(activity.getActName());
+            existingActivity.setActDescription(activity.getActDescription());
+
+            String[] imageType = file[0].getContentType().split("/");
+            String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
+            String filePath = directory + uniqueName;
+
+            try
+            {
+                ImageModel imageModel = new ImageModel();
+                imageModel.setImageName( uniqueName );
+                imageModel.setImageType(file[0].getContentType());
+                imageModel.setImageSize(file[0].getSize());
+                imageModel.setImageUrl(filePath);
+
+                HashSet<ImageModel> images = new HashSet<>();
+                images.add(imageModel);
+
+                imageModelService.removeFile(directory, existingActivity.getActImage());
+                deleteImageFromDataBase(activity);
+
+                existingActivity.setActImage( uniqueName );
+                existingActivity.setActivityImages(images);
+
+                file[0].transferTo(new File(filePath));
+
+                return activityRepository.save(existingActivity);
+            }
+            catch (Exception e)
+            {
+                System.out.println("Error in update category: " + e.getMessage());
+                return null;
+            }
+
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    @Transactional
+    public void deleteImageFromDataBase(Activity activity)
+    {
+        Activity existingActivity = activityRepository.findById(activity.getActId()).orElse(null);
+
+        if (existingActivity != null)
+        {
+            ImageModel imageModel = imageModelService.findImageByName(existingActivity.getActImage());
+
+            existingActivity.getActivityImages().remove(imageModel);
+
+            activityRepository.save(existingActivity);
+        }
+    }
 }
