@@ -26,7 +26,7 @@ public class CoachController
     public Coach retrieveCoach(@PathVariable("coach-id") Long coachId) { return coachService.retrieveCoach(coachId); }
 
 
-    @PostMapping(value = "/add-coach")
+    @PostMapping(value = "/register-coach")
     @ResponseBody
     public Coach registerCoach(@RequestBody Coach coach) { return coachService.registerCoach(coach); }
 
