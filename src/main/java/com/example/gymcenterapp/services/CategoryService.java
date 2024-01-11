@@ -21,6 +21,7 @@ public class CategoryService implements ICategoryService
 {
 
     final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\categories\\";
+//    final String directory = "http://localhost:8089/categories/";
 
     CategoryRepository categoryRepository;
 

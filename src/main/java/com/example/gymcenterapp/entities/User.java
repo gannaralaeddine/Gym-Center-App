@@ -62,6 +62,17 @@ public class User implements Serializable, UserDetails
     )
     private Set<Role> roles = new HashSet<>();
 
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_images",
+            joinColumns = { @JoinColumn (name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "image_id") }
+    )
+    private Set<ImageModel> userImages;
+
+
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
@@ -108,4 +119,6 @@ public class User implements Serializable, UserDetails
     {
         this.roles.add(role);
     }
+
+
 }

@@ -1,11 +1,17 @@
 package com.example.gymcenterapp.services;
 
 import com.example.gymcenterapp.entities.Coach;
+import com.example.gymcenterapp.entities.Role;
 import com.example.gymcenterapp.interfaces.ICoachService;
 import com.example.gymcenterapp.repositories.CoachRepository;
+import com.example.gymcenterapp.repositories.RoleRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -13,9 +19,34 @@ import java.util.List;
 public class CoachService implements ICoachService
 { 
     CoachRepository coachRepository;
+    RoleRepository roleRepository;
 
     @Override
-    public Coach registerCoach(Coach coach) { return coachRepository.save(coach); }
+    public Coach registerCoach(Coach coach)
+    {
+        Set<Role> roles = new HashSet<>();
+
+        coach.setUserPassword(new BCryptPasswordEncoder().encode(coach.getUserPassword()));
+
+        coach.getRoles().forEach(role -> {
+
+            if (role.getRoleId() != null)
+            {
+                Role newRole = roleRepository.findById(role.getRoleId()).orElse(null);
+
+                assert newRole != null;
+                newRole.getUsers().add(coach);
+
+                roles.add(newRole);
+            }
+            else
+            {
+                roles.add(role);
+            }
+        });
+        coach.setRoles(roles);
+        return coachRepository.save(coach);
+    }
 
     @Override
     public List<Coach> retrieveAllCoaches() { return coachRepository.findAll(); }
