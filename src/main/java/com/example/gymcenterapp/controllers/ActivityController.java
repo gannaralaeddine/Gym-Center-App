@@ -1,19 +1,13 @@
 package com.example.gymcenterapp.controllers;
 
 import com.example.gymcenterapp.entities.Activity;
-import com.example.gymcenterapp.entities.Category;
 import com.example.gymcenterapp.repositories.ActivityRepository;
 import com.example.gymcenterapp.repositories.CategoryRepository;
 import com.example.gymcenterapp.services.ActivityService;
-import com.example.gymcenterapp.services.ImageModelService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -27,8 +21,6 @@ public class ActivityController
     CategoryRepository categoryRepository;
 
     ActivityRepository activityRepository;
-
-    ImageModelService imageModelService;
 
 
     @GetMapping("/retrieve-all-activities")
@@ -58,18 +50,6 @@ public class ActivityController
     @ResponseBody
     public List<Activity> getCategoryActivities(@PathVariable Long categoryId) { return activityService.getCategoryActivities(categoryId); }
 
-
-
-    // Get category image
-//--------------------------------------------------------------------------------------------------------------------------
-
-    @GetMapping("/get-image/{image-name}")
-    public ResponseEntity<?> getImageByName(@PathVariable("image-name") String imageName) throws IOException
-    {
-        byte[] imageData = imageModelService.getImage(imageName);
-
-        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.valueOf("image/png")).body(imageData);
-    }
 
 
 // Add Category with one image

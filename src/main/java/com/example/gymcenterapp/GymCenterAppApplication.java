@@ -104,7 +104,6 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/category/delete-category/{id}").permitAll()
                 .antMatchers("/category/retrieve-category/{id}").permitAll()
                 .antMatchers("/category/retrieve-all-categories").permitAll()
-                .antMatchers("/category/get-image/{image-name}").permitAll()
                 .antMatchers("/category/create-category").permitAll()
                 .antMatchers("/category/add-images-to-category").permitAll()
 
@@ -120,7 +119,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/member/retrieve-member/{member-id}").permitAll()
                 .antMatchers("/member/retrieve-all-members").permitAll()
 
-                .antMatchers("/session/add-session").permitAll()
+                .antMatchers("/session/create-session").permitAll()
                 .antMatchers("/session/update-session/{session-id}").permitAll()
                 .antMatchers("/session/delete-session/{session-id}").permitAll()
                 .antMatchers("/session/retrieve-session/{session-id}").permitAll()
@@ -141,7 +140,9 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/activity/get-category-activities/{id}").permitAll()
                 .antMatchers("/activity/create-activity").permitAll()
                 .antMatchers("/activity/add-images-to-activity").permitAll()
-                .antMatchers("/activity/get-image/{image-name}").permitAll()
+
+
+                .antMatchers("/image/get-image/{image-name}").permitAll()
 
                 .anyRequest().authenticated().and().httpBasic();
     }

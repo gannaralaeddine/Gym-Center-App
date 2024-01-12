@@ -1,6 +1,5 @@
 package com.example.gymcenterapp.services;
 
-import com.example.gymcenterapp.entities.Category;
 import com.example.gymcenterapp.entities.ImageModel;
 import com.example.gymcenterapp.entities.Role;
 import com.example.gymcenterapp.entities.User;

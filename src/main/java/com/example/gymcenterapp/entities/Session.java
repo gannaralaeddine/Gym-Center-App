@@ -35,15 +35,15 @@ public class Session
     @Column(name = "session_name")
     private String sessionName;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "activityId",referencedColumnName = "actId")
+    @ManyToOne
+    @JoinColumn(name = "activityId")
     private Activity sessionActivity;
     
     @JoinColumn(name = "session_image")
     private String sessionImage;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id",referencedColumnName = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private Coach sessionCoach;
 
     @ManyToMany(mappedBy = "memberSessions")

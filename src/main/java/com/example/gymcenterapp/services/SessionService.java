@@ -1,6 +1,5 @@
 package com.example.gymcenterapp.services;
 
-import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.ImageModel;
 import com.example.gymcenterapp.entities.Session;
 import com.example.gymcenterapp.interfaces.ISessionService;
@@ -17,11 +16,11 @@ import java.util.Set;
 @Service
 @AllArgsConstructor
 public class SessionService implements ISessionService
-{ 
+{
     SessionRepository sessionRepository;
     ImageModelService imageModelService;   
     
-    final String directory = "C:\\Users\\awadi\\Desktop\\Projet PFE\\back\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
+    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
 
     @Override
     public Session addSession(Session session) { return sessionRepository.save(session); }

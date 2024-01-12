@@ -18,6 +18,8 @@ import java.util.List;
 @Embeddable
 public class Coach extends User
 {
+    @ElementCollection
+    private List<MyGrantedAuthority> authorities;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -28,7 +30,8 @@ public class Coach extends User
     private List<Activity> coachSpecialities;
 
 
-    @OneToMany(mappedBy = "sessionCoach")
+    @OneToMany
+    @JoinColumn(name = "sessionId")
     @JsonIgnore
     private List<Session> coachSessions;
 

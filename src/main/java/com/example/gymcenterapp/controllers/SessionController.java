@@ -1,9 +1,17 @@
 package com.example.gymcenterapp.controllers;
 
+import com.example.gymcenterapp.entities.Category;
 import com.example.gymcenterapp.entities.Session;
+import com.example.gymcenterapp.services.ImageModelService;
 import com.example.gymcenterapp.services.SessionService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -14,6 +22,12 @@ public class SessionController
 {
     SessionService sessionService;
 
+    @PostMapping(value = { "/create-session" }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public Session addSessionWithOneImage(@RequestPart("session") Session session,
+                                            @RequestPart("imageFile") MultipartFile[] images)
+    {
+        return sessionService.addSessionWithOneImage(session, images);
+    }
 
     @GetMapping("/retrieve-all-sessions")
     @ResponseBody
@@ -36,4 +50,5 @@ public class SessionController
 
     @DeleteMapping(value = "/delete-session/{Session-id}")
     public void deleteSession(@PathVariable("Session-id") Long SessionId) { sessionService.deleteSession(SessionId); }
+
 }
