@@ -1,12 +1,15 @@
 package com.example.gymcenterapp.controllers;
 
+import com.example.gymcenterapp.entities.Category;
 import com.example.gymcenterapp.entities.Role;
 import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.services.RoleServiceImpl;
 import com.example.gymcenterapp.services.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -80,4 +83,15 @@ public class UserController
     public List<Role> getAllRoles() {
         return roleService.retrieveAllRoles();
     }
+
+
+// Update User Profile Picture
+//----------------------------------------------------------------------------------------------------------------------
+    @PutMapping(value = { "/update-profile-picture" }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public User updateProfilePicture(@RequestPart("user") User user,
+                                   @RequestPart("imageFile") MultipartFile[] profilePicture)
+    {
+        return userService.updateProfilePicture(user, profilePicture);
+    }
+
 }

@@ -1,5 +1,7 @@
 package com.example.gymcenterapp.services;
 
+import com.example.gymcenterapp.entities.Category;
+import com.example.gymcenterapp.entities.ImageModel;
 import com.example.gymcenterapp.entities.Role;
 import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.interfaces.IUserService;
@@ -11,7 +13,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,10 +24,13 @@ import java.util.Set;
 @Service
 public class UserService implements IUserService, UserDetailsService
 {
+    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\users\\";
 
     UserRepository userRepository;
 
     RoleRepository roleRepository;
+
+    ImageModelService imageModelService;
 
     @Override
     public User addUser(User user)
@@ -87,5 +94,41 @@ public class UserService implements IUserService, UserDetailsService
     public User retrieveUserByEmail(String email)
     {
         return userRepository.findByEmail(email);
+    }
+
+
+    @Override
+    public User updateProfilePicture(User user, MultipartFile[] file)
+    {
+        User existingUser = userRepository.findById(user.getUserId()).orElse(null);
+
+        if (existingUser != null)
+        {
+            String[] imageType = file[0].getContentType().split("/");
+            String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
+            String filePath = directory + uniqueName;
+
+            try {
+                ImageModel imageModel = new ImageModel();
+                imageModel.setImageName(uniqueName);
+                imageModel.setImageType(file[0].getContentType());
+                imageModel.setImageSize(file[0].getSize());
+                imageModel.setImageUrl(filePath);
+
+                HashSet<ImageModel> images = new HashSet<>();
+                images.add(imageModel);
+
+                existingUser.setUserPicture(uniqueName);
+                existingUser.setUserImages(images);
+
+                file[0].transferTo(new File(filePath));
+
+                return userRepository.save(existingUser);
+            } catch (Exception e) {
+                System.out.println("Error in update profile picture: " + e.getMessage());
+                return null;
+            }
+        }
+        return null;
     }
 }

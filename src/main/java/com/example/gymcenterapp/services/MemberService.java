@@ -1,11 +1,17 @@
 package com.example.gymcenterapp.services;
 
 import com.example.gymcenterapp.entities.Member;
+import com.example.gymcenterapp.entities.Role;
 import com.example.gymcenterapp.interfaces.IMemberService;
 import com.example.gymcenterapp.repositories.MemberRepository;
+import com.example.gymcenterapp.repositories.RoleRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -13,9 +19,34 @@ import java.util.List;
 public class MemberService implements IMemberService
 { 
     MemberRepository memberRepository;
+    RoleRepository roleRepository;
 
     @Override
-    public Member registerMember(Member member) { return memberRepository.save(member); }
+    public Member registerMember(Member member) {
+
+        Set<Role> roles = new HashSet<>();
+
+        member.setUserPassword(new BCryptPasswordEncoder().encode(member.getUserPassword()));
+
+        member.getRoles().forEach(role -> {
+
+            if (role.getRoleId() != null)
+            {
+                Role newRole = roleRepository.findById(role.getRoleId()).orElse(null);
+
+                assert newRole != null;
+                newRole.getUsers().add(member);
+
+                roles.add(newRole);
+            }
+            else
+            {
+                roles.add(role);
+            }
+        });
+        member.setRoles(roles);
+        return memberRepository.save(member);
+    }
 
     @Override
     public List<Member> retrieveAllMembers() { return memberRepository.findAll(); }

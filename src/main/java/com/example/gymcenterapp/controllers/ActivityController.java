@@ -97,7 +97,7 @@ public class ActivityController
 // Update Category
 //----------------------------------------------------------------------------------------------------------------------
     @PutMapping(value = { "/update-activity" }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public Activity updateCategory(@RequestPart("activity") Activity activity,
+    public Activity updateActivity(@RequestPart("activity") Activity activity,
                                    @RequestPart("imageFile") MultipartFile[] images)
     {
         return activityService.updateActivity(activity, images);
