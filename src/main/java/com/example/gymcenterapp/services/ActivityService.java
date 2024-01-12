@@ -11,8 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.*;
 
 @Service
@@ -20,10 +18,9 @@ import java.util.*;
 
 public class ActivityService implements IActivityService
 {
-    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\activities\\";
+    final String directory = "C:\\Users\\awadi\\Desktop\\Projet PFE\\back\\Gym-Center-App\\src\\main\\resources\\static\\categories\\";
 
     ActivityRepository activityRepository;
-
     ImageModelService imageModelService;
 
     @Override

@@ -1,16 +1,21 @@
 package com.example.gymcenterapp.entities;
 
 import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +25,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+@Embeddable
 public class Session 
 {
     @Id
@@ -32,12 +38,23 @@ public class Session
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "activityId",referencedColumnName = "actId")
     private Activity sessionActivity;
+    
+    @JoinColumn(name = "session_image")
+    private String sessionImage;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id",referencedColumnName = "user_id")
     private Coach sessionCoach;
 
-
     @ManyToMany(mappedBy = "memberSessions")
     private List<Member> sessionMembers;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+        name = "session_images",
+        joinColumns = { @JoinColumn (name = "session_id") },
+        inverseJoinColumns = { @JoinColumn(name = "image_id") }
+    )
+    private Set<ImageModel> sessionImages;
+
 }

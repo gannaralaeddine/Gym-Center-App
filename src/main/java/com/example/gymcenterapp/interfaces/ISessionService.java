@@ -4,8 +4,14 @@ import com.example.gymcenterapp.entities.Session;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public interface ISessionService
 {
+    Session addSessionWithOneImage(Session session, MultipartFile[] file);
+
+    Session addImagesToSession( Long sessionId, MultipartFile[] files );
+
     Session addSession(Session session);
 
     List<Session> retrieveAllSessions();
