@@ -4,6 +4,7 @@ import com.example.gymcenterapp.entities.Category;
 import com.example.gymcenterapp.entities.ImageModel;
 import com.example.gymcenterapp.interfaces.ICategoryService;
 import com.example.gymcenterapp.repositories.CategoryRepository;
+import com.example.gymcenterapp.repositories.ImageModelRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,12 +21,15 @@ import java.util.Set;
 public class CategoryService implements ICategoryService
 {
 
-    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\categories\\";
+//    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\categories\\";
+    final String directory = "C:\\Users\\awadi\\Desktop\\Projet PFE\\back\\Gym-Center-App\\src\\main\\resources\\static\\categories\\";
+
 //    final String directory = "http://localhost:8089/categories/";
 
     CategoryRepository categoryRepository;
 
     ImageModelService imageModelService;
+    ImageModelRepository imageModelRepository;
 
 
     @Override
@@ -169,7 +173,7 @@ public class CategoryService implements ICategoryService
             ImageModel imageModel = imageModelService.findImageByName(existingCategory.getCatImage());
 
             existingCategory.getImages().remove(imageModel);
-
+            imageModelRepository.delete(imageModel);
 
             categoryRepository.save(existingCategory);
         }

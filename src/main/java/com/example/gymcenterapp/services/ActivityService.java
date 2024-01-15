@@ -4,6 +4,7 @@ import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.ImageModel;
 import com.example.gymcenterapp.interfaces.IActivityService;
 import com.example.gymcenterapp.repositories.ActivityRepository;
+import com.example.gymcenterapp.repositories.ImageModelRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,11 +18,12 @@ import java.util.*;
 
 public class ActivityService implements IActivityService
 {
-    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\activities\\";
-//    final String directory = "C:\\Users\\awadi\\Desktop\\Projet PFE\\back\\Gym-Center-App\\src\\main\\resources\\static\\activities\\";
+//    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\activities\\";
+    final String directory = "C:\\Users\\awadi\\Desktop\\Projet PFE\\back\\Gym-Center-App\\src\\main\\resources\\static\\activities\\";
 
 
     ActivityRepository activityRepository;
+    ImageModelRepository imageModelRepository;
     ImageModelService imageModelService;
 
     @Override
@@ -114,10 +116,31 @@ public class ActivityService implements IActivityService
         }
         catch (Exception e)
         {
-            System.out.println("Error in add Images To Category: " + e.getMessage());
+            System.out.println("Error in add Images To Activity: " + e.getMessage());
             return null;
         }
     }
+
+    @Override
+    public Activity deleteActivityImage(Long actId, String imageName)
+    {
+        Activity activity = activityRepository.findById(actId).orElse(null);
+        ImageModel imageModel = imageModelRepository.findByName(imageName);
+
+        if (activity != null && imageModel != null)
+        {
+            activity.getActivityImages().remove(imageModel);
+            imageModelService.removeFile(directory, imageName);
+            imageModelRepository.delete(imageModel);
+            return activityRepository.save(activity);
+        }
+        else
+        {
+            System.out.println("activity or image is null");
+            return null;
+        }
+    }
+
 
     @Override
     public Activity updateActivity( Activity activity, MultipartFile[] file)

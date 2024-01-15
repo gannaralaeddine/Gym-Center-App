@@ -24,4 +24,6 @@ public interface IActivityService
     Activity updateActivity( Activity activity, MultipartFile[] file);
 
     List<Activity> getCategoryActivities(Long categoryId);
+
+    Activity deleteActivityImage(Long actId, String imageName);
 }

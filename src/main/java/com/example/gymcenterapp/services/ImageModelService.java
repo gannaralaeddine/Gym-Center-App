@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -42,15 +43,18 @@ public class ImageModelService
     public Set<ImageModel> prepareFiles(MultipartFile[] files, Set<ImageModel> images, String directory) throws IOException {
 
 
+
         for (MultipartFile file: files)
         {
-            String filePath = directory + generateUniqueName();
+            String[] imageType = Objects.requireNonNull(file.getContentType()).split("/");
+            String uniqueName = generateUniqueName() + "." + imageType[1];
+            String filePath = directory + uniqueName;
 
             ImageModel imageModel = new ImageModel();
-            imageModel.setImageName(file.getOriginalFilename());
+            imageModel.setImageName(uniqueName);
             imageModel.setImageType(file.getContentType());
             imageModel.setImageSize(file.getSize());
-            imageModel.setImageUrl(file.getOriginalFilename());
+            imageModel.setImageUrl(filePath);
 
             images.add(imageModel);
 
@@ -88,4 +92,6 @@ public class ImageModelService
     ImageModel findImageByName(String imageName){
         return imageModelRepository.findByName(imageName);
     }
+
+
 }

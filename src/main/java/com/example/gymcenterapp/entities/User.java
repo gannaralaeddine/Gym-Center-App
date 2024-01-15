@@ -55,6 +55,8 @@ public class User implements Serializable, UserDetails
 
     private String userPassword;
 
+//    private boolean isAccountVerified;
+
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
         joinColumns = {@JoinColumn (name = "fk_user_id", referencedColumnName = "user_id")},

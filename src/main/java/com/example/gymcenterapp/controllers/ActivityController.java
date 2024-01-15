@@ -67,10 +67,10 @@ public class ActivityController
 //--------------------------------------------------------------------------------------------------------------------------
 
     @PutMapping(value = { "/add-images-to-activity" }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public Activity addImagesToActivity(@RequestPart("activity") Activity activity,
+    public Activity addImagesToActivity(@RequestPart("id") Long actId,
                                         @RequestPart("imageFile") MultipartFile[] images)
     {
-        return activityService.addImagesToActivity(activity.getActId(), images);
+        return activityService.addImagesToActivity(actId, images);
     }
 
 
@@ -82,4 +82,15 @@ public class ActivityController
     {
         return activityService.updateActivity(activity, images);
     }
+
+// Delete Activity image
+//----------------------------------------------------------------------------------------------------------------------
+    @DeleteMapping(value = { "/delete-activity-image/{actId}/{imageName}" })
+    @ResponseBody
+    public Activity deleteActivityImage(@PathVariable Long actId, @PathVariable String imageName)
+    {
+        return activityService.deleteActivityImage(actId, imageName);
+    }
+
+
 }

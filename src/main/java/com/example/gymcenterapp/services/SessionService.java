@@ -20,7 +20,8 @@ public class SessionService implements ISessionService
     SessionRepository sessionRepository;
     ImageModelService imageModelService;   
     
-    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
+//    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
+    final String directory = "C:\\Users\\awadi\\Desktop\\Projet PFE\\back\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
 
     @Override
     public Session addSession(Session session) { return sessionRepository.save(session); }
