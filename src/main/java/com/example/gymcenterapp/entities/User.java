@@ -33,6 +33,8 @@ public class User implements Serializable, UserDetails
 
     private String userLastName;
 
+    private String userDescription;
+
     private Date userBirthDate;
 
     private String userPhoneNumber;

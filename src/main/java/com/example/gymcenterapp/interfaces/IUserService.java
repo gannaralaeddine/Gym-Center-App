@@ -15,5 +15,7 @@ public interface IUserService
 
     int numberOfUsers();
 
+    User updateUserData(String userEmail, User user);
+
     User updateProfilePicture(User user, MultipartFile[] file);
 }

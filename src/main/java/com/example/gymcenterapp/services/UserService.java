@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -97,13 +98,41 @@ public class UserService implements IUserService, UserDetailsService
 
 
     @Override
+    public User updateUserData(String userEmail, User user)
+    {
+        User existingUser = userRepository.findByEmail(userEmail);
+
+        if (existingUser != null)
+        {
+            existingUser.setUserFirstName(user.getUserFirstName());
+            existingUser.setUserLastName(user.getUserLastName());
+            existingUser.setUserDescription(user.getUserDescription());
+            existingUser.setUserBirthDate(user.getUserBirthDate());
+            existingUser.setUserPhoneNumber(user.getUserPhoneNumber());
+            existingUser.setUserCountry(user.getUserCountry());
+            existingUser.setUserState(user.getUserState());
+            existingUser.setUserCity(user.getUserCity());
+            existingUser.setUserZipCode(user.getUserZipCode());
+            existingUser.setUserHeight(user.getUserHeight());
+            existingUser.setUserWeight(user.getUserWeight());
+            existingUser.setUserGender(user.getUserGender());
+            return userRepository.save(existingUser);
+        }
+        else
+        {
+            System.out.println("Cannot find user(update user data method)!!!");
+            return null;
+        }
+    }
+
+    @Override
     public User updateProfilePicture(User user, MultipartFile[] file)
     {
         User existingUser = userRepository.findById(user.getUserId()).orElse(null);
 
         if (existingUser != null)
         {
-            String[] imageType = file[0].getContentType().split("/");
+            String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
             String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
             String filePath = directory + uniqueName;
 

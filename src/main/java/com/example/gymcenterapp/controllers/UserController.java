@@ -47,9 +47,6 @@ public class UserController
     }
 
 
-
-
-
     @GetMapping(value = "/number-of-users")
     @ResponseBody
     public int numberOfUsers() {
@@ -66,7 +63,13 @@ public class UserController
         return userDetails;
     }
 
-
+// Update User Data
+//----------------------------------------------------------------------------------------------------------------------
+    @PutMapping(value = { "/update-user" })
+    public User updateUserData(@RequestBody User user)
+    {
+        return userService.updateUserData(user.getUserEmail(), user);
+    }
 
 
 // Manage roles
