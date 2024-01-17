@@ -3,6 +3,7 @@ package com.example.gymcenterapp.interfaces;
 import com.example.gymcenterapp.entities.User;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface IUserService
@@ -17,5 +18,7 @@ public interface IUserService
 
     User updateUserData(String userEmail, User user);
 
-    User updateProfilePicture(User user, MultipartFile[] file);
+    User updateProfilePicture(User user, MultipartFile[] file) throws IOException;
+
+    void addImagesToProfile(Long userId, MultipartFile[] files);
 }

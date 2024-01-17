@@ -74,7 +74,7 @@ public class ActivityController
     }
 
 
-// Update Category
+// Update Activity
 //----------------------------------------------------------------------------------------------------------------------
     @PutMapping(value = { "/update-activity" }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public Activity updateActivity(@RequestPart("activity") Activity activity,

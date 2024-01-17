@@ -1,5 +1,6 @@
 package com.example.gymcenterapp.controllers;
 
+import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Role;
 import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.services.RoleServiceImpl;
@@ -91,9 +92,21 @@ public class UserController
 //----------------------------------------------------------------------------------------------------------------------
     @PutMapping(value = { "/update-profile-picture" }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public User updateProfilePicture(@RequestPart("user") User user,
-                                   @RequestPart("imageFile") MultipartFile[] profilePicture)
+                                   @RequestPart("imageFile") MultipartFile[] images)
     {
-        return userService.updateProfilePicture(user, profilePicture);
+        System.out.println("files length: " + images.length);
+        return userService.updateProfilePicture(user, images);
+    }
+
+
+// Add Images to User profile
+//--------------------------------------------------------------------------------------------------------------------------
+
+    @PutMapping(value = { "/add-images-to-user" }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public void addImagesToProfile(@RequestPart("id") Long userId,
+                                        @RequestPart("imageFile") MultipartFile[] images)
+    {
+        userService.addImagesToProfile(userId, images);
     }
 
 }

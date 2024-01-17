@@ -164,14 +164,21 @@ public class ActivityService implements IActivityService
                 imageModel.setImageSize(file[0].getSize());
                 imageModel.setImageUrl(filePath);
 
-                HashSet<ImageModel> images = new HashSet<>();
+                Set<ImageModel> images = existingActivity.getActivityImages();
                 images.add(imageModel);
 
                 imageModelService.removeFile(directory, existingActivity.getActImage());
-                deleteImageFromDataBase(activity);
+
 
                 existingActivity.setActImage( uniqueName );
                 existingActivity.setActivityImages(images);
+
+                ImageModel existingImageModel = imageModelService.findImageByName(existingActivity.getActImage());
+
+                existingActivity.getActivityImages().remove(existingImageModel);
+                imageModelRepository.delete(existingImageModel);
+
+                activityRepository.save(existingActivity);
 
                 file[0].transferTo(new File(filePath));
 
@@ -197,11 +204,7 @@ public class ActivityService implements IActivityService
 
         if (existingActivity != null)
         {
-            ImageModel imageModel = imageModelService.findImageByName(existingActivity.getActImage());
 
-            existingActivity.getActivityImages().remove(imageModel);
-
-            activityRepository.save(existingActivity);
         }
     }
 }

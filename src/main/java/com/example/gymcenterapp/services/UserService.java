@@ -4,6 +4,7 @@ import com.example.gymcenterapp.entities.ImageModel;
 import com.example.gymcenterapp.entities.Role;
 import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.interfaces.IUserService;
+import com.example.gymcenterapp.repositories.ImageModelRepository;
 import com.example.gymcenterapp.repositories.RoleRepository;
 import com.example.gymcenterapp.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,8 @@ public class UserService implements IUserService, UserDetailsService
     RoleRepository roleRepository;
 
     ImageModelService imageModelService;
+
+    ImageModelRepository imageModelRepository;
 
     @Override
     public User addUser(User user)
@@ -126,37 +129,107 @@ public class UserService implements IUserService, UserDetailsService
     }
 
     @Override
-    public User updateProfilePicture(User user, MultipartFile[] file)
-    {
-        User existingUser = userRepository.findById(user.getUserId()).orElse(null);
+    public User updateProfilePicture(User user, MultipartFile[] files) {
+        User existingUser = userRepository.findByEmail(user.getUserEmail());
+
+        System.out.println("getUserPicture: " + user.getUserPicture());
 
         if (existingUser != null)
         {
-            String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
-            String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
-            String filePath = directory + uniqueName;
-
-            try {
-                ImageModel imageModel = new ImageModel();
-                imageModel.setImageName(uniqueName);
-                imageModel.setImageType(file[0].getContentType());
-                imageModel.setImageSize(file[0].getSize());
-                imageModel.setImageUrl(filePath);
-
-                HashSet<ImageModel> images = new HashSet<>();
-                images.add(imageModel);
-
-                existingUser.setUserPicture(uniqueName);
-                existingUser.setUserImages(images);
-
-                file[0].transferTo(new File(filePath));
-
-                return userRepository.save(existingUser);
-            } catch (Exception e) {
-                System.out.println("Error in update profile picture: " + e.getMessage());
-                return null;
+            if (user.getUserPicture() != null)
+            {
+                updateProfileImage(files, existingUser);
+            }
+            else
+            {
+                addProfileImage(files, existingUser);
             }
         }
         return null;
+    }
+
+
+    @Override
+    public void addImagesToProfile(Long userId, MultipartFile[] files)
+    {
+        try
+        {
+            User existingUser = userRepository.findById(userId).orElse(null);
+
+            if (existingUser != null)
+            {
+                Set<ImageModel> images =  imageModelService.prepareFiles(files, existingUser.getUserImages(), directory);
+
+                existingUser.setUserImages(images);
+
+                userRepository.save(existingUser);
+            }
+
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error in add Images To user profile: " + e.getMessage());
+        }
+    }
+
+    public void updateProfileImage(MultipartFile[] files, User existingUser)
+    {
+        String[] imageType = Objects.requireNonNull(files[0].getContentType()).split("/");
+        String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
+        String filePath = directory + uniqueName;
+
+        ImageModel imageModel = new ImageModel();
+        imageModel.setImageName(uniqueName);
+        imageModel.setImageType(files[0].getContentType());
+        imageModel.setImageSize(files[0].getSize());
+        imageModel.setImageUrl(filePath);
+
+        try
+        {
+            Set<ImageModel> existingImages = existingUser.getUserImages();
+            existingImages.add(imageModel);
+
+            files[0].transferTo(new File(filePath));
+
+
+            ImageModel existingImageModel = imageModelService.findImageByName(existingUser.getUserPicture());
+            existingImages.remove(existingImageModel);
+            imageModelRepository.delete(existingImageModel);
+            imageModelService.removeFile(directory, existingUser.getUserPicture());
+
+            existingUser.setUserPicture(uniqueName);
+            existingUser.setUserImages(existingImages);
+            userRepository.save(existingUser);
+
+        }
+        catch (Exception e) {
+            System.out.println("Error in update profile picture: " + e.getMessage());
+        }
+    }
+
+    public void addProfileImage(MultipartFile[] files, User existingUser)
+    {
+        String[] imageType = Objects.requireNonNull(files[0].getContentType()).split("/");
+        String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
+        String filePath = directory + uniqueName;
+
+        ImageModel imageModel = new ImageModel();
+        imageModel.setImageName(uniqueName);
+        imageModel.setImageType(files[0].getContentType());
+        imageModel.setImageSize(files[0].getSize());
+        imageModel.setImageUrl(filePath);
+
+        try
+        {
+            existingUser.getUserImages().add(imageModel);
+
+            files[0].transferTo(new File(filePath));
+            existingUser.setUserPicture(uniqueName);
+            userRepository.save(existingUser);
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error in add Images To Activity: " + e.getMessage());
+        }
     }
 }
