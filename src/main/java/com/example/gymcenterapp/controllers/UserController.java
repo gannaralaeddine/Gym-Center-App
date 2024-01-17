@@ -1,6 +1,5 @@
 package com.example.gymcenterapp.controllers;
 
-import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Role;
 import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.services.RoleServiceImpl;

@@ -30,8 +30,8 @@ public class Coach extends User
     private List<Activity> coachSpecialities;
 
 
-    @OneToMany
-    @JoinColumn(name = "sessionId")
+    @OneToMany(mappedBy = "sessionCoach")
+//    @JoinColumn(name = "sessionCoach")
     @JsonIgnore
     private List<Session> coachSessions;
 

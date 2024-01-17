@@ -34,14 +34,14 @@ public class Session
     @Column(name = "session_name")
     private String sessionName;
 
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REMOVE })
     @JoinColumn(name = "activityId")
     private Activity sessionActivity;
     
     @JoinColumn(name = "session_image")
     private String sessionImage;
 
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REMOVE })
     @JoinColumn(name = "user_id")
     private Coach sessionCoach;
 

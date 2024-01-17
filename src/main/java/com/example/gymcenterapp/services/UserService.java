@@ -25,7 +25,8 @@ import java.util.Set;
 @Service
 public class UserService implements IUserService, UserDetailsService
 {
-    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\users\\";
+//    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\users\\";
+    final String directory = "C:\\Users\\awadi\\Desktop\\Projet PFE\\back\\Gym-Center-App\\src\\main\\resources\\static\\activities\\";
 
     UserRepository userRepository;
 
@@ -230,6 +231,26 @@ public class UserService implements IUserService, UserDetailsService
         catch (Exception e)
         {
             System.out.println("Error in add Images To Activity: " + e.getMessage());
+        }
+    }
+
+
+    public User deleteUserImage(Long userId, String imageName)
+    {
+        User user = userRepository.findById(userId).orElse(null);
+        ImageModel imageModel = imageModelRepository.findByName(imageName);
+
+        if (user != null && imageModel != null)
+        {
+            user.getUserImages().remove(imageModel);
+            imageModelService.removeFile(directory, imageName);
+            imageModelRepository.delete(imageModel);
+            return userRepository.save(user);
+        }
+        else
+        {
+            System.out.println("activity or image is null");
+            return null;
         }
     }
 }

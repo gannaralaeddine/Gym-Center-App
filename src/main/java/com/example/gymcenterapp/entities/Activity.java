@@ -47,8 +47,8 @@ public class Activity implements Serializable
     private  List<Subscription> actSubscriptions;
 
 
-    @OneToMany
-    @JoinColumn(name = "sessionId")
+    @OneToMany(mappedBy = "sessionActivity")
+//    @JoinColumn(name = "sessionId")
     @JsonIgnore
     private  List<Session> actSessions;
 

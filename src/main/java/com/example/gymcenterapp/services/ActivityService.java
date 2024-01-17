@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.File;
 import java.util.*;
 
@@ -197,14 +196,4 @@ public class ActivityService implements IActivityService
         }
     }
 
-    @Transactional
-    public void deleteImageFromDataBase(Activity activity)
-    {
-        Activity existingActivity = activityRepository.findById(activity.getActId()).orElse(null);
-
-        if (existingActivity != null)
-        {
-
-        }
-    }
 }
