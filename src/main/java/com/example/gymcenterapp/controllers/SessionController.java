@@ -42,4 +42,8 @@ public class SessionController
     @DeleteMapping(value = "/delete-session/{Session-id}")
     public void deleteSession(@PathVariable("Session-id") Long SessionId) { sessionService.deleteSession(SessionId); }
 
+    @PutMapping(value = "/update-session-with-image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @ResponseBody
+    public Session updateSessionWithImage(@RequestPart("session") Session session, @RequestPart("imageFile") MultipartFile[] image) { return sessionService.updateSession(session,image); }
+
 }
