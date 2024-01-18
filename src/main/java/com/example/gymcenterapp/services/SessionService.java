@@ -38,13 +38,14 @@ public class SessionService implements ISessionService
     @Override
     public Session updateSession(Long id, Session session)
     {
+        System.out.println("session: " + session);
         Session existingSession = sessionRepository.findById(id).orElse(null);
-
+        
         if (existingSession != null)
         {
+            existingSession.setSessionName(session.getSessionName());
             existingSession.setSessionActivity(session.getSessionActivity());
             existingSession.setSessionCoach(session.getSessionCoach());
-            existingSession.setSessionMembers(session.getSessionMembers());
             return sessionRepository.save(existingSession);
         }
 
