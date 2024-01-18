@@ -12,8 +12,6 @@ public interface ISessionService
 
     Session addImagesToSession( Long sessionId, MultipartFile[] files );
 
-    Session addSession(Session session);
-
     List<Session> retrieveAllSessions();
 
     Session retrieveSession(Long id);
@@ -21,4 +19,6 @@ public interface ISessionService
     void deleteSession(Long id);
 
     Session updateSession(Long id, Session session);
+
+    Session updateSession(Session session, MultipartFile[] file);
 }

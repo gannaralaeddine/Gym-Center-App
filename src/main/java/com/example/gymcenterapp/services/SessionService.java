@@ -3,6 +3,7 @@ package com.example.gymcenterapp.services;
 import com.example.gymcenterapp.entities.ImageModel;
 import com.example.gymcenterapp.entities.Session;
 import com.example.gymcenterapp.interfaces.ISessionService;
+import com.example.gymcenterapp.repositories.ImageModelRepository;
 import com.example.gymcenterapp.repositories.SessionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,12 +20,10 @@ public class SessionService implements ISessionService
 {
     SessionRepository sessionRepository;
     ImageModelService imageModelService;   
-    
+    ImageModelRepository imageModelRepository;
 //    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
     final String directory = "C:\\Users\\awadi\\Desktop\\Projet PFE\\back\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
 
-    @Override
-    public Session addSession(Session session) { return sessionRepository.save(session); }
 
     @Override
     public List<Session> retrieveAllSessions() { return sessionRepository.findAll(); }
@@ -38,9 +37,8 @@ public class SessionService implements ISessionService
     @Override
     public Session updateSession(Long id, Session session)
     {
-        System.out.println("session: " + session);
         Session existingSession = sessionRepository.findById(id).orElse(null);
-        
+
         if (existingSession != null)
         {
             existingSession.setSessionName(session.getSessionName());
@@ -106,7 +104,61 @@ public class SessionService implements ISessionService
         }
         catch (Exception e)
         {
-            System.out.println("Error in add Images To Category: " + e.getMessage());
+            System.out.println("Error in add Images To session: " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public Session updateSession(Session session, MultipartFile[] file)
+    {
+        Session existingSession = sessionRepository.findById(session.getSessionId()).orElse(null);
+
+        if (existingSession != null)
+        {
+            existingSession.setSessionName(session.getSessionName());
+            existingSession.setSessionActivity(session.getSessionActivity());
+            existingSession.setSessionCoach(session.getSessionCoach());
+
+            String[] imageType = file[0].getContentType().split("/");
+            String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
+            String filePath = directory + uniqueName;
+
+            try
+            {
+                ImageModel imageModel = new ImageModel();
+                imageModel.setImageName( uniqueName );
+                imageModel.setImageType(file[0].getContentType());
+                imageModel.setImageSize(file[0].getSize());
+                imageModel.setImageUrl(filePath);
+
+                Set<ImageModel> images = existingSession.getSessionImages();
+                images.add(imageModel);
+
+                imageModelService.removeFile(directory, session.getSessionImage());
+
+
+                existingSession.setSessionImage( uniqueName );
+                existingSession.setSessionImages(images);
+
+                ImageModel existingImageModel = imageModelService.findImageByName(session.getSessionImage());
+
+                existingSession.getSessionImages().remove(existingImageModel);
+                imageModelRepository.delete(existingImageModel);
+
+                file[0].transferTo(new File(filePath));
+
+                return sessionRepository.save(existingSession);
+            }
+            catch (Exception e)
+            {
+                System.out.println("Error in update session: " + e.getMessage());
+                return null;
+            }
+
+        }
+        else
+        {
             return null;
         }
     }

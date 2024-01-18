@@ -34,10 +34,6 @@ public class SessionController
     public Session retrieveSession(@PathVariable("session-id") Long sessionId) { return sessionService.retrieveSession(sessionId); }
 
 
-    @PostMapping(value = "/add-session")
-    @ResponseBody
-    public Session addSession(@RequestBody Session session) { return sessionService.addSession(session); }
-
     @PutMapping(value = "/update-session/{session-id}")
     @ResponseBody
     public Session updateSession(@PathVariable("session-id") Long sessionId,@RequestBody Session session) { return sessionService.updateSession(sessionId,session); }

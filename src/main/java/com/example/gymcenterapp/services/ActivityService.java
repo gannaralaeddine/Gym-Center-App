@@ -166,18 +166,16 @@ public class ActivityService implements IActivityService
                 Set<ImageModel> images = existingActivity.getActivityImages();
                 images.add(imageModel);
 
-                imageModelService.removeFile(directory, existingActivity.getActImage());
+                imageModelService.removeFile(directory, activity.getActImage());
 
 
                 existingActivity.setActImage( uniqueName );
                 existingActivity.setActivityImages(images);
 
-                ImageModel existingImageModel = imageModelService.findImageByName(existingActivity.getActImage());
+                ImageModel existingImageModel = imageModelService.findImageByName(activity.getActImage());
 
                 existingActivity.getActivityImages().remove(existingImageModel);
                 imageModelRepository.delete(existingImageModel);
-
-                activityRepository.save(existingActivity);
 
                 file[0].transferTo(new File(filePath));
 
@@ -185,7 +183,7 @@ public class ActivityService implements IActivityService
             }
             catch (Exception e)
             {
-                System.out.println("Error in update category: " + e.getMessage());
+                System.out.println("Error in update activity: " + e.getMessage());
                 return null;
             }
 
