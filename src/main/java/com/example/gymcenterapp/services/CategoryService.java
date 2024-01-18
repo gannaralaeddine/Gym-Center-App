@@ -8,11 +8,10 @@ import com.example.gymcenterapp.repositories.ImageModelRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.transaction.Transactional;
 import java.io.File;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -101,7 +100,7 @@ public class CategoryService implements ICategoryService
             existingCategory.setCatName(category.getCatName());
             existingCategory.setCatDescription(category.getCatDescription());
 
-            String[] imageType = file[0].getContentType().split("/");
+            String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
             String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
             String filePath = directory + uniqueName;
 
@@ -113,25 +112,29 @@ public class CategoryService implements ICategoryService
                 imageModel.setImageSize(file[0].getSize());
                 imageModel.setImageUrl(filePath);
 
-                HashSet<ImageModel> images = new HashSet<>();
+                Set<ImageModel> images = existingCategory.getImages();
                 images.add(imageModel);
 
+                file[0].transferTo(new File(filePath));
+
+                ImageModel existingImageModel = imageModelService.findImageByName(existingCategory.getCatImage());
+
+                images.remove(existingImageModel);
+                imageModelRepository.delete(existingImageModel);
                 imageModelService.removeFile(directory, existingCategory.getCatImage());
-                deleteImageFromDataBase(category);
+
 
                 existingCategory.setCatImage( uniqueName );
                 existingCategory.setImages(images);
 
-                file[0].transferTo(new File(filePath));
 
                 return categoryRepository.save(existingCategory);
             }
             catch (Exception e)
             {
-                System.out.println("Error in update category: " + e.getMessage());
+                System.out.println("Error in update category with image: " + e.getMessage());
                 return null;
             }
-
         }
         else
         {
@@ -162,20 +165,4 @@ public class CategoryService implements ICategoryService
         }
     }
 
-
-    @Transactional
-    public void deleteImageFromDataBase(Category category)
-    {
-        Category existingCategory = categoryRepository.findById(category.getCatId()).orElse(null);
-
-        if (existingCategory != null)
-        {
-            ImageModel imageModel = imageModelService.findImageByName(existingCategory.getCatImage());
-
-            existingCategory.getImages().remove(imageModel);
-            imageModelRepository.delete(imageModel);
-
-            categoryRepository.save(existingCategory);
-        }
-    }
 }

@@ -28,12 +28,14 @@ public class ActivityService implements IActivityService
     @Override
     public Activity addActivityWithOneImage(Activity activity, MultipartFile[] file)
     {
-        String[] imageType = file[0].getContentType().split("/");
+        String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
         String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
         String filePath = directory + uniqueName;
 
         try
         {
+
+
             ImageModel imageModel = new  ImageModel();
             imageModel.setImageName( uniqueName );
             imageModel.setImageType( file[0].getContentType() );
@@ -151,7 +153,7 @@ public class ActivityService implements IActivityService
             existingActivity.setActName(activity.getActName());
             existingActivity.setActDescription(activity.getActDescription());
 
-            String[] imageType = file[0].getContentType().split("/");
+            String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
             String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
             String filePath = directory + uniqueName;
 
