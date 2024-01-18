@@ -166,24 +166,24 @@ public class ActivityService implements IActivityService
                 Set<ImageModel> images = existingActivity.getActivityImages();
                 images.add(imageModel);
 
-                imageModelService.removeFile(directory, activity.getActImage());
+                file[0].transferTo(new File(filePath));
+
+                ImageModel existingImageModel = imageModelService.findImageByName(existingActivity.getActImage());
+
+                images.remove(existingImageModel);
+                imageModelRepository.delete(existingImageModel);
+                imageModelService.removeFile(directory, existingActivity.getActImage());
 
 
                 existingActivity.setActImage( uniqueName );
                 existingActivity.setActivityImages(images);
 
-                ImageModel existingImageModel = imageModelService.findImageByName(activity.getActImage());
-
-                existingActivity.getActivityImages().remove(existingImageModel);
-                imageModelRepository.delete(existingImageModel);
-
-                file[0].transferTo(new File(filePath));
 
                 return activityRepository.save(existingActivity);
             }
             catch (Exception e)
             {
-                System.out.println("Error in update activity: " + e.getMessage());
+                System.out.println("Error in update activity with image: " + e.getMessage());
                 return null;
             }
 

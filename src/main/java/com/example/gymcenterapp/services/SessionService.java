@@ -135,27 +135,26 @@ public class SessionService implements ISessionService
                 Set<ImageModel> images = existingSession.getSessionImages();
                 images.add(imageModel);
 
-                imageModelService.removeFile(directory, session.getSessionImage());
+                file[0].transferTo(new File(filePath));
+
+                ImageModel existingImageModel = imageModelService.findImageByName(existingSession.getSessionImage());
+
+                images.remove(existingImageModel);
+                imageModelRepository.delete(existingImageModel);
+                imageModelService.removeFile(directory, existingSession.getSessionImage());
 
 
                 existingSession.setSessionImage( uniqueName );
                 existingSession.setSessionImages(images);
 
-                ImageModel existingImageModel = imageModelService.findImageByName(session.getSessionImage());
-
-                existingSession.getSessionImages().remove(existingImageModel);
-                imageModelRepository.delete(existingImageModel);
-
-                file[0].transferTo(new File(filePath));
 
                 return sessionRepository.save(existingSession);
             }
             catch (Exception e)
             {
-                System.out.println("Error in update session: " + e.getMessage());
+                System.out.println("Error in update session with image: " + e.getMessage());
                 return null;
             }
-
         }
         else
         {

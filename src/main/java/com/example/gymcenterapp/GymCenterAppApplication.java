@@ -125,6 +125,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/session/delete-session/{session-id}").permitAll()
                 .antMatchers("/session/retrieve-session/{session-id}").permitAll()
                 .antMatchers("/session/retrieve-all-sessions").permitAll()
+                .antMatchers("/update-session-with-image").permitAll()
 
                 .antMatchers("/subscription/add-subscription").permitAll()
                 .antMatchers("/subscription/update-subscription/{subscription-id}").permitAll()
