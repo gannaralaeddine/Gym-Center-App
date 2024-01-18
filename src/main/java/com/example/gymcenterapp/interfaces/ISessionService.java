@@ -21,4 +21,6 @@ public interface ISessionService
     Session updateSession(Long id, Session session);
 
     Session updateSession(Session session, MultipartFile[] file);
+
+    Session deleteSessionImage(Long sessionId, String imageName);
 }

@@ -46,4 +46,23 @@ public class SessionController
     @ResponseBody
     public Session updateSessionWithImage(@RequestPart("session") Session session, @RequestPart("imageFile") MultipartFile[] image) { return sessionService.updateSession(session,image); }
 
+
+    // Add Images to Session
+//--------------------------------------------------------------------------------------------------------------------------
+
+    @PutMapping(value = { "/add-images-to-session" }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public Session addImagesToSession(@RequestPart("id") Long sessionId,
+                                        @RequestPart("imageFile") MultipartFile[] images)
+    {
+        return sessionService.addImagesToSession(sessionId, images);
+    }
+
+// Delete Session image
+//----------------------------------------------------------------------------------------------------------------------
+    @DeleteMapping(value = { "/delete-session-image/{sessionId}/{imageName}" })
+    @ResponseBody
+    public Session deleteSessionImage(@PathVariable Long sessionId, @PathVariable String imageName)
+    {
+        return sessionService.deleteSessionImage(sessionId, imageName);
+    }
 }

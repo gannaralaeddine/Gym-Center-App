@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -21,8 +22,8 @@ public class SessionService implements ISessionService
     SessionRepository sessionRepository;
     ImageModelService imageModelService;   
     ImageModelRepository imageModelRepository;
-    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
-//    final String directory = "C:\\Users\\awadi\\Desktop\\Projet PFE\\back\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
+//    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
+    final String directory = "C:\\Users\\awadi\\Desktop\\Projet PFE\\back\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
 
 
     @Override
@@ -54,7 +55,7 @@ public class SessionService implements ISessionService
     public Session addSessionWithOneImage(Session session, MultipartFile[] file) 
     {
         // generate unique name and file path for image
-        String[] imageType = file[0].getContentType().split("/");
+        String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
         String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
         String filePath = directory + uniqueName;
 
@@ -120,7 +121,7 @@ public class SessionService implements ISessionService
             existingSession.setSessionActivity(session.getSessionActivity());
             existingSession.setSessionCoach(session.getSessionCoach());
 
-            String[] imageType = file[0].getContentType().split("/");
+            String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
             String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
             String filePath = directory + uniqueName;
 
@@ -158,6 +159,27 @@ public class SessionService implements ISessionService
         }
         else
         {
+            return null;
+        }
+    }
+
+
+    @Override
+    public Session deleteSessionImage(Long sessionId, String imageName)
+    {
+        Session session = sessionRepository.findById(sessionId).orElse(null);
+        ImageModel imageModel = imageModelRepository.findByName(imageName);
+
+        if (session != null && imageModel != null)
+        {
+            session.getSessionImages().remove(imageModel);
+            imageModelService.removeFile(directory, imageName);
+            imageModelRepository.delete(imageModel);
+            return sessionRepository.save(session);
+        }
+        else
+        {
+            System.out.println("Session or image is null");
             return null;
         }
     }

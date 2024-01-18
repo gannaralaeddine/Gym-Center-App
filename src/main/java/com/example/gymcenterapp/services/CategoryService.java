@@ -34,7 +34,7 @@ public class CategoryService implements ICategoryService
     @Override
     public Category addCategoryWithOneImage( Category category, MultipartFile[] file)
     {
-        String[] imageType = file[0].getContentType().split("/");
+        String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
         String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
         String filePath = directory + uniqueName;
 
