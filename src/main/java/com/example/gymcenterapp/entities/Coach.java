@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,12 +28,13 @@ public class Coach extends User
             joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "activityCoaches",referencedColumnName = "actId")
     )
-    private List<Activity> coachSpecialities;
+    @JsonIgnore
+    private Set<Activity> coachSpecialities;
 
 
     @OneToMany(mappedBy = "sessionCoach")
 //    @JoinColumn(name = "sessionCoach")
     @JsonIgnore
-    private List<Session> coachSessions;
+    private Set<Session> coachSessions;
 
 }

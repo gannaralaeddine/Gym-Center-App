@@ -44,17 +44,17 @@ public class Activity implements Serializable
 
     @OneToMany(mappedBy = "activity")
     @JsonIgnore
-    private  List<Subscription> actSubscriptions;
+    private  Set<Subscription> actSubscriptions;
 
 
     @OneToMany(mappedBy = "sessionActivity")
 //    @JoinColumn(name = "sessionId")
     @JsonIgnore
-    private  List<Session> actSessions;
+    private  Set<Session> actSessions;
 
 
     @ManyToMany(mappedBy = "coachSpecialities")
-    private List<Coach> actCoaches;
+    private Set<Coach> actCoaches;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "activity_images",

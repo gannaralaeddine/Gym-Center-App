@@ -143,7 +143,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/activity/create-activity").permitAll()
                 .antMatchers("/activity/add-images-to-activity").permitAll()
                 .antMatchers("/activity/delete-activity-image/{actId}/{imageName}").permitAll()
-
+                .antMatchers("/activity/add-coach-to-activity/{activityId}/{coachId}").permitAll()
                 .antMatchers("/image/get-image/{image-name}").permitAll()
 
                 .anyRequest().authenticated().and().httpBasic();
