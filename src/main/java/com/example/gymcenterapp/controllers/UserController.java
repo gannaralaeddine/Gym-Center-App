@@ -1,5 +1,6 @@
 package com.example.gymcenterapp.controllers;
 
+import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Role;
 import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.services.RoleServiceImpl;
@@ -108,4 +109,14 @@ public class UserController
         userService.addImagesToProfile(userId, images);
     }
 
+
+
+// Delete User image
+//----------------------------------------------------------------------------------------------------------------------
+    @DeleteMapping(value = { "/delete-user-image/{userId}/{imageName}" })
+    @ResponseBody
+    public User deleteUserImage(@PathVariable Long userId, @PathVariable String imageName)
+    {
+        return userService.deleteUserImage(userId, imageName);
+    }
 }

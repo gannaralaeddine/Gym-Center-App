@@ -249,7 +249,7 @@ public class UserService implements IUserService, UserDetailsService
         }
         else
         {
-            System.out.println("activity or image is null");
+            System.out.println("user or image is null");
             return null;
         }
     }
