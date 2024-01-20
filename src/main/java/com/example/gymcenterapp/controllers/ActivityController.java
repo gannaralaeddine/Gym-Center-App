@@ -38,7 +38,6 @@ public class ActivityController
     @ResponseBody
     public Activity retrieveActivity(@PathVariable("activity-id") Long activityId) { return activityService.retrieveActivity(activityId); }
 
-
     @PostMapping(value = "/add-activity")
     @ResponseBody
     public Activity addActivity(@RequestBody Activity activity) { return activityService.addActivity(activity); }
