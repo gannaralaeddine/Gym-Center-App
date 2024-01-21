@@ -43,6 +43,7 @@ public class SessionService implements ISessionService
         if (existingSession != null)
         {
             existingSession.setSessionName(session.getSessionName());
+            existingSession.setSessionDescription(session.getSessionDescription());
             existingSession.setSessionActivity(session.getSessionActivity());
             existingSession.setSessionCoach(session.getSessionCoach());
             return sessionRepository.save(existingSession);
@@ -118,6 +119,7 @@ public class SessionService implements ISessionService
         if (existingSession != null)
         {
             existingSession.setSessionName(session.getSessionName());
+            existingSession.setSessionDescription(session.getSessionDescription());
             existingSession.setSessionActivity(session.getSessionActivity());
             existingSession.setSessionCoach(session.getSessionCoach());
 

@@ -34,6 +34,9 @@ public class Session
     @Column(name = "session_name")
     private String sessionName;
 
+    @Column(name = "session_description")
+    private String sessionDescription;
+
     @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REMOVE })
     @JoinColumn(name = "activityId")
     private Activity sessionActivity;
