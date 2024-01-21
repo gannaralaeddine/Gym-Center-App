@@ -1,17 +1,14 @@
 package com.example.gymcenterapp.controllers;
 
 import com.example.gymcenterapp.entities.Activity;
-import com.example.gymcenterapp.entities.Coach;
 import com.example.gymcenterapp.repositories.ActivityRepository;
 import com.example.gymcenterapp.repositories.CategoryRepository;
-import com.example.gymcenterapp.repositories.CoachRepository;
 import com.example.gymcenterapp.services.ActivityService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
-import java.util.Set;
 
 
 @RestController
@@ -25,8 +22,6 @@ public class ActivityController
     CategoryRepository categoryRepository;
 
     ActivityRepository activityRepository;
-
-    CoachRepository coachRepository;
 
     @GetMapping("/retrieve-all-activities")
     @ResponseBody
@@ -99,27 +94,7 @@ public class ActivityController
     @PutMapping("/add-coach-to-activity/{coachId}/{activityId}")
     public void addCoachToActivity(@PathVariable Long activityId,@PathVariable Long coachId) 
     {
-        Activity activity = activityRepository.findById(activityId).orElse(null);
-        Coach coach = coachRepository.findById(coachId).orElse(null);
-        if ((activity != null) && (coach != null))
-        {
-            Set<Activity> setActivity = coach.getCoachSpecialities();
-            Set<Coach> setCoach = activity.getActCoaches();
-
-            setActivity.add(activity);
-            setCoach.add(coach);
-
-            activity.setActCoaches(setCoach);
-            coach.setCoachSpecialities(setActivity);
-
-            activityRepository.save(activity);
-            coachRepository.save(coach);
-            System.out.println("coach added successfully !");
-        }
-        else
-        {
-            System.out.println("coach is null");
-        }
+        activityService.addCoachToActivity(activityId, coachId);
     }
 
 }

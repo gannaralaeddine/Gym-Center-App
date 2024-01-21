@@ -1,9 +1,11 @@
 package com.example.gymcenterapp.services;
 
 import com.example.gymcenterapp.entities.Activity;
+import com.example.gymcenterapp.entities.Coach;
 import com.example.gymcenterapp.entities.ImageModel;
 import com.example.gymcenterapp.interfaces.IActivityService;
 import com.example.gymcenterapp.repositories.ActivityRepository;
+import com.example.gymcenterapp.repositories.CoachRepository;
 import com.example.gymcenterapp.repositories.ImageModelRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ public class ActivityService implements IActivityService
     ActivityRepository activityRepository;
     ImageModelRepository imageModelRepository;
     ImageModelService imageModelService;
+    CoachRepository coachRepository;
 
     @Override
     public Activity addActivityWithOneImage(Activity activity, MultipartFile[] file)
@@ -196,4 +199,30 @@ public class ActivityService implements IActivityService
         }
     }
 
+
+    @Override
+    public void addCoachToActivity(Long activityId, Long coachId)
+    {
+        Activity activity = activityRepository.findById(activityId).orElse(null);
+        Coach coach = coachRepository.findById(coachId).orElse(null);
+        if ((activity != null) && (coach != null))
+        {
+            Set<Activity> setActivity = coach.getCoachSpecialities();
+            Set<Coach> setCoach = activity.getActCoaches();
+
+            setActivity.add(activity);
+            setCoach.add(coach);
+
+            activity.setActCoaches(setCoach);
+            coach.setCoachSpecialities(setActivity);
+
+            activityRepository.save(activity);
+            coachRepository.save(coach);
+            System.out.println("coach added successfully !");
+        }
+        else
+        {
+            System.out.println("coach or activity is null in addCoachToActivity");
+        }
+    }
 }
