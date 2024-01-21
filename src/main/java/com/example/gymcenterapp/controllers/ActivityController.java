@@ -96,7 +96,7 @@ public class ActivityController
         return activityService.deleteActivityImage(actId, imageName);
     }
 
-    @PutMapping("/add-coach-to-activity/{activityId}/{coachId}")
+    @PutMapping("/add-coach-to-activity/{coachId}/{activityId}")
     public void addCoachToActivity(@PathVariable Long activityId,@PathVariable Long coachId) 
     {
         Activity activity = activityRepository.findById(activityId).orElse(null);
@@ -114,6 +114,7 @@ public class ActivityController
 
             activityRepository.save(activity);
             coachRepository.save(coach);
+            System.out.println("coach added successfully !");
         }
         else
         {
