@@ -17,7 +17,7 @@ public class SubscriptionController
 {
     SubscriptionService subscriptionService;
 
-    @PostMapping(value = "/add-subscription")
+    @PostMapping(value = "/create-subscription")
     @ResponseBody
     public Subscription addSubscription(@RequestBody Subscription subscription) { return subscriptionService.addSubscription(subscription); }
 
