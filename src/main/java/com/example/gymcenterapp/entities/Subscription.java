@@ -21,21 +21,21 @@ public class Subscription implements Serializable
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JoinColumn(name = "subscriptionId")
-    private Long subId;
+    @JoinColumn(name = "subscription_id")
+    private Long subscriptionId;
 
     @JoinColumn(name = "subscription_price")
-    private float subPrice;
+    private float subscriptionPrice;
 
-    @JoinColumn(name = "subscription_start")
-    private Date subscriptionStart;
+    @JoinColumn(name = "subscription_start_date")
+    private Date subscriptionStartDate;
 
-    @JoinColumn(name = "subscription_end")
-    private Date subscriptionEnd;
+    @JoinColumn(name = "subscription_end_date")
+    private Date subscriptionEndDate;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "activityId",referencedColumnName = "actId")
-    private Activity activity;
+    @JoinColumn(name = "activity_id",referencedColumnName = "actId")
+    private Activity subscriptionActivity;
 
 
     @ManyToMany(mappedBy = "memberSubscriptions")

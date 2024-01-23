@@ -37,10 +37,10 @@ public class SubscriptionService implements ISubscriptionService
 
         if (existingSubscription != null)
         {
-            existingSubscription.setSubPrice(subscription.getSubPrice());
-            existingSubscription.setSubscriptionStart(subscription.getSubscriptionStart());
-            existingSubscription.setSubscriptionEnd(subscription.getSubscriptionEnd());
-            existingSubscription.setActivity(subscription.getActivity());
+            existingSubscription.setSubscriptionPrice(subscription.getSubscriptionPrice());
+            existingSubscription.setSubscriptionStartDate(subscription.getSubscriptionStartDate());
+            existingSubscription.setSubscriptionEndDate(subscription.getSubscriptionEndDate());
+            existingSubscription.setSubscriptionActivity(subscription.getSubscriptionActivity());
             existingSubscription.setSubscriptionMembers(subscription.getSubscriptionMembers());
             return subscriptionRepository.save(existingSubscription);
         }
