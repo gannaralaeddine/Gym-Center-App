@@ -41,7 +41,7 @@ public class Activity implements Serializable
     private Category category;
 
 
-    @OneToMany(mappedBy = "activity")
+    @OneToMany(mappedBy = "subscriptionActivity")
     @JsonIgnore
     private  Set<Subscription> actSubscriptions;
 

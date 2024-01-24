@@ -21,7 +21,7 @@ public class Member extends User
     @JoinTable(
             name = "members_subscriptions",
             joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "subscriptionId",referencedColumnName = "subId")
+            inverseJoinColumns = @JoinColumn(name = "subscriptionId",referencedColumnName = "subscriptionId")
     )
     private List<Subscription> memberSubscriptions;
 
