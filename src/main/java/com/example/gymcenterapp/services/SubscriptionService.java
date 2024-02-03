@@ -1,22 +1,28 @@
 package com.example.gymcenterapp.services;
 
+import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Category;
+import com.example.gymcenterapp.entities.Coach;
+import com.example.gymcenterapp.entities.Member;
 import com.example.gymcenterapp.entities.Subscription;
 import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.interfaces.ISubscriptionService;
 import com.example.gymcenterapp.interfaces.IUserService;
+import com.example.gymcenterapp.repositories.MemberRepository;
 import com.example.gymcenterapp.repositories.SubscriptionRepository;
 import com.example.gymcenterapp.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
 public class SubscriptionService implements ISubscriptionService
 {
     SubscriptionRepository subscriptionRepository;
+    MemberRepository memberRepository;
 
     @Override
     public Subscription addSubscription(Subscription subscription) { return subscriptionRepository.save(subscription); }
@@ -46,5 +52,32 @@ public class SubscriptionService implements ISubscriptionService
         }
 
         return null;
+    }
+
+    @Override
+    public void addMemberToSubscription(Long subscriptionId, Long memberId) 
+    {
+        Subscription subscription = subscriptionRepository.findById(subscriptionId).orElse(null);
+        Member member = memberRepository.findById(memberId).orElse(null);
+
+        if ((subscription != null) && (member != null))
+        {
+            Set<Subscription> setSubscription = member.getMemberSubscriptions();
+            Set<Member> setMember = subscription.getSubscriptionMembers();
+
+            setSubscription.add(subscription);
+            setMember.add(member);
+
+            subscription.setSubscriptionMembers(setMember);
+            member.setMemberSubscriptions(setSubscription);
+
+            subscriptionRepository.save(subscription);
+            memberRepository.save(member);
+            System.out.println("member added successfully !");
+        }
+        else
+        {
+            System.out.println("member or subscription is null in addMemberToSubscription");
+        }
     }
 }

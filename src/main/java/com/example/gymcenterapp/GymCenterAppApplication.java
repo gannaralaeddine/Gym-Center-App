@@ -130,11 +130,13 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/session/add-images-to-session").permitAll()
                 .antMatchers("/session/delete-session-image/{sessionId}/{imageName}").permitAll()
 
-                .antMatchers("/subscription/add-subscription").permitAll()
+                .antMatchers("/subscription/create-subscription").permitAll()
                 .antMatchers("/subscription/update-subscription/{subscription-id}").permitAll()
                 .antMatchers("/subscription/delete-subscription/{subscription-id}").permitAll()
                 .antMatchers("/subscription/retrieve-subscription/{subscription-id}").permitAll()
                 .antMatchers("/subscription/retrieve-all-subscriptions").permitAll()
+                .antMatchers("/subscription/add-member-to-subscription/{subscriptionId}/{memberId}").permitAll()
+                
 
                 .antMatchers("/activity/retrieve-all-activities").permitAll()
                 .antMatchers("/activity/add-activity").permitAll()

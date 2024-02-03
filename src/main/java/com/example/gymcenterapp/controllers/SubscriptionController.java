@@ -35,5 +35,11 @@ public class SubscriptionController
 
     @GetMapping("/retrieve-subscription/{id}")
     @ResponseBody
-    public Subscription retrieveActivity(@PathVariable("id") Long idSubscription) { return subscriptionService.retrieveSubscription(idSubscription); }
+    public Subscription retrieveSubscription(@PathVariable("id") Long idSubscription) { return subscriptionService.retrieveSubscription(idSubscription); }
+
+    @PutMapping("/add-member-to-subscription/{subscriptionId}/{memberId}")
+    public void addMemberToSubscription(@PathVariable Long subscriptionId,@PathVariable Long memberId) 
+    {
+        subscriptionService.addMemberToSubscription(subscriptionId, memberId);
+    }
 }

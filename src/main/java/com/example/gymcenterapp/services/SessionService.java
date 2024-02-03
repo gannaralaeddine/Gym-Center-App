@@ -44,6 +44,10 @@ public class SessionService implements ISessionService
         {
             existingSession.setSessionName(session.getSessionName());
             existingSession.setSessionDescription(session.getSessionDescription());
+            existingSession.setSessionStartDate(session.getSessionStartDate());
+            existingSession.setSessionTotalPlaces(session.getSessionTotalPlaces());
+            existingSession.setSessionReservedPlaces(session.getSessionReservedPlaces());
+            existingSession.setSessionDescription(session.getSessionDescription());
             existingSession.setSessionActivity(session.getSessionActivity());
             existingSession.setSessionCoach(session.getSessionCoach());
             return sessionRepository.save(existingSession);

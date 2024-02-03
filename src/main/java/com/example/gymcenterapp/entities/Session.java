@@ -1,5 +1,6 @@
 package com.example.gymcenterapp.entities;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -36,6 +37,15 @@ public class Session
 
     @Column(name = "session_description")
     private String sessionDescription;
+
+    @Column(name = "session_start_date")
+    private Date sessionStartDate;
+
+    @Column(name = "session_total_places")
+    private Integer sessionTotalPlaces;
+
+    @Column(name = "session_reserved_places")
+    private Integer sessionReservedPlaces;
 
     @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REMOVE })
     @JoinColumn(name = "activityId")

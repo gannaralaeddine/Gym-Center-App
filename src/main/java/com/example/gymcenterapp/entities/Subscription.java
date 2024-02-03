@@ -5,9 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,11 +38,10 @@ public class Subscription implements Serializable
     @JoinColumn(name = "subscription_end_date")
     private Date subscriptionEndDate;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REMOVE })
     @JoinColumn(name = "activity_id",referencedColumnName = "actId")
     private Activity subscriptionActivity;
 
-
     @ManyToMany(mappedBy = "memberSubscriptions")
-    private List<Member> subscriptionMembers;
+    private Set<Member> subscriptionMembers;
 }
