@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -57,6 +59,7 @@ public class Session
     @JoinColumn(name = "user_id")
     private Coach sessionCoach;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "memberSessions")
     private Set<Member> sessionMembers;
 
