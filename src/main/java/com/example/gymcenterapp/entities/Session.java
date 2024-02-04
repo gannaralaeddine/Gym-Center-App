@@ -59,7 +59,7 @@ public class Session
     private Coach sessionCoach;
 
     @ManyToMany(mappedBy = "memberSessions")
-    private List<Member> sessionMembers;
+    private Set<Member> sessionMembers;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(

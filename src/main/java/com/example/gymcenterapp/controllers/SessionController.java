@@ -1,5 +1,8 @@
 package com.example.gymcenterapp.controllers;
 
+import com.example.gymcenterapp.entities.Activity;
+import com.example.gymcenterapp.entities.Coach;
+import com.example.gymcenterapp.entities.Member;
 import com.example.gymcenterapp.entities.Session;
 import com.example.gymcenterapp.services.SessionService;
 import lombok.AllArgsConstructor;
@@ -8,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/session")
@@ -65,4 +69,14 @@ public class SessionController
     {
         return sessionService.deleteSessionImage(sessionId, imageName);
     }
+
+
+// Assign member to session
+//----------------------------------------------------------------------------------------------------------------------
+    @PutMapping("/assign-member-to-session/{memberId}/{sessionId}")
+    public void assignMemberToSession(@PathVariable Long memberId,@PathVariable Long sessionId)
+    {
+        sessionService.assignMemberToSession(memberId, sessionId);
+    }
+
 }

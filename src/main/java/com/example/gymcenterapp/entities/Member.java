@@ -1,12 +1,10 @@
 package com.example.gymcenterapp.entities;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,5 +35,5 @@ public class Member extends User
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "sessionId",referencedColumnName = "sessionId")
     )
-    private List<Session> memberSessions;
+    private Set<Session> memberSessions;
 }

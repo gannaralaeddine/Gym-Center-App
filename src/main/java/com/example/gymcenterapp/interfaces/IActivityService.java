@@ -1,7 +1,6 @@
 package com.example.gymcenterapp.interfaces;
 
 import com.example.gymcenterapp.entities.Activity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 

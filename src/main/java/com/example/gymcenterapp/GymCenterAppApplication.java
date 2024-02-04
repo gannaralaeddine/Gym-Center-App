@@ -129,13 +129,14 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/session/update-session-with-image").permitAll()
                 .antMatchers("/session/add-images-to-session").permitAll()
                 .antMatchers("/session/delete-session-image/{sessionId}/{imageName}").permitAll()
+                .antMatchers("/session/add-member-to-session/{memberId}/{sessionId}").permitAll()
 
                 .antMatchers("/subscription/create-subscription").permitAll()
                 .antMatchers("/subscription/update-subscription/{subscription-id}").permitAll()
                 .antMatchers("/subscription/delete-subscription/{subscription-id}").permitAll()
                 .antMatchers("/subscription/retrieve-subscription/{subscription-id}").permitAll()
                 .antMatchers("/subscription/retrieve-all-subscriptions").permitAll()
-                .antMatchers("/subscription/add-member-to-subscription/{subscriptionId}/{memberId}").permitAll()
+                .antMatchers("/subscription/assign-member-to-subscription/{subscriptionId}/{memberId}").permitAll()
                 
 
                 .antMatchers("/activity/retrieve-all-activities").permitAll()
@@ -158,7 +159,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://localhost:4500"));
         corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
                 "Accept", "Authorization", "Origin, Accept", "X-Requested-With",
                 "Access-Control-Request-Method", "Access-Control-Request-Headers"));

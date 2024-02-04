@@ -1,9 +1,9 @@
 package com.example.gymcenterapp.services;
 
-import com.example.gymcenterapp.entities.ImageModel;
-import com.example.gymcenterapp.entities.Session;
+import com.example.gymcenterapp.entities.*;
 import com.example.gymcenterapp.interfaces.ISessionService;
 import com.example.gymcenterapp.repositories.ImageModelRepository;
+import com.example.gymcenterapp.repositories.MemberRepository;
 import com.example.gymcenterapp.repositories.SessionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +22,8 @@ public class SessionService implements ISessionService
     SessionRepository sessionRepository;
     ImageModelService imageModelService;   
     ImageModelRepository imageModelRepository;
+    MemberRepository memberRepository;
+
 //    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
     final String directory = "C:\\Users\\awadi\\Desktop\\Projet PFE\\back\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
 
@@ -187,6 +189,34 @@ public class SessionService implements ISessionService
         {
             System.out.println("Session or image is null");
             return null;
+        }
+    }
+
+
+    public void assignMemberToSession(Long memberId, Long sessionId)
+    {
+
+        Member member = memberRepository.findById(memberId).orElse(null);
+        Session session = sessionRepository.findById(sessionId).orElse(null);
+
+        if ((member != null) && (session != null))
+        {
+            Set<Session> memberSessions = member.getMemberSessions();
+            Set<Member> sessionMembers = session.getSessionMembers();
+
+            memberSessions.add(session);
+            sessionMembers.add(member);
+
+            member.setMemberSessions(memberSessions);
+            session.setSessionMembers(sessionMembers);
+
+            memberRepository.save(member);
+            sessionRepository.save(session);
+            System.out.println("member participated successfully in session !");
+        }
+        else
+        {
+            System.out.println("member or session is null in assignMemberToSession");
         }
     }
 }
