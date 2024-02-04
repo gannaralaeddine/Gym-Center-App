@@ -59,7 +59,7 @@ public class Session
     @JoinColumn(name = "user_id")
     private Coach sessionCoach;
 
-    @JsonIgnore
+    
     @ManyToMany(mappedBy = "memberSessions")
     private Set<Member> sessionMembers;
 

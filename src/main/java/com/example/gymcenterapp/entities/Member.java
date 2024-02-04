@@ -30,6 +30,7 @@ public class Member extends User
 
 
     @ManyToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinTable(
             name = "members_sessions",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
