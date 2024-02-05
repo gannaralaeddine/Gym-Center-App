@@ -46,7 +46,7 @@ public class SessionService implements ISessionService
         {
             existingSession.setSessionName(session.getSessionName());
             existingSession.setSessionDescription(session.getSessionDescription());
-            existingSession.setSessionStartDate(session.getSessionStartDate());
+            existingSession.setSessionDeadline(session.getSessionDeadline());
             existingSession.setSessionTotalPlaces(session.getSessionTotalPlaces());
             existingSession.setSessionReservedPlaces(session.getSessionReservedPlaces());
             existingSession.setSessionDescription(session.getSessionDescription());

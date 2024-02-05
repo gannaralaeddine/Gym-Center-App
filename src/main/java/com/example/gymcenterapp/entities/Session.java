@@ -39,8 +39,8 @@ public class Session
     @Column(name = "session_description")
     private String sessionDescription;
 
-    @Column(name = "session_start_date")
-    private Date sessionStartDate;
+    @Column(name = "session_deadline")
+    private Date sessionDeadline;
 
     @Column(name = "session_total_places")
     private Integer sessionTotalPlaces;
