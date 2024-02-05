@@ -61,4 +61,8 @@ public class Activity implements Serializable
             inverseJoinColumns = { @JoinColumn(name = "image_id") }
     )
     private Set<ImageModel> activityImages;
+
+    @OneToMany(mappedBy = "offerActivity")
+    @JsonIgnore
+    private Set<Offer> activityOffers;
 }

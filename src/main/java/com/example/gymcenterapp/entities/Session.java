@@ -46,7 +46,7 @@ public class Session
     private Integer sessionTotalPlaces;
 
     @Column(name = "session_reserved_places")
-    private Integer sessionReservedPlaces;
+    private Integer sessionReservedPlaces = 0;
 
     @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REMOVE })
     @JoinColumn(name = "activityId")

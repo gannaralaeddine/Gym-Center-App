@@ -210,14 +210,7 @@ public class SessionService implements ISessionService
             member.setMemberSessions(memberSessions);
             session.setSessionMembers(sessionMembers);
             
-            if (session.getSessionReservedPlaces() != null)
-            {
-                session.setSessionReservedPlaces(session.getSessionReservedPlaces() + 1);
-            }
-            else
-            {
-                session.setSessionReservedPlaces(1);
-            }
+            session.setSessionReservedPlaces(session.getSessionReservedPlaces() + 1);
 
             memberRepository.save(member);
             sessionRepository.save(session);
