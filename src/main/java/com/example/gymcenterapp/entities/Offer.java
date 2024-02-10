@@ -34,7 +34,7 @@ public class Offer
     private Integer offerPeriod;
 
     @Column(name = "offer_price")
-    private Float offerPrice;
+    private Double offerPrice;
 
     @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REMOVE })
     @JoinColumn(name = "offer_activity")
