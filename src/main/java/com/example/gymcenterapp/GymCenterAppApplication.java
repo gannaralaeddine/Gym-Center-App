@@ -158,6 +158,12 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/offer/update-offer/{offer-id}").permitAll()
                 .antMatchers("/offer/delete-offer/{offer-id}").permitAll()
 
+                .antMatchers("/option/retrieve-all-options").permitAll()
+                .antMatchers("/option/retrieve-option/{option-id}").permitAll()
+                .antMatchers("/option/create-option").permitAll()
+                .antMatchers("/option/update-option/{option-id}").permitAll()
+                .antMatchers("/option/delete-option/{option-id}").permitAll()
+
                 .anyRequest().authenticated().and().httpBasic();
     }
 

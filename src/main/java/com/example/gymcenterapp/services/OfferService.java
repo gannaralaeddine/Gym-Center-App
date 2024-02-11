@@ -37,6 +37,7 @@ public class OfferService implements IOfferService
             existingOffer.setOfferPeriod(offer.getOfferPeriod());
             existingOffer.setOfferPrice(offer.getOfferPrice());
             existingOffer.setOfferActivity(offer.getOfferActivity());
+            existingOffer.setOfferOption(offer.getOfferOption());
             return offerRepository.save(existingOffer);
         }
         else
