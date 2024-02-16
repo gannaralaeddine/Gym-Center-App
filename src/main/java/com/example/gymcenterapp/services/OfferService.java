@@ -1,8 +1,10 @@
 package com.example.gymcenterapp.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import com.example.gymcenterapp.entities.Offer;
+import com.example.gymcenterapp.entities.Option;
 import com.example.gymcenterapp.interfaces.IOfferService;
 import com.example.gymcenterapp.repositories.OfferRepository;
 
@@ -13,9 +15,16 @@ import lombok.AllArgsConstructor;
 public class OfferService implements IOfferService
 {
     OfferRepository offerRepository;
+    OptionService optionService;
     
     @Override
-    public Offer addOffer(Offer offer) { return offerRepository.save(offer); }
+    public Offer addOffer(Offer offer) 
+    {
+        List <Option> options = new ArrayList<>();
+        for (Option option : offer.getOfferOption()) { options.add(optionService.retrieveOption(option.getOptionId())); }
+        offer.setOfferOption(options);
+        return offerRepository.save(offer); 
+    }
 
     @Override
     public List<Offer> retrieveAllOffers() { return offerRepository.findAll(); }
@@ -46,4 +55,5 @@ public class OfferService implements IOfferService
             return null;
         }
     }
+
 }

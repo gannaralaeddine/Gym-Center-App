@@ -4,12 +4,16 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -45,7 +49,11 @@ public class Offer
     @JoinColumn(name = "offer_activity")
     private Activity offerActivity;
 
-    @OneToMany(mappedBy = "optionId")
-    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+        name = "offer_option",
+        joinColumns = { @JoinColumn (name = "offer_id") },
+        inverseJoinColumns = { @JoinColumn(name = "option_id") }
+    )
     private List<Option> offerOption;
 }
