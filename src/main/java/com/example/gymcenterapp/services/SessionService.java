@@ -6,6 +6,8 @@ import com.example.gymcenterapp.repositories.ImageModelRepository;
 import com.example.gymcenterapp.repositories.MemberRepository;
 import com.example.gymcenterapp.repositories.SessionRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,8 +26,8 @@ public class SessionService implements ISessionService
     ImageModelRepository imageModelRepository;
     MemberRepository memberRepository;
 
-//    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
-    final String directory = "C:\\Users\\awadi\\Desktop\\Projet PFE\\back\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
+    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
+//    final String directory = "C:\\Users\\awadi\\Desktop\\Projet PFE\\back\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
 
 
     @Override
@@ -193,10 +195,10 @@ public class SessionService implements ISessionService
     }
 
 
-    public void assignMemberToSession(Long memberId, Long sessionId)
+    public ResponseEntity<String> assignMemberToSession(String email, Long sessionId)
     {
 
-        Member member = memberRepository.findById(memberId).orElse(null);
+        Member member = memberRepository.findByEmail(email);
         Session session = sessionRepository.findById(sessionId).orElse(null);
 
         if ((member != null) && (session != null))
@@ -204,21 +206,36 @@ public class SessionService implements ISessionService
             Set<Session> memberSessions = member.getMemberSessions();
             Set<Member> sessionMembers = session.getSessionMembers();
 
+            if (sessionMembers.size() >= session.getSessionTotalPlaces())
+            {
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("No free places in this session !");
+            }
+
+            if (sessionMembers.contains(member))
+            {
+                return ResponseEntity.status(HttpStatus.FOUND).body("Member already participated to session !");
+            }
+
             memberSessions.add(session);
             sessionMembers.add(member);
 
             member.setMemberSessions(memberSessions);
             session.setSessionMembers(sessionMembers);
             
-            session.setSessionReservedPlaces(session.getSessionReservedPlaces() + 1);
+            if (session.getSessionReservedPlaces() != null)
+            {
+                session.setSessionReservedPlaces(session.getSessionReservedPlaces() + 1);
+            }
+            else
+            {
+                session.setSessionReservedPlaces(1);
+            }
 
             memberRepository.save(member);
             sessionRepository.save(session);
-            System.out.println("member participated successfully in session !");
+
+            return ResponseEntity.ok("Member participated successfully in session !");
         }
-        else
-        {
-            System.out.println("member or session is null in assignMemberToSession");
-        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member or session is null in assignMemberToSession");
     }
 }

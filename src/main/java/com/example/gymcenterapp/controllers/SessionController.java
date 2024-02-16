@@ -4,6 +4,7 @@ import com.example.gymcenterapp.entities.Session;
 import com.example.gymcenterapp.services.SessionService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/session")
 @AllArgsConstructor
-
 public class SessionController
 {
     SessionService sessionService;
@@ -69,10 +69,10 @@ public class SessionController
 
 // Assign member to session
 //----------------------------------------------------------------------------------------------------------------------
-    @PutMapping("/assign-member-to-session/{memberId}/{sessionId}")
-    public void assignMemberToSession(@PathVariable Long memberId,@PathVariable Long sessionId)
+    @PutMapping("/assign-member-to-session/{email}/{sessionId}")
+    public ResponseEntity<String> assignMemberToSession(@PathVariable String email, @PathVariable Long sessionId)
     {
-        sessionService.assignMemberToSession(memberId, sessionId);
+        return sessionService.assignMemberToSession(email, sessionId);
     }
 
 }
