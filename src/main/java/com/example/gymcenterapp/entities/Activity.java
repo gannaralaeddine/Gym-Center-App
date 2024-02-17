@@ -47,7 +47,6 @@ public class Activity implements Serializable
 
 
     @OneToMany(mappedBy = "sessionActivity")
-//    @JoinColumn(name = "sessionId")
     @JsonIgnore
     private  Set<Session> actSessions;
 

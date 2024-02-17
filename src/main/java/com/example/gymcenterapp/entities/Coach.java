@@ -33,7 +33,6 @@ public class Coach extends User
 
 
     @OneToMany(mappedBy = "sessionCoach")
-//    @JoinColumn(name = "sessionCoach")
     @JsonIgnore
     private Set<Session> coachSessions;
 

@@ -26,8 +26,8 @@ public class SessionService implements ISessionService
     ImageModelRepository imageModelRepository;
     MemberRepository memberRepository;
 
-    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
-//    final String directory = "C:\\Users\\awadi\\Desktop\\Projet PFE\\back\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
+//    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
+    final String directory = "C:\\Users\\awadi\\Desktop\\Projet PFE\\back\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
 
 
     @Override
@@ -232,9 +232,8 @@ public class SessionService implements ISessionService
             }
 
             memberRepository.save(member);
-            sessionRepository.save(session);
 
-            return ResponseEntity.ok("Member participated successfully in session !");
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member or session is null in assignMemberToSession");
     }
