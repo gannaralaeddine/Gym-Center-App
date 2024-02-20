@@ -21,7 +21,10 @@ public class OfferService implements IOfferService
     public Offer addOffer(Offer offer) 
     {
         List <Option> options = new ArrayList<>();
-        for (Option option : offer.getOfferOption()) { options.add(optionService.retrieveOption(option.getOptionId())); }
+        for (Option option : offer.getOfferOption()) 
+        { 
+            options.add(optionService.retrieveOption(option.getOptionId())); 
+        }
         offer.setOfferOption(options);
         return offerRepository.save(offer); 
     }
@@ -39,6 +42,7 @@ public class OfferService implements IOfferService
     public Offer updateOffer(Long id, Offer offer) 
     {
         Offer existingOffer = offerRepository.findById(id).orElse(null);
+        List <Option> options = new ArrayList<>();
 
         if (existingOffer != null)
         {
@@ -46,7 +50,12 @@ public class OfferService implements IOfferService
             existingOffer.setOfferPeriod(offer.getOfferPeriod());
             existingOffer.setOfferPrice(offer.getOfferPrice());
             existingOffer.setOfferActivity(offer.getOfferActivity());
-            existingOffer.setOfferOption(offer.getOfferOption());
+            for (Option option : offer.getOfferOption()) 
+            { 
+                options.add(optionService.retrieveOption(option.getOptionId())); 
+            }
+            existingOffer.getOfferOption().clear();
+            existingOffer.setOfferOption(options);
             return offerRepository.save(existingOffer);
         }
         else

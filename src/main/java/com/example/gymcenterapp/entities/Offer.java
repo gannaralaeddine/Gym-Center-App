@@ -49,7 +49,7 @@ public class Offer
     @JoinColumn(name = "offer_activity")
     private Activity offerActivity;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     @JoinTable(
         name = "offer_option",
         joinColumns = { @JoinColumn (name = "offer_id") },
