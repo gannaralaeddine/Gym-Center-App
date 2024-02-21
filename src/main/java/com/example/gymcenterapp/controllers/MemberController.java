@@ -1,10 +1,12 @@
 package com.example.gymcenterapp.controllers;
 
 import com.example.gymcenterapp.entities.Member;
+import com.example.gymcenterapp.entities.Session;
 import com.example.gymcenterapp.services.MemberService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/member")
@@ -20,9 +22,9 @@ public class MemberController
     public List<Member> getAllMembers() { return memberService.retrieveAllMembers(); }
 
 
-    @GetMapping("/retrieve-member/{member-id}")
+    @GetMapping("/retrieve-member/{email}")
     @ResponseBody
-    public Member retrieveMember(@PathVariable("member-id") Long memberId) { return memberService.retrieveMember(memberId); }
+    public Member retrieveMember(@PathVariable("email") String email) { return memberService.retrieveMember(email); }
 
 
     @PostMapping(value = "/register-member")
@@ -35,4 +37,9 @@ public class MemberController
 
     @DeleteMapping(value = "/delete-member/{member-id}")
     public void deleteMember(@PathVariable("member-id") Long memberId) { memberService.deleteMember(memberId); }
+
+
+    @GetMapping("/retrieve-member-sessions/{email}")
+    @ResponseBody
+    public Set<Session> retrieveMemberSessions(@PathVariable("email") String email) { return memberService.retrieveMemberSessions(email); }
 }

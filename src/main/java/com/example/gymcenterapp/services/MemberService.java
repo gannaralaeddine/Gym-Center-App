@@ -2,6 +2,7 @@ package com.example.gymcenterapp.services;
 
 import com.example.gymcenterapp.entities.Member;
 import com.example.gymcenterapp.entities.Role;
+import com.example.gymcenterapp.entities.Session;
 import com.example.gymcenterapp.interfaces.IMemberService;
 import com.example.gymcenterapp.repositories.MemberRepository;
 import com.example.gymcenterapp.repositories.RoleRepository;
@@ -52,7 +53,7 @@ public class MemberService implements IMemberService
     public List<Member> retrieveAllMembers() { return memberRepository.findAll(); }
 
     @Override
-    public Member retrieveMember(Long id) { return memberRepository.findById(id).orElse(null); }
+    public Member retrieveMember(String email) { return memberRepository.findByEmail(email); }
 
     @Override
     public void deleteMember(Long id) { memberRepository.deleteById(id);}
@@ -83,5 +84,11 @@ public class MemberService implements IMemberService
         }
 
         return null;
+    }
+
+    public Set<Session> retrieveMemberSessions(String email)
+    {
+        Member member = memberRepository.findByEmail(email);
+        return member.getMemberSessions();
     }
 }

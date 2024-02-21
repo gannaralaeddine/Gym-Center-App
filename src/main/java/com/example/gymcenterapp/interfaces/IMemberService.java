@@ -10,7 +10,7 @@ public interface IMemberService
 
     List<Member> retrieveAllMembers();
 
-    Member retrieveMember(Long id);
+    Member retrieveMember(String email);
 
     void deleteMember(Long id);
 
