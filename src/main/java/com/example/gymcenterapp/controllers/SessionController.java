@@ -75,4 +75,21 @@ public class SessionController
         return sessionService.assignMemberToSession(email, sessionId);
     }
 
+
+// Remove member from session
+//----------------------------------------------------------------------------------------------------------------------
+    @PutMapping("/remove-member-from-session/{email}/{sessionId}")
+    public ResponseEntity<String> removeMemberFromSession(@PathVariable String email, @PathVariable Long sessionId)
+    {
+        return sessionService.removeMemberFromSession(email, sessionId);
+    }
+
+
+    @PostMapping("/is-member-participated-to-session/{email}/{sessionId}")
+    public boolean isMemberParticipatedToSession(@PathVariable String email, @PathVariable Long sessionId)
+    {
+        boolean b = sessionService.isMemberParticipatedToSession(email, sessionId);
+        System.out.println("isMemberParticipatedToSession: " + b);
+        return b;
+    }
 }

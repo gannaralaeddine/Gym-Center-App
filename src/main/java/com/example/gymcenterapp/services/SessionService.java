@@ -237,4 +237,46 @@ public class SessionService implements ISessionService
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member or session is null in assignMemberToSession");
     }
+
+
+    public ResponseEntity<String> removeMemberFromSession(String email, Long sessionId)
+    {
+
+        Member member = memberRepository.findByEmail(email);
+        Session session = sessionRepository.findById(sessionId).orElse(null);
+
+        if ((member != null) && (session != null))
+        {
+            Set<Session> memberSessions = member.getMemberSessions();
+            Set<Member> sessionMembers = session.getSessionMembers();
+
+
+            memberSessions.remove(session);
+            sessionMembers.remove(member);
+
+            member.setMemberSessions(memberSessions);
+            session.setSessionMembers(sessionMembers);
+
+
+            session.setSessionReservedPlaces(session.getSessionReservedPlaces() - 1);
+
+
+            memberRepository.save(member);
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Member or session is null in assignMemberToSession");
+    }
+
+    public boolean isMemberParticipatedToSession(String email, Long sessionId)
+    {
+        Member member = memberRepository.findByEmail(email);
+        Session session = sessionRepository.findById(sessionId).orElse(null);
+
+        if (member != null && session != null)
+        {
+            return session.getSessionMembers().contains(member);
+        }
+        return false;
+    }
 }
