@@ -1,8 +1,10 @@
 package com.example.gymcenterapp.services;
 
+import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Coach;
 import com.example.gymcenterapp.entities.Role;
 import com.example.gymcenterapp.interfaces.ICoachService;
+import com.example.gymcenterapp.repositories.ActivityRepository;
 import com.example.gymcenterapp.repositories.CoachRepository;
 import com.example.gymcenterapp.repositories.RoleRepository;
 import lombok.AllArgsConstructor;
@@ -20,6 +22,8 @@ public class CoachService implements ICoachService
 { 
     CoachRepository coachRepository;
     RoleRepository roleRepository;
+    ActivityRepository activityRepository;
+
 
     @Override
     public Coach registerCoach(Coach coach)
@@ -83,5 +87,38 @@ public class CoachService implements ICoachService
         }
 
         return null;
+    }
+
+
+    public void updateCoachSpecialities(Long coachId, List<Long> specialities)
+    {
+        for (Long speciality : specialities) {
+            addCoachToActivity(coachId, speciality);
+        }
+    }
+
+    public void addCoachToActivity(Long coachId, Long activityId)
+    {
+        Activity activity = activityRepository.findById(activityId).orElse(null);
+        Coach coach = coachRepository.findById(coachId).orElse(null);
+        if ((activity != null) && (coach != null))
+        {
+            Set<Activity> setActivity = coach.getCoachSpecialities();
+            Set<Coach> setCoach = activity.getActCoaches();
+
+            setActivity.add(activity);
+            setCoach.add(coach);
+
+            activity.setActCoaches(setCoach);
+            coach.setCoachSpecialities(setActivity);
+
+            activityRepository.save(activity);
+            coachRepository.save(coach);
+            System.out.println("coach added successfully !");
+        }
+        else
+        {
+            System.out.println("coach or activity is null in addCoachToActivity");
+        }
     }
 }
