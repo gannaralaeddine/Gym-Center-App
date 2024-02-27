@@ -1,11 +1,13 @@
 package com.example.gymcenterapp.controllers;
 
+import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Coach;
 import com.example.gymcenterapp.services.CoachService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/coach")
@@ -24,6 +26,10 @@ public class CoachController
     @GetMapping("/retrieve-coach/{coach-id}")
     @ResponseBody
     public Coach retrieveCoach(@PathVariable("coach-id") Long coachId) { return coachService.retrieveCoach(coachId); }
+
+    @GetMapping("/retrieve-coach-specialities/{coach-id}")
+    @ResponseBody
+    public Set<Activity> retrieveCoachSpecialities(@PathVariable("coach-id") Long coachId) { return coachService.retrieveCoachSpecialities(coachId); }
 
 
     @PostMapping(value = "/register-coach")
@@ -44,4 +50,6 @@ public class CoachController
     {
         coachService.updateCoachSpecialities(coachId, specialities);
     }
+
+
 }

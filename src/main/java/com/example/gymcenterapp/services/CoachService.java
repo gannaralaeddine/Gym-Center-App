@@ -92,9 +92,20 @@ public class CoachService implements ICoachService
 
     public void updateCoachSpecialities(Long coachId, List<Long> specialities)
     {
-        for (Long speciality : specialities) {
+        for (Long speciality : specialities) 
+        {
             addCoachToActivity(coachId, speciality);
         }
+    }
+
+    public Set<Activity> retrieveCoachSpecialities(Long coachId)
+    {
+        Coach coach = coachRepository.findById(coachId).orElse(null);
+        if (coach != null)
+        {
+            return coach.getCoachSpecialities();
+        }
+        return null;
     }
 
     public void addCoachToActivity(Long coachId, Long activityId)
