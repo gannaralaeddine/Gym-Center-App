@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -141,28 +142,20 @@ public class CoachService implements ICoachService
     {
         Activity activity = activityRepository.findById(activityId).orElse(null);
         Coach coach = coachRepository.findById(coachId).orElse(null);
+
         if ((activity != null) && (coach != null))
         {
-            for (Activity speciality: coach.getCoachSpecialities())
-            {
-                if (speciality.getActId() == activityId)
-                {
-                    coach.getCoachSpecialities().remove(speciality);
-                    coach.setCoachSpecialities(coach.getCoachSpecialities());
-                    coachRepository.save(coach);
+            Set<Activity> coachSpecialities = coach.getCoachSpecialities();
+            Set<Coach> activityCoaches = activity.getActCoaches();
 
-                    for (Coach c: activity.getActCoaches())
-                    {
-                        if (c.getUserId() == coachId)
-                        {
-                            activity.getActCoaches().remove(c);
-                            activity.setActCoaches(activity.getActCoaches());
-                            activityRepository.save(activity);
-                        }
-                    }
-                    
-                }
-            }
+            coachSpecialities.removeIf(act -> act.getActId() == activityId);
+            coach.setCoachSpecialities(coachSpecialities);
+            coachRepository.save(coach);
+
+            activityCoaches.removeIf(c -> c.getUserId() == coachId);
+            activity.setActCoaches(activityCoaches);
+            activityRepository.save(activity);
+
         }
     }
 }
