@@ -90,6 +90,7 @@ public class CoachService implements ICoachService
     }
 
 
+    @Override
     public void updateCoachSpecialities(Long coachId, List<Long> specialities)
     {
         for (Long speciality : specialities) 
@@ -98,6 +99,7 @@ public class CoachService implements ICoachService
         }
     }
 
+    @Override
     public Set<Activity> retrieveCoachSpecialities(Long coachId)
     {
         Coach coach = coachRepository.findById(coachId).orElse(null);
@@ -108,6 +110,7 @@ public class CoachService implements ICoachService
         return null;
     }
 
+    @Override
     public void addCoachToActivity(Long coachId, Long activityId)
     {
         Activity activity = activityRepository.findById(activityId).orElse(null);
@@ -130,6 +133,36 @@ public class CoachService implements ICoachService
         else
         {
             System.out.println("coach or activity is null in addCoachToActivity");
+        }
+    }
+
+    @Override
+    public void deleteCoachActivities(Long coachId, Long activityId)
+    {
+        Activity activity = activityRepository.findById(activityId).orElse(null);
+        Coach coach = coachRepository.findById(coachId).orElse(null);
+        if ((activity != null) && (coach != null))
+        {
+            for (Activity speciality: coach.getCoachSpecialities())
+            {
+                if (speciality.getActId() == activityId)
+                {
+                    coach.getCoachSpecialities().remove(speciality);
+                    coach.setCoachSpecialities(coach.getCoachSpecialities());
+                    coachRepository.save(coach);
+
+                    for (Coach c: activity.getActCoaches())
+                    {
+                        if (c.getUserId() == coachId)
+                        {
+                            activity.getActCoaches().remove(c);
+                            activity.setActCoaches(activity.getActCoaches());
+                            activityRepository.save(activity);
+                        }
+                    }
+                    
+                }
+            }
         }
     }
 }

@@ -51,5 +51,9 @@ public class CoachController
         coachService.updateCoachSpecialities(coachId, specialities);
     }
 
-
+    @PutMapping(value = "/delete-coach-activities/{coach-id}/{activity-id}")
+    public void deleteCoachActivities(@PathVariable("coach-id") Long coachId, @PathVariable("activity-id") Long activityId)
+    {
+        coachService.deleteCoachActivities(coachId, activityId);
+    }
 }
