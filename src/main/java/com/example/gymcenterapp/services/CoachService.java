@@ -1,30 +1,24 @@
 package com.example.gymcenterapp.services;
 
-import com.example.gymcenterapp.entities.Activity;
-import com.example.gymcenterapp.entities.Coach;
-import com.example.gymcenterapp.entities.Role;
+import com.example.gymcenterapp.entities.*;
 import com.example.gymcenterapp.interfaces.ICoachService;
-import com.example.gymcenterapp.repositories.ActivityRepository;
-import com.example.gymcenterapp.repositories.CoachRepository;
-import com.example.gymcenterapp.repositories.RoleRepository;
+import com.example.gymcenterapp.repositories.*;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 @Service
 @AllArgsConstructor
-
 public class CoachService implements ICoachService
-{ 
-    CoachRepository coachRepository;
-    RoleRepository roleRepository;
-    ActivityRepository activityRepository;
-
+{
+    private CoachRepository coachRepository;
+    private RoleRepository roleRepository;
+    private ActivityRepository activityRepository;
+    private EmailServiceImpl emailService;
 
     @Override
     public Coach registerCoach(Coach coach)
@@ -50,6 +44,9 @@ public class CoachService implements ICoachService
             }
         });
         coach.setRoles(roles);
+
+        emailService.sendConfirmationEmail(coach);
+
         return coachRepository.save(coach);
     }
 

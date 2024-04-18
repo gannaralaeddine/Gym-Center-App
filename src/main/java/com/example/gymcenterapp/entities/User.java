@@ -57,7 +57,8 @@ public class User implements Serializable, UserDetails
 
     private String userPassword;
 
-//    private boolean isAccountVerified;
+    @Column(nullable = true)
+    private boolean userIsEnabled;
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
@@ -73,8 +74,6 @@ public class User implements Serializable, UserDetails
             inverseJoinColumns = { @JoinColumn(name = "image_id") }
     )
     private Set<ImageModel> userImages;
-
-
 
 
     @Override
@@ -113,7 +112,6 @@ public class User implements Serializable, UserDetails
         return true;
     }
 
-    @Override
     public boolean isEnabled() {
         return true;
     }

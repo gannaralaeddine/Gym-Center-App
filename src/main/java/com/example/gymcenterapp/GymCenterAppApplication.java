@@ -99,6 +99,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/user/update-user").permitAll()
                 .antMatchers("/user/add-images-to-user").permitAll()
                 .antMatchers("/user/delete-user-image/{userId}/{imageName}").permitAll()
+                .antMatchers("/user/confirm-account").permitAll()
 
                 .antMatchers("/category/add-category").permitAll()
                 .antMatchers("/category/update-category").permitAll()

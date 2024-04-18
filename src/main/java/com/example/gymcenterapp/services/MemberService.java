@@ -16,11 +16,11 @@ import java.util.Set;
 
 @Service
 @AllArgsConstructor
-
 public class MemberService implements IMemberService
 { 
-    MemberRepository memberRepository;
-    RoleRepository roleRepository;
+    private MemberRepository memberRepository;
+    private RoleRepository roleRepository;
+    private EmailServiceImpl emailService;
 
     @Override
     public Member registerMember(Member member) {
@@ -46,6 +46,7 @@ public class MemberService implements IMemberService
             }
         });
         member.setRoles(roles);
+        emailService.sendConfirmationEmail(member);
         return memberRepository.save(member);
     }
 

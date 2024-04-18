@@ -1,6 +1,5 @@
 package com.example.gymcenterapp.controllers;
 
-import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Role;
 import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.services.RoleServiceImpl;
@@ -118,5 +117,12 @@ public class UserController
     public User deleteUserImage(@PathVariable Long userId, @PathVariable String imageName)
     {
         return userService.deleteUserImage(userId, imageName);
+    }
+
+// Confirm account
+//----------------------------------------------------------------------------------------------------------------------
+    @RequestMapping("/confirm-account")
+    public String confirmUserAccountCompany(@RequestParam("token")String confirmationToken) {
+        return userService.confirmUserAccount(confirmationToken);
     }
 }

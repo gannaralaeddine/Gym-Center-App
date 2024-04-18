@@ -1,9 +1,11 @@
 package com.example.gymcenterapp.services;
 
+import com.example.gymcenterapp.entities.ConfirmationToken;
 import com.example.gymcenterapp.entities.ImageModel;
 import com.example.gymcenterapp.entities.Role;
 import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.interfaces.IUserService;
+import com.example.gymcenterapp.repositories.ConfirmationTokenRepository;
 import com.example.gymcenterapp.repositories.ImageModelRepository;
 import com.example.gymcenterapp.repositories.RoleRepository;
 import com.example.gymcenterapp.repositories.UserRepository;
@@ -28,13 +30,12 @@ public class UserService implements IUserService, UserDetailsService
 //    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\users\\";
     final String directory = "C:\\Users\\awadi\\Desktop\\Projet PFE\\back\\Gym-Center-App\\src\\main\\resources\\static\\activities\\";
 
-    UserRepository userRepository;
-
-    RoleRepository roleRepository;
-
-    ImageModelService imageModelService;
-
-    ImageModelRepository imageModelRepository;
+    private UserRepository userRepository;
+    private RoleRepository roleRepository;
+    private ImageModelService imageModelService;
+    private ImageModelRepository imageModelRepository;
+    private ConfirmationTokenRepository confirmationTokenRepository;
+    private EmailServiceImpl emailService;
 
     @Override
     public User addUser(User user)
@@ -60,6 +61,7 @@ public class UserService implements IUserService, UserDetailsService
             }
         });
         user.setRoles(roles);
+        emailService.sendConfirmationEmail(user);
         return userRepository.save(user);
     }
 
@@ -251,6 +253,23 @@ public class UserService implements IUserService, UserDetailsService
         {
             System.out.println("user or image is null");
             return null;
+        }
+    }
+
+
+    public String confirmUserAccount(String confirmationToken)
+    {
+        ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
+        if(token != null)
+        {
+            User user = userRepository.findByEmail(token.getUser().getUserEmail());
+            user.setUserIsEnabled(true);
+            userRepository.save(user);
+            return "<h1>Account Verified successfully</h1>";
+        }
+        else
+        {
+            return "<h1>Invalid token!</h1>";
         }
     }
 }
