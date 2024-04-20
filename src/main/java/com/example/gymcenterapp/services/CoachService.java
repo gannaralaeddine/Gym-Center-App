@@ -57,6 +57,9 @@ public class CoachService implements ICoachService
     public Coach retrieveCoach(Long id) { return coachRepository.findById(id).orElse(null); }
 
     @Override
+    public Coach retrieveCoachByEmail(String email) { return coachRepository.findByEmail(email); }
+
+    @Override
     public void deleteCoach(Long id) { coachRepository.deleteById(id);}
 
     @Override
@@ -154,5 +157,12 @@ public class CoachService implements ICoachService
             activityRepository.save(activity);
 
         }
+    }
+
+    @Override
+    public Set<Session> retrieveCoachSessions(String email)
+    {
+        Coach coach = coachRepository.findByEmail(email);
+        return coach.getCoachSessions();
     }
 }

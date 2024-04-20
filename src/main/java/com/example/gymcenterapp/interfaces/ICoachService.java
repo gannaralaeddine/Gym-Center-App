@@ -2,6 +2,7 @@ package com.example.gymcenterapp.interfaces;
 
 import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Coach;
+import com.example.gymcenterapp.entities.Session;
 
 import java.util.List;
 import java.util.Set;
@@ -14,6 +15,8 @@ public interface ICoachService
 
     Coach retrieveCoach(Long id);
 
+    Coach retrieveCoachByEmail(String email);
+
     void deleteCoach(Long id);
 
     Coach updateCoach(Long id, Coach coach);
@@ -25,4 +28,6 @@ public interface ICoachService
     void addCoachToActivity(Long coachId, Long activityId);
 
     void deleteCoachActivities(Long coachId, Long activityId);
+
+    Set<Session> retrieveCoachSessions(String email);
 }

@@ -2,6 +2,7 @@ package com.example.gymcenterapp.controllers;
 
 import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Coach;
+import com.example.gymcenterapp.entities.Session;
 import com.example.gymcenterapp.services.CoachService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,11 @@ public class CoachController
     @GetMapping("/retrieve-coach/{coach-id}")
     @ResponseBody
     public Coach retrieveCoach(@PathVariable("coach-id") Long coachId) { return coachService.retrieveCoach(coachId); }
+
+    @GetMapping("/retrieve-coach-by-email/{email}")
+    @ResponseBody
+    public Coach retrieveCoachByEmail(@PathVariable("email") String email) { return coachService.retrieveCoachByEmail(email); }
+
 
     @GetMapping("/retrieve-coach-specialities/{coach-id}")
     @ResponseBody
@@ -56,4 +62,9 @@ public class CoachController
     {
         coachService.deleteCoachActivities(coachId, activityId);
     }
+
+    @GetMapping("/retrieve-coach-sessions/{email}")
+    @ResponseBody
+    public Set<Session> retrieveCoachSessions(@PathVariable("email") String email) { return coachService.retrieveCoachSessions(email); }
+
 }
