@@ -7,6 +7,8 @@ import com.example.gymcenterapp.interfaces.IMemberService;
 import com.example.gymcenterapp.repositories.MemberRepository;
 import com.example.gymcenterapp.repositories.RoleRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,31 +25,36 @@ public class MemberService implements IMemberService
     private EmailServiceImpl emailService;
 
     @Override
-    public Member registerMember(Member member) {
+    public ResponseEntity<String> registerMember(Member member) {
 
-        Set<Role> roles = new HashSet<>();
+        if (memberRepository.numberOfUsersByEmail(member.getUserEmail()) == 0)
+        {
+            Set<Role> roles = new HashSet<>();
 
-        member.setUserPassword(new BCryptPasswordEncoder().encode(member.getUserPassword()));
+            member.setUserPassword(new BCryptPasswordEncoder().encode(member.getUserPassword()));
 
-        member.getRoles().forEach(role -> {
+            member.getRoles().forEach(role -> {
 
-            if (role.getRoleId() != null)
-            {
-                Role newRole = roleRepository.findById(role.getRoleId()).orElse(null);
+                if (role.getRoleId() != null)
+                {
+                    Role newRole = roleRepository.findById(role.getRoleId()).orElse(null);
 
-                assert newRole != null;
-                newRole.getUsers().add(member);
+                    assert newRole != null;
+                    newRole.getUsers().add(member);
 
-                roles.add(newRole);
-            }
-            else
-            {
-                roles.add(role);
-            }
-        });
-        member.setRoles(roles);
-        emailService.sendConfirmationEmail(member);
-        return memberRepository.save(member);
+                    roles.add(newRole);
+                }
+                else
+                {
+                    roles.add(role);
+                }
+            });
+            member.setRoles(roles);
+            emailService.sendConfirmationEmail(member);
+            memberRepository.save(member);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.FOUND).body("User already exist! please try with another email !");
     }
 
     @Override

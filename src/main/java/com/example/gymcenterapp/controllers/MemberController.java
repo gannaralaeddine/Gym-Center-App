@@ -4,6 +4,7 @@ import com.example.gymcenterapp.entities.Member;
 import com.example.gymcenterapp.entities.Session;
 import com.example.gymcenterapp.services.MemberService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +30,7 @@ public class MemberController
 
     @PostMapping(value = "/register-member")
     @ResponseBody
-    public Member registerMember(@RequestBody Member member) { return memberService.registerMember(member); }
+    public ResponseEntity<String> registerMember(@RequestBody Member member) { return memberService.registerMember(member); }
 
     @PutMapping(value = "/update-member/{member-id}")
     @ResponseBody

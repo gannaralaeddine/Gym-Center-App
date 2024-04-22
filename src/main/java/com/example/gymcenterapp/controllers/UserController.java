@@ -7,6 +7,7 @@ import com.example.gymcenterapp.services.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,7 +42,7 @@ public class UserController
 
     @PostMapping(value = "/register-user")
     @ResponseBody
-    public User addUser(@RequestBody User user)
+    public ResponseEntity<String> addUser(@RequestBody User user)
     {
         return userService.addUser(user);
     }

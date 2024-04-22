@@ -1,12 +1,13 @@
 package com.example.gymcenterapp.interfaces;
 
 import com.example.gymcenterapp.entities.Member;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface IMemberService
 {
-    Member registerMember(Member member);
+    ResponseEntity<String> registerMember(Member member);
 
     List<Member> retrieveAllMembers();
 

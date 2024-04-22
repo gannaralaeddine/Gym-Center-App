@@ -4,6 +4,8 @@ import com.example.gymcenterapp.entities.*;
 import com.example.gymcenterapp.interfaces.ICoachService;
 import com.example.gymcenterapp.repositories.*;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,33 +23,38 @@ public class CoachService implements ICoachService
     private EmailServiceImpl emailService;
 
     @Override
-    public Coach registerCoach(Coach coach)
+    public ResponseEntity<String> registerCoach(Coach coach)
     {
-        Set<Role> roles = new HashSet<>();
+        if (coachRepository.numberOfUsersByEmail(coach.getUserEmail()) == 0)
+        {
+            Set<Role> roles = new HashSet<>();
 
-        coach.setUserPassword(new BCryptPasswordEncoder().encode(coach.getUserPassword()));
+            coach.setUserPassword(new BCryptPasswordEncoder().encode(coach.getUserPassword()));
 
-        coach.getRoles().forEach(role -> {
+            coach.getRoles().forEach(role -> {
 
-            if (role.getRoleId() != null)
-            {
-                Role newRole = roleRepository.findById(role.getRoleId()).orElse(null);
+                if (role.getRoleId() != null)
+                {
+                    Role newRole = roleRepository.findById(role.getRoleId()).orElse(null);
 
-                assert newRole != null;
-                newRole.getUsers().add(coach);
+                    assert newRole != null;
+                    newRole.getUsers().add(coach);
 
-                roles.add(newRole);
-            }
-            else
-            {
-                roles.add(role);
-            }
-        });
-        coach.setRoles(roles);
+                    roles.add(newRole);
+                }
+                else
+                {
+                    roles.add(role);
+                }
+            });
+            coach.setRoles(roles);
 
-        emailService.sendConfirmationEmail(coach);
+            emailService.sendConfirmationEmail(coach);
 
-        return coachRepository.save(coach);
+            coachRepository.save(coach);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.FOUND).body("User already exist! please try with another email !");
     }
 
     @Override

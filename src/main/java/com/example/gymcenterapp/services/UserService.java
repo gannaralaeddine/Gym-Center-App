@@ -10,6 +10,8 @@ import com.example.gymcenterapp.repositories.ImageModelRepository;
 import com.example.gymcenterapp.repositories.RoleRepository;
 import com.example.gymcenterapp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -47,31 +49,34 @@ public class UserService implements IUserService, UserDetailsService
     }
 
     @Override
-    public User addUser(User user)
+    public ResponseEntity<String> addUser(User user)
     {
-        Set<Role> roles = new HashSet<>();
 
-        user.setUserPassword(new BCryptPasswordEncoder().encode(user.getUserPassword()));
+        if (userRepository.numberOfUsersByEmail(user.getUserEmail()) == 0)
+        {
+            Set<Role> roles = new HashSet<>();
 
-        user.getRoles().forEach(role -> {
-            System.out.println("user roles: " + role.getRoleId());
-            if (role.getRoleId() != null)
-            {
-                Role newRole = roleRepository.findById(role.getRoleId()).orElse(null);
+            user.setUserPassword(new BCryptPasswordEncoder().encode(user.getUserPassword()));
 
-                assert newRole != null;
-                newRole.getUsers().add(user);
+            user.getRoles().forEach(role -> {
+                System.out.println("user roles: " + role.getRoleId());
+                if (role.getRoleId() != null) {
+                    Role newRole = roleRepository.findById(role.getRoleId()).orElse(null);
 
-                roles.add(newRole);
-            }
-            else
-            {
-                roles.add(role);
-            }
-        });
-        user.setRoles(roles);
-        emailService.sendConfirmationEmail(user);
-        return userRepository.save(user);
+                    assert newRole != null;
+                    newRole.getUsers().add(user);
+
+                    roles.add(newRole);
+                } else {
+                    roles.add(role);
+                }
+            });
+            user.setRoles(roles);
+            emailService.sendConfirmationEmail(user);
+            userRepository.save(user);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.FOUND).body("User already exist! please try with another email !");
     }
 
     @Override

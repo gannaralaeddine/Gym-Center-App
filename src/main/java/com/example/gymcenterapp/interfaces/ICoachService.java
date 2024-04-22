@@ -3,13 +3,14 @@ package com.example.gymcenterapp.interfaces;
 import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Coach;
 import com.example.gymcenterapp.entities.Session;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Set;
 
 public interface ICoachService
 {
-    Coach registerCoach(Coach coach);
+    ResponseEntity<String> registerCoach(Coach coach);
 
     List<Coach> retrieveAllCoaches();
 
