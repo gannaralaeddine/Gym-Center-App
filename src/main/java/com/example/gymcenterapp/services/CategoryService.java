@@ -5,7 +5,7 @@ import com.example.gymcenterapp.entities.ImageModel;
 import com.example.gymcenterapp.interfaces.ICategoryService;
 import com.example.gymcenterapp.repositories.CategoryRepository;
 import com.example.gymcenterapp.repositories.ImageModelRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
@@ -15,28 +15,32 @@ import java.util.Objects;
 import java.util.Set;
 
 @Service
-@AllArgsConstructor
-
 public class CategoryService implements ICategoryService
 {
 
-//    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\categories\\";
-    final String directory = "C:\\Users\\awadi\\Desktop\\Projet PFE\\back\\Gym-Center-App\\src\\main\\resources\\static\\categories\\";
 
 //    final String directory = "http://localhost:8089/categories/";
 
-    CategoryRepository categoryRepository;
+    @Value("${app.directory}")
+    private String directory;
 
-    ImageModelService imageModelService;
-    ImageModelRepository imageModelRepository;
+    private final CategoryRepository categoryRepository;
+    private final ImageModelService imageModelService;
+    private final ImageModelRepository imageModelRepository;
 
+
+    public CategoryService(CategoryRepository categoryRepository, ImageModelService imageModelService, ImageModelRepository imageModelRepository) {
+        this.categoryRepository = categoryRepository;
+        this.imageModelService = imageModelService;
+        this.imageModelRepository = imageModelRepository;
+    }
 
     @Override
     public Category addCategoryWithOneImage( Category category, MultipartFile[] file)
     {
         String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
         String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
-        String filePath = directory + uniqueName;
+        String filePath = directory + "categories\\" + uniqueName;
 
         try
         {
@@ -102,7 +106,7 @@ public class CategoryService implements ICategoryService
 
             String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
             String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
-            String filePath = directory + uniqueName;
+            String filePath = directory + "categories\\" + uniqueName;
 
             try
             {
@@ -121,7 +125,7 @@ public class CategoryService implements ICategoryService
 
                 images.remove(existingImageModel);
                 imageModelRepository.delete(existingImageModel);
-                imageModelService.removeFile(directory, existingCategory.getCatImage());
+                imageModelService.removeFile(directory + "categories\\", existingCategory.getCatImage());
 
 
                 existingCategory.setCatImage( uniqueName );
@@ -152,7 +156,7 @@ public class CategoryService implements ICategoryService
             Category category = categoryRepository.findById(catId).orElse(null);
 
             assert category != null;
-            Set<ImageModel> images =  imageModelService.prepareFiles(files, category.getImages(), directory);
+            Set<ImageModel> images =  imageModelService.prepareFiles(files, category.getImages(), directory + "categories\\");
 
             category.setImages(images);
 

@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class RoleServiceImpl
 {
-    RoleRepository roleRepository;
+    private RoleRepository roleRepository;
 
     public Role addRole(Role role)
     {

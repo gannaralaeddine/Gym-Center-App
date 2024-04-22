@@ -7,33 +7,39 @@ import com.example.gymcenterapp.interfaces.IActivityService;
 import com.example.gymcenterapp.repositories.ActivityRepository;
 import com.example.gymcenterapp.repositories.CoachRepository;
 import com.example.gymcenterapp.repositories.ImageModelRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.util.*;
 
 @Service
-@AllArgsConstructor
-
 public class ActivityService implements IActivityService
 {
-//    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\activities\\";
-    final String directory = "C:\\Users\\awadi\\Desktop\\Projet PFE\\back\\Gym-Center-App\\src\\main\\resources\\static\\activities\\";
+    @Value("${app.directory}")
+    private String directory;
 
 
-    ActivityRepository activityRepository;
-    ImageModelRepository imageModelRepository;
-    ImageModelService imageModelService;
-    CoachRepository coachRepository;
+    private final ActivityRepository activityRepository;
+    private final ImageModelRepository imageModelRepository;
+    private final ImageModelService imageModelService;
+    private final CoachRepository coachRepository;
+
+    private ActivityService(ActivityRepository activityRepository, ImageModelRepository imageModelRepository, ImageModelService imageModelService,
+                            CoachRepository coachRepository)
+    {
+        this.activityRepository = activityRepository;
+        this.imageModelRepository = imageModelRepository;
+        this.imageModelService = imageModelService;
+        this.coachRepository = coachRepository;
+    }
 
     @Override
     public Activity addActivityWithOneImage(Activity activity, MultipartFile[] file)
     {
         String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
         String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
-        String filePath = directory + uniqueName;
+        String filePath = directory + "activities\\" + uniqueName;
 
         try
         {
@@ -112,7 +118,7 @@ public class ActivityService implements IActivityService
             Activity activity = activityRepository.findById(actId).orElse(null);
 
             assert activity != null;
-            Set<ImageModel> images =  imageModelService.prepareFiles(files, activity.getActivityImages(), directory);
+            Set<ImageModel> images =  imageModelService.prepareFiles(files, activity.getActivityImages(), directory + "activities\\");
 
             activity.setActivityImages(images);
 
@@ -134,7 +140,7 @@ public class ActivityService implements IActivityService
         if (activity != null && imageModel != null)
         {
             activity.getActivityImages().remove(imageModel);
-            imageModelService.removeFile(directory, imageName);
+            imageModelService.removeFile(directory + "activities\\", imageName);
             imageModelRepository.delete(imageModel);
             return activityRepository.save(activity);
         }
@@ -158,7 +164,7 @@ public class ActivityService implements IActivityService
 
             String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
             String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
-            String filePath = directory + uniqueName;
+            String filePath = directory + "activities\\" + uniqueName;
 
             try
             {
@@ -177,7 +183,7 @@ public class ActivityService implements IActivityService
 
                 images.remove(existingImageModel);
                 imageModelRepository.delete(existingImageModel);
-                imageModelService.removeFile(directory, existingActivity.getActImage());
+                imageModelService.removeFile(directory + "activities\\", existingActivity.getActImage());
 
 
                 existingActivity.setActImage( uniqueName );
@@ -225,4 +231,7 @@ public class ActivityService implements IActivityService
             System.out.println("coach or activity is null in addCoachToActivity");
         }
     }
+
+
+
 }

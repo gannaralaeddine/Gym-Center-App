@@ -3,20 +3,27 @@ package com.example.gymcenterapp.services;
 import com.example.gymcenterapp.entities.ConfirmationToken;
 import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.repositories.ConfirmationTokenRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
 public class EmailServiceImpl
 {
+    @Value("${app.email}")
+    private String appEmail;
+
+    @Value("${app.API}")
+    private String appAPI;
     private JavaMailSender javaMailSender;
     private ConfirmationTokenRepository confirmationTokenRepository;
 
+    public EmailServiceImpl(ConfirmationTokenRepository confirmationTokenRepository) {
+        this.confirmationTokenRepository = confirmationTokenRepository;
+    }
 
     @Autowired
     public void EmailService(JavaMailSender javaMailSender) {
@@ -38,7 +45,7 @@ public class EmailServiceImpl
         SimpleMailMessage RegistrationConfirmation = new SimpleMailMessage();
         RegistrationConfirmation.setTo(user.getUserEmail());
         RegistrationConfirmation.setSubject("Votre compte est prêt");
-        RegistrationConfirmation.setFrom("gannaralaeddine@gmail.com");
+        RegistrationConfirmation.setFrom(appEmail);
         RegistrationConfirmation.setText("Votre compte a été créé avec succès !");
         sendEmail(RegistrationConfirmation);
 
@@ -46,7 +53,7 @@ public class EmailServiceImpl
         SimpleMailMessage accountValidation = new SimpleMailMessage();
         accountValidation.setTo(user.getUserEmail());
         accountValidation.setSubject("Confirmer votre inscription");
-        accountValidation.setFrom("gannaralaeddine@gmail.com");
+        accountValidation.setFrom(appEmail);
 
         accountValidation.setText(
                 "Hey " + user.getUserFirstName() + " " + user.getUserLastName() +
@@ -55,7 +62,7 @@ public class EmailServiceImpl
                         "Nous comprenons la sensibilité de vos informations, c’est pourquoi notre processus de vérification d’identité est conçu pour être sécurisé et confidentiel.\n" +
                         "\n" +
                         "Pour valider votre compte, veuillez cliquer sur le lien ci-dessous:\n" +
-                        "http://localhost:8089/gym-center/user/confirm-account?token=" + confirmationToken.getConfirmationToken() +
+                        appAPI + "/gym-center/user/confirm-account?token=" + confirmationToken.getConfirmationToken() +
                         "\n" +
                         "\n" +
                         "Une fois votre identité vérifiée, vous aurez accès à toutes les fonctionnalités de la plateforme Gym Center, tout en contribuant à un environnement numérique plus sûr pour tous les utilisateurs.\n" +

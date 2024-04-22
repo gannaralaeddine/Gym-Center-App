@@ -22,7 +22,7 @@ import java.util.UUID;
 public class ImageModelService
 {
 
-    ImageModelRepository imageModelRepository;
+    private ImageModelRepository imageModelRepository;
 
     public byte[] getImage(String imageName) throws IOException {
         ImageModel imageModel = imageModelRepository.findByName(imageName);

@@ -1,16 +1,10 @@
 package com.example.gymcenterapp.services;
 
-import com.example.gymcenterapp.entities.Activity;
-import com.example.gymcenterapp.entities.Category;
-import com.example.gymcenterapp.entities.Coach;
 import com.example.gymcenterapp.entities.Member;
 import com.example.gymcenterapp.entities.Subscription;
-import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.interfaces.ISubscriptionService;
-import com.example.gymcenterapp.interfaces.IUserService;
 import com.example.gymcenterapp.repositories.MemberRepository;
 import com.example.gymcenterapp.repositories.SubscriptionRepository;
-import com.example.gymcenterapp.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

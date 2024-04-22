@@ -5,7 +5,7 @@ import com.example.gymcenterapp.interfaces.ISessionService;
 import com.example.gymcenterapp.repositories.ImageModelRepository;
 import com.example.gymcenterapp.repositories.MemberRepository;
 import com.example.gymcenterapp.repositories.SessionRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,17 +18,22 @@ import java.util.Objects;
 import java.util.Set;
 
 @Service
-@AllArgsConstructor
 public class SessionService implements ISessionService
 {
-    SessionRepository sessionRepository;
-    ImageModelService imageModelService;   
-    ImageModelRepository imageModelRepository;
-    MemberRepository memberRepository;
+    @Value("${app.directory}")
+    private String directory;
 
-//    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
-    final String directory = "C:\\Users\\awadi\\Desktop\\Projet PFE\\back\\Gym-Center-App\\src\\main\\resources\\static\\sessions\\";
+    private final SessionRepository sessionRepository;
+    private final ImageModelService imageModelService;
+    private final ImageModelRepository imageModelRepository;
+    private final MemberRepository memberRepository;
 
+    public SessionService(SessionRepository sessionRepository, ImageModelService imageModelService, ImageModelRepository imageModelRepository, MemberRepository memberRepository) {
+        this.sessionRepository = sessionRepository;
+        this.imageModelService = imageModelService;
+        this.imageModelRepository = imageModelRepository;
+        this.memberRepository = memberRepository;
+    }
 
     @Override
     public List<Session> retrieveAllSessions() { return sessionRepository.findAll(); }
@@ -65,7 +70,7 @@ public class SessionService implements ISessionService
         // generate unique name and file path for image
         String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
         String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
-        String filePath = directory + uniqueName;
+        String filePath = directory + "sessions\\" + uniqueName;
 
         try
         {
@@ -105,7 +110,7 @@ public class SessionService implements ISessionService
             Session session = sessionRepository.findById(sessionId).orElse(null);
 
             assert session != null;
-            Set<ImageModel> images =  imageModelService.prepareFiles(files, session.getSessionImages(), directory);
+            Set<ImageModel> images =  imageModelService.prepareFiles(files, session.getSessionImages(), directory + "sessions\\");
 
             session.setSessionImages(images);
 
@@ -132,7 +137,7 @@ public class SessionService implements ISessionService
 
             String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
             String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
-            String filePath = directory + uniqueName;
+            String filePath = directory + "sessions\\" + uniqueName;
 
             try
             {
@@ -151,7 +156,7 @@ public class SessionService implements ISessionService
 
                 images.remove(existingImageModel);
                 imageModelRepository.delete(existingImageModel);
-                imageModelService.removeFile(directory, existingSession.getSessionImage());
+                imageModelService.removeFile(directory + "sessions\\", existingSession.getSessionImage());
 
 
                 existingSession.setSessionImage( uniqueName );
@@ -182,7 +187,7 @@ public class SessionService implements ISessionService
         if (session != null && imageModel != null)
         {
             session.getSessionImages().remove(imageModel);
-            imageModelService.removeFile(directory, imageName);
+            imageModelService.removeFile(directory + "sessions\\", imageName);
             imageModelRepository.delete(imageModel);
             return sessionRepository.save(session);
         }

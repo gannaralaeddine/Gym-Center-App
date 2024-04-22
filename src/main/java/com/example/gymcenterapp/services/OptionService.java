@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class OptionService implements IOptionService
 {
-    OptionRepository optionRepository;
+    private OptionRepository optionRepository;
 
     @Override
     public Option createOption(Option option) 

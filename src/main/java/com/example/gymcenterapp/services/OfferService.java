@@ -14,8 +14,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class OfferService implements IOfferService
 {
-    OfferRepository offerRepository;
-    OptionService optionService;
+    private OfferRepository offerRepository;
+    private OptionService optionService;
     
     @Override
     public Offer addOffer(Offer offer) 

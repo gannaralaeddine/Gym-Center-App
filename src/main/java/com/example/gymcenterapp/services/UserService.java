@@ -9,7 +9,7 @@ import com.example.gymcenterapp.repositories.ConfirmationTokenRepository;
 import com.example.gymcenterapp.repositories.ImageModelRepository;
 import com.example.gymcenterapp.repositories.RoleRepository;
 import com.example.gymcenterapp.repositories.UserRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,19 +23,28 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-@AllArgsConstructor
+
 @Service
 public class UserService implements IUserService, UserDetailsService
 {
-//    final String directory = "C:\\Users\\ganna\\IdeaProjects\\Gym-Center-App\\src\\main\\resources\\static\\users\\";
-    final String directory = "C:\\Users\\awadi\\Desktop\\Projet PFE\\back\\Gym-Center-App\\src\\main\\resources\\static\\activities\\";
+    @Value("${app.directory}")
+    private String directory;
 
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
-    private ImageModelService imageModelService;
-    private ImageModelRepository imageModelRepository;
-    private ConfirmationTokenRepository confirmationTokenRepository;
-    private EmailServiceImpl emailService;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final ImageModelService imageModelService;
+    private final ImageModelRepository imageModelRepository;
+    private final ConfirmationTokenRepository confirmationTokenRepository;
+    private final EmailServiceImpl emailService;
+
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, ImageModelService imageModelService, ImageModelRepository imageModelRepository, ConfirmationTokenRepository confirmationTokenRepository, EmailServiceImpl emailService) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.imageModelService = imageModelService;
+        this.imageModelRepository = imageModelRepository;
+        this.confirmationTokenRepository = confirmationTokenRepository;
+        this.emailService = emailService;
+    }
 
     @Override
     public User addUser(User user)
@@ -161,7 +170,7 @@ public class UserService implements IUserService, UserDetailsService
 
             if (existingUser != null)
             {
-                Set<ImageModel> images =  imageModelService.prepareFiles(files, existingUser.getUserImages(), directory);
+                Set<ImageModel> images =  imageModelService.prepareFiles(files, existingUser.getUserImages(), directory + "users\\");
 
                 existingUser.setUserImages(images);
 
@@ -179,7 +188,7 @@ public class UserService implements IUserService, UserDetailsService
     {
         String[] imageType = Objects.requireNonNull(files[0].getContentType()).split("/");
         String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
-        String filePath = directory + uniqueName;
+        String filePath = directory + "users\\" + uniqueName;
 
         ImageModel imageModel = new ImageModel();
         imageModel.setImageName(uniqueName);
@@ -198,7 +207,7 @@ public class UserService implements IUserService, UserDetailsService
             ImageModel existingImageModel = imageModelService.findImageByName(existingUser.getUserPicture());
             existingImages.remove(existingImageModel);
             imageModelRepository.delete(existingImageModel);
-            imageModelService.removeFile(directory, existingUser.getUserPicture());
+            imageModelService.removeFile(directory + "users\\", existingUser.getUserPicture());
 
             existingUser.setUserPicture(uniqueName);
             existingUser.setUserImages(existingImages);
@@ -214,7 +223,7 @@ public class UserService implements IUserService, UserDetailsService
     {
         String[] imageType = Objects.requireNonNull(files[0].getContentType()).split("/");
         String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
-        String filePath = directory + uniqueName;
+        String filePath = directory + "users\\" + uniqueName;
 
         ImageModel imageModel = new ImageModel();
         imageModel.setImageName(uniqueName);
@@ -245,7 +254,7 @@ public class UserService implements IUserService, UserDetailsService
         if (user != null && imageModel != null)
         {
             user.getUserImages().remove(imageModel);
-            imageModelService.removeFile(directory, imageName);
+            imageModelService.removeFile(directory + "users\\", imageName);
             imageModelRepository.delete(imageModel);
             return userRepository.save(user);
         }
