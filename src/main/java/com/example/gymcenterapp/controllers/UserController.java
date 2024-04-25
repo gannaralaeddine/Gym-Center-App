@@ -1,5 +1,6 @@
 package com.example.gymcenterapp.controllers;
 
+import com.example.gymcenterapp.entities.EmailModel;
 import com.example.gymcenterapp.entities.Role;
 import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.services.RoleServiceImpl;
@@ -125,5 +126,12 @@ public class UserController
     @RequestMapping("/confirm-account")
     public String confirmUserAccountCompany(@RequestParam("token")String confirmationToken) {
         return userService.confirmUserAccount(confirmationToken);
+    }
+
+    @PostMapping(value = "/send-contact-us-email")
+    @ResponseBody
+    public void sendContactUsEmail(@RequestBody EmailModel email)
+    {
+        userService.sendContactUsEmail(email);
     }
 }

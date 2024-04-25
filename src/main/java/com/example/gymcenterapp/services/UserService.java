@@ -1,9 +1,6 @@
 package com.example.gymcenterapp.services;
 
-import com.example.gymcenterapp.entities.ConfirmationToken;
-import com.example.gymcenterapp.entities.ImageModel;
-import com.example.gymcenterapp.entities.Role;
-import com.example.gymcenterapp.entities.User;
+import com.example.gymcenterapp.entities.*;
 import com.example.gymcenterapp.interfaces.IUserService;
 import com.example.gymcenterapp.repositories.ConfirmationTokenRepository;
 import com.example.gymcenterapp.repositories.ImageModelRepository;
@@ -12,6 +9,7 @@ import com.example.gymcenterapp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,6 +29,9 @@ public class UserService implements IUserService, UserDetailsService
 {
     @Value("${app.directory}")
     private String directory;
+
+    @Value("${app.email}")
+    private String appEmail;
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -285,5 +286,16 @@ public class UserService implements IUserService, UserDetailsService
         {
             return "<h1>Invalid token!</h1>";
         }
+    }
+
+
+    public void sendContactUsEmail(EmailModel email)
+    {
+        SimpleMailMessage contactUs = new SimpleMailMessage();
+        contactUs.setTo(appEmail);
+        contactUs.setSubject(email.getSubject());
+        contactUs.setFrom(email.getSenderEmail());
+        contactUs.setText(email.getText() + "\n\n" + email.getSenderName());
+        emailService.sendEmail(contactUs);
     }
 }
