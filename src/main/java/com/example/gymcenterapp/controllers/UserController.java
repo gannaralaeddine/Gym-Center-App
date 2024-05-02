@@ -134,4 +134,29 @@ public class UserController
     {
         userService.sendContactUsEmail(email);
     }
+
+    @PostMapping(value = "/send-verification-code/{email}")
+    @ResponseBody
+    public void sendVerificationCode(@PathVariable String email)
+    {
+        userService.sendVerificationCode(email);
+    }
+
+
+    @PostMapping(value = "/check-verification-code/{code}")
+    @ResponseBody
+    public ResponseEntity<String> checkVerificationCode(@PathVariable int code)
+    {
+        return userService.checkVerificationCode(code);
+    }
+
+
+    @PutMapping(value = "/change-password/{email}/{password}")
+    @ResponseBody
+    public ResponseEntity<String> changePassword(@PathVariable String email, @PathVariable String password)
+    {
+        return userService.changePassword(email, password);
+    }
+
+
 }

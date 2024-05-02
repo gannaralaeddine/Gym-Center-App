@@ -18,10 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -39,6 +36,8 @@ public class UserService implements IUserService, UserDetailsService
     private final ImageModelRepository imageModelRepository;
     private final ConfirmationTokenRepository confirmationTokenRepository;
     private final EmailServiceImpl emailService;
+
+    private int verificationCode;
 
     public UserService(UserRepository userRepository, RoleRepository roleRepository, ImageModelService imageModelService, ImageModelRepository imageModelRepository, ConfirmationTokenRepository confirmationTokenRepository, EmailServiceImpl emailService) {
         this.userRepository = userRepository;
@@ -297,5 +296,54 @@ public class UserService implements IUserService, UserDetailsService
         contactUs.setFrom(email.getSenderEmail());
         contactUs.setText(email.getText() + "\n\n" + email.getSenderName());
         emailService.sendEmail(contactUs);
+    }
+
+    public void sendVerificationCode(String email)
+    {
+        System.out.println("________________________________________________");
+        System.out.println(email);
+        int code = new Random().nextInt(999999-100000)+100000;
+        System.out.println("random: " + code);
+
+        verificationCode = code;
+
+        SimpleMailMessage forgotPassword = new SimpleMailMessage();
+        forgotPassword.setTo(email);
+        forgotPassword.setSubject("Gym Center App Récupérer votre mot de passe");
+        forgotPassword.setFrom(appEmail);
+        forgotPassword.setText("Salut,\n\n" +
+                "Vous avez oublié votre mot de passe ?\n" +
+                "Vous pouvez utiliser ce code pour récupérer votre compte: " + code + "\n" +
+                "Si vous ne souhaitez pas modifier votre mot de passe ou si vous ne l’avez pas demandé, veuillez ignorer et supprimer ce message.\n\n" +
+                "Cordialement,");
+        emailService.sendEmail(forgotPassword);
+    }
+
+    public ResponseEntity<String> checkVerificationCode(int code)
+    {
+        if (code == verificationCode)
+        {
+            System.out.println("code correct !!");
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        System.out.println("code not correct !!");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Incorrect code !");
+    }
+
+    public ResponseEntity<String> changePassword(String email, String password)
+    {
+        User user = userRepository.findByEmail(email);
+
+        if (user != null)
+        {
+            user.setUserPassword(new BCryptPasswordEncoder().encode(password));
+            userRepository.save(user);
+            System.out.println("password changed successfully !");
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        System.out.println("User not found !");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found !");
     }
 }
