@@ -36,4 +36,11 @@ public class Coach extends User
     @JsonIgnore
     private Set<Session> coachSessions;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "private_coaches_members",
+            joinColumns = @JoinColumn(name = "privateCoaches",referencedColumnName = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "privateMembers",referencedColumnName = "user_id"))
+    @JsonIgnore
+    private Set<Member> privateMembers;
 }

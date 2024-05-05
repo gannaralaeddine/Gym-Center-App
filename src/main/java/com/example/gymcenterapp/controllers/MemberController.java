@@ -1,5 +1,6 @@
 package com.example.gymcenterapp.controllers;
 
+import com.example.gymcenterapp.entities.Coach;
 import com.example.gymcenterapp.entities.Member;
 import com.example.gymcenterapp.entities.Session;
 import com.example.gymcenterapp.services.MemberService;
@@ -43,4 +44,20 @@ public class MemberController
     @GetMapping("/retrieve-member-sessions/{email}")
     @ResponseBody
     public Set<Session> retrieveMemberSessions(@PathVariable("email") String email) { return memberService.retrieveMemberSessions(email); }
+
+    @PutMapping(value = "/private-coach-booking/{memberEmail}/{coachEmail}")
+    @ResponseBody
+    public ResponseEntity<String> coachBooking(@PathVariable String memberEmail, @PathVariable String coachEmail) { return memberService.privateCoachBooking(memberEmail, coachEmail); }
+
+    @GetMapping("/retrieve-private-coaches/{memberEmail}")
+    @ResponseBody
+    public Set<Coach> retrievePrivateCoaches(@PathVariable("memberEmail") String memberEmail) { return memberService.retrievePrivateCoaches(memberEmail); }
+
+
+    @GetMapping("/is-my-private-coach/{memberEmail}/{coachEmail}")
+    public boolean isMyPrivateCoach(@PathVariable String memberEmail, @PathVariable String coachEmail)
+    {
+        return memberService.isMyPrivateCoach(memberEmail, coachEmail);
+    }
+
 }

@@ -2,6 +2,7 @@ package com.example.gymcenterapp.controllers;
 
 import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Coach;
+import com.example.gymcenterapp.entities.Member;
 import com.example.gymcenterapp.entities.Session;
 import com.example.gymcenterapp.services.CoachService;
 import lombok.AllArgsConstructor;
@@ -67,5 +68,13 @@ public class CoachController
     @GetMapping("/retrieve-coach-sessions/{email}")
     @ResponseBody
     public Set<Session> retrieveCoachSessions(@PathVariable("email") String email) { return coachService.retrieveCoachSessions(email); }
+
+    @GetMapping("/retrieve-private-members/{coachEmail}")
+    @ResponseBody
+    public Set<Member> retrievePrivateMembers(@PathVariable("coachEmail") String coachEmail) { return coachService.retrievePrivateMembers(coachEmail); }
+
+    @GetMapping("/terminate-coach-member-relation/{memberEmail}/{coachEmail}")
+    @ResponseBody
+    public ResponseEntity<String> terminateCoachMemberRelation(@PathVariable String memberEmail, @PathVariable String coachEmail) { return coachService.terminateCoachMemberRelation(memberEmail, coachEmail); }
 
 }

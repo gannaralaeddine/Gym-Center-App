@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.Set;
 public class CoachService implements ICoachService
 {
     private CoachRepository coachRepository;
+    private MemberRepository memberRepository;
     private RoleRepository roleRepository;
     private ActivityRepository activityRepository;
     private EmailServiceImpl emailService;
@@ -171,5 +173,35 @@ public class CoachService implements ICoachService
     {
         Coach coach = coachRepository.findByEmail(email);
         return coach.getCoachSessions();
+    }
+
+    public Set<Member> retrievePrivateMembers(String coachEmail)
+    {
+        Coach coach = coachRepository.findByEmail(coachEmail);
+        return coach.getPrivateMembers();
+    }
+
+    public ResponseEntity<String> terminateCoachMemberRelation(String memberEmail, String coachEmail)
+    {
+        Member member = memberRepository.findByEmail(memberEmail);
+        Coach coach = coachRepository.findByEmail(coachEmail);
+
+        if (member != null && coach != null)
+        {
+            Set<Member> coachMembers = coach.getPrivateMembers();
+            Set<Coach> memberCoaches = member.getPrivateCoaches();
+
+            if (coachMembers.contains(member) && memberCoaches.contains(coach))
+            {
+                coachMembers.remove(member);
+                memberCoaches.remove(coach);
+                memberRepository.save(member);
+                coachRepository.save(coach);
+
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            return ResponseEntity.status(HttpStatus.FOUND).body("Cannot find member for this coach !");
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

@@ -37,4 +37,7 @@ public class Member extends User
             inverseJoinColumns = @JoinColumn(name = "sessionId",referencedColumnName = "sessionId")
     )
     private Set<Session> memberSessions;
+
+    @ManyToMany(mappedBy = "privateMembers")
+    private Set<Coach> privateCoaches;
 }

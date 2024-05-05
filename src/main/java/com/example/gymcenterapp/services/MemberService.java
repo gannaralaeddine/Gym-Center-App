@@ -1,9 +1,11 @@
 package com.example.gymcenterapp.services;
 
+import com.example.gymcenterapp.entities.Coach;
 import com.example.gymcenterapp.entities.Member;
 import com.example.gymcenterapp.entities.Role;
 import com.example.gymcenterapp.entities.Session;
 import com.example.gymcenterapp.interfaces.IMemberService;
+import com.example.gymcenterapp.repositories.CoachRepository;
 import com.example.gymcenterapp.repositories.MemberRepository;
 import com.example.gymcenterapp.repositories.RoleRepository;
 import lombok.AllArgsConstructor;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestPart;
 
 import java.util.HashSet;
 import java.util.List;
@@ -23,6 +26,7 @@ public class MemberService implements IMemberService
     private MemberRepository memberRepository;
     private RoleRepository roleRepository;
     private EmailServiceImpl emailService;
+    private CoachRepository coachRepository;
 
     @Override
     public ResponseEntity<String> registerMember(Member member) {
@@ -98,5 +102,49 @@ public class MemberService implements IMemberService
     {
         Member member = memberRepository.findByEmail(email);
         return member.getMemberSessions();
+    }
+
+    public ResponseEntity<String> privateCoachBooking(String memberEmail, String coachEmail)
+    {
+        Member member = memberRepository.findByEmail(memberEmail);
+        Coach coach = coachRepository.findByEmail(coachEmail);
+
+        if (member != null && coach != null)
+        {
+            Set<Member> coachMembers = coach.getPrivateMembers();
+            Set<Coach> memberCoaches = member.getPrivateCoaches();
+
+            if (coachMembers.contains(member))
+            {
+                return new ResponseEntity<>(HttpStatus.FOUND);
+            }
+
+            coachMembers.add(member);
+            memberCoaches.add(coach);
+
+            memberRepository.save(member);
+            coachRepository.save(coach);
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    public boolean isMyPrivateCoach(String memberEmail, String coachEmail)
+    {
+        Member member = memberRepository.findByEmail(memberEmail);
+        Coach coach = coachRepository.findByEmail(coachEmail);
+
+        if (member != null && coach != null)
+        {
+            return coach.getPrivateMembers().contains(member);
+        }
+        return false;
+    }
+
+    public Set<Coach> retrievePrivateCoaches(String memberEmail)
+    {
+        Member member = memberRepository.findByEmail(memberEmail);
+        return member.getPrivateCoaches();
     }
 }
