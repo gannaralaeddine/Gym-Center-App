@@ -1,9 +1,6 @@
 package com.example.gymcenterapp.controllers;
 
-import com.example.gymcenterapp.entities.Activity;
-import com.example.gymcenterapp.entities.Coach;
-import com.example.gymcenterapp.entities.Member;
-import com.example.gymcenterapp.entities.Session;
+import com.example.gymcenterapp.entities.*;
 import com.example.gymcenterapp.services.CoachService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -77,4 +74,12 @@ public class CoachController
     @ResponseBody
     public ResponseEntity<String> terminateCoachMemberRelation(@PathVariable String memberEmail, @PathVariable String coachEmail) { return coachService.terminateCoachMemberRelation(memberEmail, coachEmail); }
 
+
+    @GetMapping("/getCoachNotifications/{coachEmail}")
+    @ResponseBody
+    public Set<NotificationMemberCoach> getCoachNotifications(@PathVariable String coachEmail)
+    {
+        return coachService.getCoachNotifications(coachEmail);
+    }
 }
+

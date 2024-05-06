@@ -1,19 +1,16 @@
 package com.example.gymcenterapp.services;
 
-import com.example.gymcenterapp.entities.Coach;
-import com.example.gymcenterapp.entities.Member;
-import com.example.gymcenterapp.entities.Role;
-import com.example.gymcenterapp.entities.Session;
+import com.example.gymcenterapp.entities.*;
 import com.example.gymcenterapp.interfaces.IMemberService;
 import com.example.gymcenterapp.repositories.CoachRepository;
 import com.example.gymcenterapp.repositories.MemberRepository;
+import com.example.gymcenterapp.repositories.NotificationMemberCoachRepository;
 import com.example.gymcenterapp.repositories.RoleRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestPart;
 
 import java.util.HashSet;
 import java.util.List;
@@ -27,6 +24,7 @@ public class MemberService implements IMemberService
     private RoleRepository roleRepository;
     private EmailServiceImpl emailService;
     private CoachRepository coachRepository;
+    private NotificationMemberCoachRepository notificationRepository;
 
     @Override
     public ResponseEntity<String> registerMember(Member member) {
@@ -146,5 +144,43 @@ public class MemberService implements IMemberService
     {
         Member member = memberRepository.findByEmail(memberEmail);
         return member.getPrivateCoaches();
+    }
+
+    public String sendInvitationToCoach(String memberEmail, String coachEmail)
+    {
+        Member member = memberRepository.findByEmail(memberEmail);
+        Coach coach = coachRepository.findByEmail(coachEmail);
+
+        if (member != null && coach != null)
+        {
+            Set<NotificationMemberCoach> memberNotifications = member.getNotificationMemberCoaches();
+            Set<NotificationMemberCoach> coachNotification = coach.getNotificationMemberCoaches();
+
+            NotificationMemberCoach notification = new NotificationMemberCoach();
+
+            notification.setMember(member);
+            notification.setCoach(coach);
+            notification.setNotificationTitle("Private coach invitation");
+            notification.setNotificationContent("bla bla bla bla bla bla bla !");
+
+            memberNotifications.add(notification);
+            coachNotification.add(notification);
+            member.setNotificationMemberCoaches(memberNotifications);
+            coach.setNotificationMemberCoaches(coachNotification);
+            notificationRepository.save(notification);
+            memberRepository.save(member);
+            coachRepository.save(coach);
+
+            return "invitation send successfully !";
+        }
+        return "member or coach is null !";
+    }
+
+
+    public Set<NotificationMemberCoach> getMemberNotifications(String memberEmail)
+    {
+        Member member = memberRepository.findByEmail(memberEmail);
+
+        return member.getNotificationMemberCoaches();
     }
 }

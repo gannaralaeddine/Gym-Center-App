@@ -1,5 +1,6 @@
 package com.example.gymcenterapp.entities;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -40,4 +41,8 @@ public class Member extends User
 
     @ManyToMany(mappedBy = "privateMembers")
     private Set<Coach> privateCoaches;
+
+    @OneToMany(mappedBy = "member")
+    @JsonIgnore
+    private Set<NotificationMemberCoach> notificationMemberCoaches = new HashSet<>();
 }

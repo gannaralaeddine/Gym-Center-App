@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -203,5 +202,12 @@ public class CoachService implements ICoachService
             return ResponseEntity.status(HttpStatus.FOUND).body("Cannot find member for this coach !");
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    public Set<NotificationMemberCoach> getCoachNotifications(String coachEmail)
+    {
+        Coach coach = coachRepository.findByEmail(coachEmail);
+
+        return coach.getNotificationMemberCoaches();
     }
 }

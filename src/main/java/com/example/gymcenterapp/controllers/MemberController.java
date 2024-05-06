@@ -2,6 +2,7 @@ package com.example.gymcenterapp.controllers;
 
 import com.example.gymcenterapp.entities.Coach;
 import com.example.gymcenterapp.entities.Member;
+import com.example.gymcenterapp.entities.NotificationMemberCoach;
 import com.example.gymcenterapp.entities.Session;
 import com.example.gymcenterapp.services.MemberService;
 import lombok.AllArgsConstructor;
@@ -60,4 +61,17 @@ public class MemberController
         return memberService.isMyPrivateCoach(memberEmail, coachEmail);
     }
 
+    @GetMapping("/send-invitation-to-coach/{memberEmail}/{coachEmail}")
+    @ResponseBody
+    public String sendInvitationToCoach(@PathVariable String memberEmail, @PathVariable String coachEmail)
+    {
+        return memberService.sendInvitationToCoach(memberEmail, coachEmail);
+    }
+
+    @GetMapping("/getMemberNotifications/{memberEmail}")
+    @ResponseBody
+    public Set<NotificationMemberCoach> getMemberNotifications(@PathVariable String memberEmail)
+    {
+        return memberService.getMemberNotifications(memberEmail);
+    }
 }

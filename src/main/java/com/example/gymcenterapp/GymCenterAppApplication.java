@@ -126,6 +126,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/coach/retrieve-coach-sessions/{email}").permitAll()
                 .antMatchers("/coach/retrieve-private-members/{coachEmail}").permitAll()
                 .antMatchers("/coach/terminate-coach-member-relation/{memberEmail}/{coachEmail}").permitAll()
+                .antMatchers("/coach/getCoachNotifications/{coachEmail}").permitAll()
 
                 .antMatchers("/member/register-member").permitAll()
                 .antMatchers("/member/update-member/{member-id}").permitAll()
@@ -136,6 +137,8 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/member/private-coach-booking/{memberEmail}/{coachEmail}").permitAll()
                 .antMatchers("/member/retrieve-private-coaches/{memberEmail}").permitAll()
                 .antMatchers("/member/is-my-private-coach/{memberEmail}/{coachEmail}").permitAll()
+                .antMatchers("/member/send-invitation-to-coach/{memberEmail}/{coachEmail}").permitAll()
+                .antMatchers("/member/getMemberNotifications/{memberEmail}").permitAll()
 
                 .antMatchers("/session/create-session").permitAll()
                 .antMatchers("/session/update-session/{session-id}").permitAll()

@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -43,4 +45,9 @@ public class Coach extends User
             inverseJoinColumns = @JoinColumn(name = "privateMembers",referencedColumnName = "user_id"))
     @JsonIgnore
     private Set<Member> privateMembers;
+
+
+    @OneToMany(mappedBy = "coach")
+    @JsonIgnore
+    private Set<NotificationMemberCoach> notificationMemberCoaches = new HashSet<>();
 }
