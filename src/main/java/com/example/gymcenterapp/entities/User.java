@@ -60,6 +60,9 @@ public class User implements Serializable, UserDetails
 
     private String userPassword;
 
+    private Boolean userIsSubscribed = false;
+
+
     @Column(nullable = true)
     private boolean userIsEnabled;
 
