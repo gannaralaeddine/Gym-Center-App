@@ -2,10 +2,7 @@ package com.example.gymcenterapp.services;
 
 import com.example.gymcenterapp.entities.*;
 import com.example.gymcenterapp.interfaces.IMemberService;
-import com.example.gymcenterapp.repositories.CoachRepository;
-import com.example.gymcenterapp.repositories.MemberRepository;
-import com.example.gymcenterapp.repositories.NotificationMemberCoachRepository;
-import com.example.gymcenterapp.repositories.RoleRepository;
+import com.example.gymcenterapp.repositories.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +22,7 @@ public class MemberService implements IMemberService
     private EmailServiceImpl emailService;
     private CoachRepository coachRepository;
     private NotificationMemberCoachRepository notificationRepository;
+    private PrivateSessionRepository privateSessionRepository;
 
     @Override
     public ResponseEntity<String> registerMember(Member member) {
@@ -182,5 +180,30 @@ public class MemberService implements IMemberService
         Member member = memberRepository.findByEmail(memberEmail);
 
         return member.getNotificationMemberCoaches();
+    }
+
+    public ResponseEntity<String> coachBooking(String memberEmail, Long privateSessionId)
+    {
+        PrivateSession privateSession = privateSessionRepository.findById(privateSessionId).orElse(null);
+        Member member = memberRepository.findByEmail(memberEmail);
+
+        if (privateSession != null && member != null)
+        {
+            privateSession.setPrivateSessionMember(member);
+            privateSession.setPrivateSessionIsReserved(true);
+            privateSessionRepository.save(privateSession);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    public Set<PrivateSession> getMemberPrivateSessions(String memberEmail)
+    {
+        Member member = memberRepository.findByEmail(memberEmail);
+        if (member != null)
+        {
+            return member.getMemberPrivateSessions();
+        }
+        return null;
     }
 }

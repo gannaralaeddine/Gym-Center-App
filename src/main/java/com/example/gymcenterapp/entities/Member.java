@@ -45,4 +45,9 @@ public class Member extends User
     @OneToMany(mappedBy = "member")
     @JsonIgnore
     private Set<NotificationMemberCoach> notificationMemberCoaches = new HashSet<>();
+
+
+    @OneToMany(mappedBy = "privateSessionMember")
+    @JsonIgnore
+    private Set<PrivateSession> memberPrivateSessions;
 }

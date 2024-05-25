@@ -87,6 +87,9 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/auth/login").permitAll()
 
 //                .anyRequest().authenticated();
+                .antMatchers("/hhh").permitAll()
+                .antMatchers("/notify").permitAll()
+                .antMatchers("/socket").permitAll()
 
                 .antMatchers("/user/retrieve-all-users").permitAll()//.hasAnyRole("ADMIN")
                 .antMatchers("/user/register-user").permitAll()
@@ -127,6 +130,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/coach/retrieve-private-members/{coachEmail}").permitAll()
                 .antMatchers("/coach/terminate-coach-member-relation/{memberEmail}/{coachEmail}").permitAll()
                 .antMatchers("/coach/getCoachNotifications/{coachEmail}").permitAll()
+                .antMatchers("/coach/getCoachPrivateSessions/{coachEmail}").permitAll()
 
                 .antMatchers("/member/register-member").permitAll()
                 .antMatchers("/member/update-member/{member-id}").permitAll()
@@ -139,6 +143,9 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/member/is-my-private-coach/{memberEmail}/{coachEmail}").permitAll()
                 .antMatchers("/member/send-invitation-to-coach/{memberEmail}/{coachEmail}").permitAll()
                 .antMatchers("/member/getMemberNotifications/{memberEmail}").permitAll()
+                .antMatchers("/member/coach-booking/{memberEmail}/{coachEmail}").permitAll()
+                .antMatchers("/member/getMemberPrivateSessions/{memberEmail}").permitAll()
+
 
                 .antMatchers("/session/create-session").permitAll()
                 .antMatchers("/session/update-session/{session-id}").permitAll()
@@ -184,6 +191,11 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/option/create-option").permitAll()
                 .antMatchers("/option/update-option/{option-id}").permitAll()
                 .antMatchers("/option/delete-option/{option-id}").permitAll()
+
+                .antMatchers("/private-session/add-private-session").permitAll()
+                .antMatchers("/private-session/retrieve-all-private-sessions").permitAll()
+                .antMatchers("/private-session/retrieve-private-session/{id}").permitAll()
+                .antMatchers("/private-session/cancelPrivateSession/{memberEmail}/{privateSessionId}").permitAll()
 
                 .anyRequest().authenticated().and().httpBasic();
     }

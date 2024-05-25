@@ -81,5 +81,13 @@ public class CoachController
     {
         return coachService.getCoachNotifications(coachEmail);
     }
+
+
+    @GetMapping("/getCoachPrivateSessions/{coachEmail}")
+    @ResponseBody
+    public Set<PrivateSession> getCoachPrivateSessions(@PathVariable String coachEmail)
+    {
+        return coachService.getCoachPrivateSessions(coachEmail);
+    }
 }
 

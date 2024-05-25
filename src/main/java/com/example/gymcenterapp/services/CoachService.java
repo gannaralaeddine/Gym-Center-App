@@ -210,4 +210,16 @@ public class CoachService implements ICoachService
 
         return coach.getNotificationMemberCoaches();
     }
+
+
+
+    public Set<PrivateSession> getCoachPrivateSessions(String coachEmail)
+    {
+        Coach coach = coachRepository.findByEmail(coachEmail);
+        if (coach != null)
+        {
+            return coach.getCoachPrivateSessions();
+        }
+        return null;
+    }
 }

@@ -50,4 +50,9 @@ public class Coach extends User
     @OneToMany(mappedBy = "coach")
     @JsonIgnore
     private Set<NotificationMemberCoach> notificationMemberCoaches = new HashSet<>();
+
+
+    @OneToMany(mappedBy = "privateSessionCoach")
+    @JsonIgnore
+    private Set<PrivateSession> coachPrivateSessions;
 }

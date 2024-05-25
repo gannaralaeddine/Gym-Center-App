@@ -1,9 +1,6 @@
 package com.example.gymcenterapp.controllers;
 
-import com.example.gymcenterapp.entities.Coach;
-import com.example.gymcenterapp.entities.Member;
-import com.example.gymcenterapp.entities.NotificationMemberCoach;
-import com.example.gymcenterapp.entities.Session;
+import com.example.gymcenterapp.entities.*;
 import com.example.gymcenterapp.services.MemberService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +15,6 @@ import java.util.Set;
 public class MemberController
 {
     MemberService memberService;
-
 
     @GetMapping("/retrieve-all-members")
     @ResponseBody
@@ -73,5 +69,19 @@ public class MemberController
     public Set<NotificationMemberCoach> getMemberNotifications(@PathVariable String memberEmail)
     {
         return memberService.getMemberNotifications(memberEmail);
+    }
+
+
+    @PutMapping(value = "/coach-booking/{memberEmail}/{privateSessionId}")
+    @ResponseBody
+    public ResponseEntity<String> coachBooking(@PathVariable String memberEmail, @PathVariable Long privateSessionId) { return memberService.coachBooking(memberEmail, privateSessionId); }
+
+
+
+    @GetMapping("/getMemberPrivateSessions/{memberEmail}")
+    @ResponseBody
+    public Set<PrivateSession> getMemberPrivateSessions(@PathVariable String memberEmail)
+    {
+        return memberService.getMemberPrivateSessions(memberEmail);
     }
 }
