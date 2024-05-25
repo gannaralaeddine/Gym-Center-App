@@ -65,6 +65,8 @@ public class SubscriptionService implements ISubscriptionService
             subscription.setSubscriptionMembers(setMember);
             member.setMemberSubscriptions(setSubscription);
 
+            member.setUserIsSubscribed(true);
+
             subscriptionRepository.save(subscription);
             memberRepository.save(member);
             System.out.println("member added successfully !");

@@ -37,7 +37,7 @@ public class SubscriptionController
     @ResponseBody
     public Subscription retrieveSubscription(@PathVariable("id") Long idSubscription) { return subscriptionService.retrieveSubscription(idSubscription); }
 
-    @PutMapping("/add-member-to-subscription/{subscriptionId}/{memberId}")
+    @PutMapping("/assign-member-to-subscription/{subscriptionId}/{memberId}")
     public void addMemberToSubscription(@PathVariable Long subscriptionId,@PathVariable Long memberId) 
     {
         subscriptionService.addMemberToSubscription(subscriptionId, memberId);
