@@ -41,39 +41,26 @@ public class SubscriptionService implements ISubscriptionService
             existingSubscription.setSubscriptionStartDate(subscription.getSubscriptionStartDate());
             existingSubscription.setSubscriptionEndDate(subscription.getSubscriptionEndDate());
             existingSubscription.setSubscriptionActivity(subscription.getSubscriptionActivity());
-            existingSubscription.setSubscriptionMembers(subscription.getSubscriptionMembers());
             return subscriptionRepository.save(existingSubscription);
         }
 
         return null;
     }
 
-    @Override
-    public void addMemberToSubscription(Long subscriptionId, Long memberId) 
-    {
-        Subscription subscription = subscriptionRepository.findById(subscriptionId).orElse(null);
-        Member member = memberRepository.findById(memberId).orElse(null);
-
-        if ((subscription != null) && (member != null))
-        {
-            Set<Subscription> setSubscription = member.getMemberSubscriptions();
-            Set<Member> setMember = subscription.getSubscriptionMembers();
-
-            setSubscription.add(subscription);
-            setMember.add(member);
-
-            subscription.setSubscriptionMembers(setMember);
-            member.setMemberSubscriptions(setSubscription);
-
-            member.setUserIsSubscribed(true);
-
-            subscriptionRepository.save(subscription);
-            memberRepository.save(member);
-            System.out.println("member added successfully !");
-        }
-        else
-        {
-            System.out.println("member or subscription is null in addMemberToSubscription");
-        }
-    }
+//    @Override
+//    public void addMemberToSubscription(Long subscriptionId, Long memberId)
+//    {
+//        Subscription subscription = subscriptionRepository.findById(subscriptionId).orElse(null);
+//        Member member = memberRepository.findById(memberId).orElse(null);
+//
+//        if ((subscription != null) && (member != null))
+//        {
+//            memberRepository.save(member);
+//            System.out.println("member added successfully !");
+//        }
+//        else
+//        {
+//            System.out.println("member or subscription is null in addMemberToSubscription");
+//        }
+//    }
 }

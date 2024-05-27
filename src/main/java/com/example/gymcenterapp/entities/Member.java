@@ -1,6 +1,7 @@
 package com.example.gymcenterapp.entities;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -20,13 +21,11 @@ import lombok.Setter;
 @Embeddable
 public class Member extends User
 {
-    @JsonIgnore  
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "members_subscriptions",
-            joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "subscriptionId",referencedColumnName = "subscriptionId")
-    )
+    @ElementCollection
+    private List<MyGrantedAuthority> authorities;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "member")
     private Set<Subscription> memberSubscriptions;
 
 

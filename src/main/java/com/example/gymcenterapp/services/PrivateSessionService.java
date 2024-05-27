@@ -1,6 +1,5 @@
 package com.example.gymcenterapp.services;
 
-import com.example.gymcenterapp.entities.Category;
 import com.example.gymcenterapp.entities.Member;
 import com.example.gymcenterapp.entities.PrivateSession;
 import com.example.gymcenterapp.repositories.MemberRepository;

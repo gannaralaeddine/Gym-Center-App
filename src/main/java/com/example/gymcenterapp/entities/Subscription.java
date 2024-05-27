@@ -5,14 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -42,6 +36,7 @@ public class Subscription implements Serializable
     @JoinColumn(name = "activity_id",referencedColumnName = "actId")
     private Activity subscriptionActivity;
 
-    @ManyToMany(mappedBy = "memberSubscriptions")
-    private Set<Member> subscriptionMembers;
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REMOVE })
+    @JoinColumn(name = "userId")
+    private Member member;
 }

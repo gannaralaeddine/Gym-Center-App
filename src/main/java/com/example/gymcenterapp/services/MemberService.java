@@ -63,6 +63,8 @@ public class MemberService implements IMemberService
     @Override
     public Member retrieveMember(String email) { return memberRepository.findByEmail(email); }
 
+    public Member retrieveMemberById(Long id) { return memberRepository.findById(id).orElse(null); }
+
     @Override
     public void deleteMember(Long id) { memberRepository.deleteById(id);}
 
@@ -203,6 +205,16 @@ public class MemberService implements IMemberService
         if (member != null)
         {
             return member.getMemberPrivateSessions();
+        }
+        return null;
+    }
+
+    public Set<Subscription> getMemberSubscriptions(String memberEmail)
+    {
+        Member member = memberRepository.findByEmail(memberEmail);
+        if (member != null)
+        {
+            return member.getMemberSubscriptions();
         }
         return null;
     }

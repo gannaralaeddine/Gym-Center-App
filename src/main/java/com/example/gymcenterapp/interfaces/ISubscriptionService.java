@@ -16,5 +16,5 @@ public interface ISubscriptionService
 
     Subscription updateSubscription(Long id, Subscription subscription);
 
-    void addMemberToSubscription(Long subscriptionId, Long memberId);
+//    void addMemberToSubscription(Long subscriptionId, Long memberId);
 }

@@ -1,7 +1,9 @@
 package com.example.gymcenterapp.entities;
 
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
+@NoArgsConstructor
 public class MyGrantedAuthority implements GrantedAuthority
 {
 

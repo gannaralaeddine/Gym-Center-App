@@ -26,6 +26,11 @@ public class MemberController
     public Member retrieveMember(@PathVariable("email") String email) { return memberService.retrieveMember(email); }
 
 
+    @GetMapping("/retrieve-member-by-id/{id}")
+    @ResponseBody
+    public Member retrieveMemberById(@PathVariable("id") Long id) { return memberService.retrieveMemberById(id); }
+
+
     @PostMapping(value = "/register-member")
     @ResponseBody
     public ResponseEntity<String> registerMember(@RequestBody Member member) { return memberService.registerMember(member); }
@@ -83,5 +88,13 @@ public class MemberController
     public Set<PrivateSession> getMemberPrivateSessions(@PathVariable String memberEmail)
     {
         return memberService.getMemberPrivateSessions(memberEmail);
+    }
+
+
+    @GetMapping("/getMemberSubscriptions/{memberEmail}")
+    @ResponseBody
+    public Set<Subscription> getMemberSubscriptions(@PathVariable String memberEmail)
+    {
+        return memberService.getMemberSubscriptions(memberEmail);
     }
 }
