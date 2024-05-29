@@ -83,7 +83,7 @@ public class MemberController
 
 
 
-    @GetMapping("/getMemberPrivateSessions/{memberEmail}")
+    @GetMapping("/get-member-private-sessions/{memberEmail}")
     @ResponseBody
     public Set<PrivateSession> getMemberPrivateSessions(@PathVariable String memberEmail)
     {
@@ -91,7 +91,7 @@ public class MemberController
     }
 
 
-    @GetMapping("/getMemberSubscriptions/{memberEmail}")
+    @GetMapping("/get-member-subscriptions/{memberEmail}")
     @ResponseBody
     public Set<Subscription> getMemberSubscriptions(@PathVariable String memberEmail)
     {

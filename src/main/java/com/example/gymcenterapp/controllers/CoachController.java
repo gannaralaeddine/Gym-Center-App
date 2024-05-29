@@ -83,7 +83,7 @@ public class CoachController
     }
 
 
-    @GetMapping("/getCoachPrivateSessions/{coachEmail}")
+    @GetMapping("/get-coach-private-sessions/{coachEmail}")
     @ResponseBody
     public Set<PrivateSession> getCoachPrivateSessions(@PathVariable String coachEmail)
     {

@@ -130,7 +130,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/coach/retrieve-private-members/{coachEmail}").permitAll()
                 .antMatchers("/coach/terminate-coach-member-relation/{memberEmail}/{coachEmail}").permitAll()
                 .antMatchers("/coach/getCoachNotifications/{coachEmail}").permitAll()
-                .antMatchers("/coach/getCoachPrivateSessions/{coachEmail}").permitAll()
+                .antMatchers("/coach/get-coach-private-sessions/{coachEmail}").permitAll()
 
                 .antMatchers("/member/register-member").permitAll()
                 .antMatchers("/member/update-member/{member-id}").permitAll()
@@ -144,8 +144,8 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/member/send-invitation-to-coach/{memberEmail}/{coachEmail}").permitAll()
                 .antMatchers("/member/getMemberNotifications/{memberEmail}").permitAll()
                 .antMatchers("/member/coach-booking/{memberEmail}/{coachEmail}").permitAll()
-                .antMatchers("/member/getMemberPrivateSessions/{memberEmail}").permitAll()
-                .antMatchers("/member/getMemberSubscriptions/{memberEmail}").permitAll()
+                .antMatchers("/member/get-member-private-sessions/{memberEmail}").permitAll()
+                .antMatchers("/member/get-member-subscriptions/{memberEmail}").permitAll()
                 .antMatchers("/member/retrieve-member-by-id/{id}").permitAll()
 
                 .antMatchers("/session/create-session").permitAll()
