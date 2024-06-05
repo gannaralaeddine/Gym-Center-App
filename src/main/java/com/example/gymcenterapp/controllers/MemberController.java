@@ -2,7 +2,11 @@ package com.example.gymcenterapp.controllers;
 
 import com.example.gymcenterapp.entities.*;
 import com.example.gymcenterapp.services.MemberService;
+
+import io.micrometer.core.ipc.http.HttpSender.Response;
 import lombok.AllArgsConstructor;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -96,5 +100,12 @@ public class MemberController
     public Set<Subscription> getMemberSubscriptions(@PathVariable String memberEmail)
     {
         return memberService.getMemberSubscriptions(memberEmail);
+    }
+
+    @PutMapping(value = "/update-member-private-sessions-number/{memberEmail}/{newPrivateSessionsNumber}")
+    @ResponseBody
+    public void updateMemberPrivateSessionsNumber(@PathVariable String memberEmail, @PathVariable Integer newPrivateSessionsNumber) 
+    { 
+        memberService.updateMemberPrivateSessionsNumber(memberEmail, newPrivateSessionsNumber); 
     }
 }

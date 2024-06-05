@@ -21,6 +21,8 @@ import lombok.Setter;
 @Embeddable
 public class Member extends User
 {
+    private Integer privateSessionsNumber = 0;
+    
     @ElementCollection
     private List<MyGrantedAuthority> authorities;
 

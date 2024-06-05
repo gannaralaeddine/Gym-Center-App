@@ -218,4 +218,16 @@ public class MemberService implements IMemberService
         }
         return null;
     }
+
+    @Override
+    public void updateMemberPrivateSessionsNumber(String email, Integer newNumberumberOfSessions) 
+    {
+        Member member = memberRepository.findByEmail(email);
+        
+        if (member != null)
+        {
+            member.setPrivateSessionsNumber(newNumberumberOfSessions + member.getPrivateSessionsNumber());
+            memberRepository.save(member);
+        }
+    }
 }
