@@ -194,6 +194,13 @@ public class MemberService implements IMemberService
             privateSession.setPrivateSessionMember(member);
             privateSession.setPrivateSessionIsReserved(true);
             privateSessionRepository.save(privateSession);
+
+            if (member.getPrivateSessionsNumber() > 0)
+            {
+                member.setPrivateSessionsNumber(member.getPrivateSessionsNumber() - 1);
+                memberRepository.save(member);
+            }
+
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
