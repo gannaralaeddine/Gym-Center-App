@@ -27,7 +27,7 @@ public class PrivateSessionController
     public PrivateSession retrievePrivateSession(@PathVariable("id") Long id) { return privateSessionService.retrievePrivateSession(id); }
 
 
-    @PutMapping(value = "/cancelPrivateSession/{memberEmail}/{privateSessionId}")
+    @PutMapping(value = "/cancel-private-session/{memberEmail}/{privateSessionId}")
     @ResponseBody
     public ResponseEntity<String> cancelPrivateSession(@PathVariable String memberEmail, @PathVariable Long privateSessionId)
     {

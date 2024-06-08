@@ -47,6 +47,8 @@ public class PrivateSessionService
         {
             privateSession.setPrivateSessionMember(null);
             privateSession.setPrivateSessionIsReserved(false);
+            member.setPrivateSessionsNumber(member.getPrivateSessionsNumber() + 1);
+            memberRepository.save(member);
             privateSessionRepository.save(privateSession);
             return new ResponseEntity<>(HttpStatus.OK);
         }

@@ -197,7 +197,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/private-session/add-private-session").permitAll()
                 .antMatchers("/private-session/retrieve-all-private-sessions").permitAll()
                 .antMatchers("/private-session/retrieve-private-session/{id}").permitAll()
-                .antMatchers("/private-session/cancelPrivateSession/{memberEmail}/{privateSessionId}").permitAll()
+                .antMatchers("/private-session/cancel-private-session/{memberEmail}/{privateSessionId}").permitAll()
 
                 .anyRequest().authenticated().and().httpBasic();
     }
