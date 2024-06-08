@@ -1,12 +1,11 @@
 package com.example.gymcenterapp.interfaces;
 
 import com.example.gymcenterapp.entities.Subscription;
-
 import java.util.List;
 
 public interface ISubscriptionService
 {
-    Subscription addSubscription(Subscription subscription);
+    Subscription addSubscription(Subscription subscription, Long memberId);
 
     List<Subscription> retrieveAllSubscriptions();
 
@@ -14,7 +13,5 @@ public interface ISubscriptionService
 
     void deleteSubscription(Long id);
 
-    Subscription updateSubscription(Long id, Subscription subscription);
-
-//    void addMemberToSubscription(Long subscriptionId, Long memberId);
+    Subscription updateSubscription(Long id,Long memberId,Subscription subscription);
 }

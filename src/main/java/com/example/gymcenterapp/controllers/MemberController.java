@@ -2,11 +2,7 @@ package com.example.gymcenterapp.controllers;
 
 import com.example.gymcenterapp.entities.*;
 import com.example.gymcenterapp.services.MemberService;
-
-import io.micrometer.core.ipc.http.HttpSender.Response;
 import lombok.AllArgsConstructor;
-
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -41,7 +37,10 @@ public class MemberController
 
     @PutMapping(value = "/update-member/{member-id}")
     @ResponseBody
-    public Member updateMember(@PathVariable("member-id") Long memberId,@RequestBody Member member) { return memberService.updateMember(memberId,member); }
+    public Member updateMember(@PathVariable("member-id") Long memberId,@RequestBody Member member) 
+    { 
+        return memberService.updateMember(memberId,member); 
+    }
 
     @DeleteMapping(value = "/delete-member/{member-id}")
     public void deleteMember(@PathVariable("member-id") Long memberId) { memberService.deleteMember(memberId); }

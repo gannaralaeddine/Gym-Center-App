@@ -90,6 +90,7 @@ public class MemberService implements IMemberService
             existingMember.setRoles(member.getRoles());
             existingMember.setMemberSessions(member.getMemberSessions());
             existingMember.setMemberSubscriptions(member.getMemberSubscriptions());
+            existingMember.setPrivateSessionsNumber(member.getPrivateSessionsNumber());
             return memberRepository.save(existingMember);
         }
 
@@ -238,3 +239,4 @@ public class MemberService implements IMemberService
         }
     }
 }
+

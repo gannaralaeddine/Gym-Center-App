@@ -7,9 +7,7 @@ import com.example.gymcenterapp.repositories.MemberRepository;
 import com.example.gymcenterapp.repositories.SubscriptionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -19,7 +17,17 @@ public class SubscriptionService implements ISubscriptionService
     MemberRepository memberRepository;
 
     @Override
-    public Subscription addSubscription(Subscription subscription) { return subscriptionRepository.save(subscription); }
+    public Subscription addSubscription(Subscription subscription, Long memberId) 
+    { 
+        Member member = memberRepository.findById(memberId).orElse(null);
+
+        if (member != null)
+        {
+            subscription.setMember(member);
+        }
+
+        return subscriptionRepository.save(subscription); 
+    }
 
     @Override
     public List<Subscription> retrieveAllSubscriptions() { return subscriptionRepository.findAll(); }
@@ -31,36 +39,29 @@ public class SubscriptionService implements ISubscriptionService
     public void deleteSubscription(Long id) { subscriptionRepository.deleteById(id); }
 
     @Override
-    public Subscription updateSubscription(Long id, Subscription subscription)
+    public Subscription updateSubscription(Long id,Long memberId ,Subscription subscription)
     {
         Subscription existingSubscription = subscriptionRepository.findById(id).orElse(null);
+        Member member = memberRepository.findById(memberId).orElse(null);
 
-        if (existingSubscription != null)
+        if (existingSubscription != null && member != null)
         {
             existingSubscription.setSubscriptionPrice(subscription.getSubscriptionPrice());
             existingSubscription.setSubscriptionStartDate(subscription.getSubscriptionStartDate());
             existingSubscription.setSubscriptionEndDate(subscription.getSubscriptionEndDate());
             existingSubscription.setSubscriptionActivity(subscription.getSubscriptionActivity());
+            existingSubscription.setMember(member);
             return subscriptionRepository.save(existingSubscription);
+        }
+        else if (existingSubscription != null)
+        {
+            existingSubscription.setSubscriptionPrice(subscription.getSubscriptionPrice());
+            existingSubscription.setSubscriptionStartDate(subscription.getSubscriptionStartDate());
+            existingSubscription.setSubscriptionEndDate(subscription.getSubscriptionEndDate());
+            existingSubscription.setSubscriptionActivity(subscription.getSubscriptionActivity());    
+            return subscriptionRepository.save(existingSubscription);        
         }
 
         return null;
     }
-
-//    @Override
-//    public void addMemberToSubscription(Long subscriptionId, Long memberId)
-//    {
-//        Subscription subscription = subscriptionRepository.findById(subscriptionId).orElse(null);
-//        Member member = memberRepository.findById(memberId).orElse(null);
-//
-//        if ((subscription != null) && (member != null))
-//        {
-//            memberRepository.save(member);
-//            System.out.println("member added successfully !");
-//        }
-//        else
-//        {
-//            System.out.println("member or subscription is null in addMemberToSubscription");
-//        }
-//    }
 }
