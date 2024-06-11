@@ -1,13 +1,16 @@
 package com.example.gymcenterapp.services;
 
+import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Member;
 import com.example.gymcenterapp.entities.Subscription;
 import com.example.gymcenterapp.interfaces.ISubscriptionService;
+import com.example.gymcenterapp.repositories.ActivityRepository;
 import com.example.gymcenterapp.repositories.MemberRepository;
 import com.example.gymcenterapp.repositories.SubscriptionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -15,6 +18,7 @@ public class SubscriptionService implements ISubscriptionService
 {
     SubscriptionRepository subscriptionRepository;
     MemberRepository memberRepository;
+    ActivityRepository activityRepository;
 
     @Override
     public Subscription addSubscription(Subscription subscription, Long memberId) 
@@ -62,6 +66,18 @@ public class SubscriptionService implements ISubscriptionService
             return subscriptionRepository.save(existingSubscription);        
         }
 
+        return null;
+    }
+
+    public Set<Subscription> retrieveActivitySubscriptions(Long activityId)
+    {
+        Activity activity = activityRepository.findById(activityId).orElse(null);
+
+        if (activity != null)
+        {
+            return activity.getActSubscriptions();
+        }
+        
         return null;
     }
 }

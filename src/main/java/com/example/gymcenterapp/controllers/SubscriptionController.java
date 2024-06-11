@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/subscription")
@@ -36,6 +37,10 @@ public class SubscriptionController
     @GetMapping("/retrieve-subscription/{id}")
     @ResponseBody
     public Subscription retrieveSubscription(@PathVariable("id") Long idSubscription) { return subscriptionService.retrieveSubscription(idSubscription); }
+
+    @GetMapping("/retrieve-activity-subscriptions/{activity-id}")
+    @ResponseBody
+    public Set<Subscription> retrieveActivitySubscriptions(@PathVariable("activity-id") Long activityId) { return subscriptionService.retrieveActivitySubscriptions(activityId); }
 
 //    @PutMapping("/assign-member-to-subscription/{subscriptionId}/{memberId}")
 //    public void addMemberToSubscription(@PathVariable Long subscriptionId,@PathVariable Long memberId)
