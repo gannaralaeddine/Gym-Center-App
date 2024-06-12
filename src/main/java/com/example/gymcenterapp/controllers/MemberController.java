@@ -107,4 +107,10 @@ public class MemberController
     { 
         memberService.updateMemberPrivateSessionsNumber(memberEmail, newPrivateSessionsNumber); 
     }
+
+    @PutMapping(value = "/replace-old-member-private-sessions-number/{member-id}/{newPrivateSessionsNumber}")
+    public void replaceOldMemberPrivateSessionsNumber(@PathVariable("member-id") Long id,@PathVariable Integer newPrivateSessionsNumber) 
+    { 
+        memberService.replaceOldMemberPrivateSessionsNumber(id,newPrivateSessionsNumber); 
+    }
 }

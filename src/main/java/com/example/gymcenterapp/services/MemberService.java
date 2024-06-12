@@ -238,5 +238,16 @@ public class MemberService implements IMemberService
             memberRepository.save(member);
         }
     }
+
+    public void replaceOldMemberPrivateSessionsNumber(Long id, Integer newNumberumberOfSessions)
+    {
+        Member member = memberRepository.findById(id).orElse(null);
+
+        if (member != null)
+        {
+            member.setPrivateSessionsNumber(newNumberumberOfSessions);
+            memberRepository.save(member);
+        }
+    }
 }
 
