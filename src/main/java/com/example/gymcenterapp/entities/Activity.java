@@ -30,6 +30,7 @@ public class Activity implements Serializable
     private String actName;
 
     @JoinColumn(name = "activityDescription")
+    @Column(length = 510)
     private String actDescription;
 
     @JoinColumn(name = "activityImage")

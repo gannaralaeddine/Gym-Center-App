@@ -35,7 +35,7 @@ public class Session
     @Column(name = "session_name")
     private String sessionName;
 
-    @Column(name = "session_description")
+    @Column(name = "session_description", length = 510)
     private String sessionDescription;
 
     @Column(name = "session_deadline")

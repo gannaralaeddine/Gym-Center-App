@@ -36,6 +36,7 @@ public class User implements Serializable, UserDetails
 
     private String userLastName;
 
+    @Column(length = 510)
     private String userDescription;
 
     private Date userBirthDate;

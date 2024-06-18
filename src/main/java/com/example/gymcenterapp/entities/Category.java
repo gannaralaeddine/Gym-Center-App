@@ -29,6 +29,7 @@ public class Category implements Serializable
     private String catName;
 
     @JoinColumn(name = "categoryDescription")
+    @Column(length = 510)
     private String catDescription;
 
     private String catImage;
