@@ -13,7 +13,7 @@
 
     <groupId>com.example</groupId>
     <artifactId>Gym-Center-App</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>Gym-Center-App</name>
     <description>Gym-Center-App</description>
     <properties>
