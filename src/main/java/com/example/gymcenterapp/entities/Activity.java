@@ -53,7 +53,7 @@ public class Activity implements Serializable
 
 
     @ManyToMany(mappedBy = "coachSpecialities")
-    private Set<Coach> actCoaches;
+private Set<Coach> actCoaches;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "activity_images",
