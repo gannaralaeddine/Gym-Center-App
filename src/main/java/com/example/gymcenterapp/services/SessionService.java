@@ -283,4 +283,9 @@ public class SessionService implements ISessionService
         }
         return false;
     }
+
+    public Session addSessionWithOneImage(Session session) 
+    {
+        return sessionRepository.save(session);
+    }
 }

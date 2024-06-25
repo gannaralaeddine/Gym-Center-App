@@ -17,6 +17,7 @@ public class PrivateSessionService
 {
     private PrivateSessionRepository privateSessionRepository;
     private MemberRepository memberRepository;
+    private EmailServiceImpl emailServiceImpl;
 
     public PrivateSession addPrivateSession(PrivateSession privateSession)
     {
@@ -45,6 +46,7 @@ public class PrivateSessionService
 
         if (privateSession != null && member != null)
         {
+            emailServiceImpl.sendCancelPrivateSessionEmail(privateSession);
             privateSession.setPrivateSessionMember(null);
             privateSession.setPrivateSessionIsReserved(false);
             member.setPrivateSessionsNumber(member.getPrivateSessionsNumber() + 1);

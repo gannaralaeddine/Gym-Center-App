@@ -4,24 +4,35 @@ import com.example.gymcenterapp.entities.*;
 import com.example.gymcenterapp.interfaces.ICoachService;
 import com.example.gymcenterapp.repositories.*;
 import lombok.AllArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Service
-@AllArgsConstructor
 public class CoachService implements ICoachService
 {
+    @Autowired
     private CoachRepository coachRepository;
+    @Autowired
     private MemberRepository memberRepository;
+    @Autowired
     private RoleRepository roleRepository;
+    @Autowired
     private ActivityRepository activityRepository;
+    @Autowired
     private EmailServiceImpl emailService;
+
+    private ConfirmationToken confirmationToken = new ConfirmationToken();
+
 
     @Override
     public ResponseEntity<String> registerCoach(Coach coach)
@@ -50,10 +61,11 @@ public class CoachService implements ICoachService
             });
             coach.setRoles(roles);
 
-            emailService.sendConfirmationEmail(coach);
+            confirmationToken = emailService.sendConfirmationEmail(coach);
 
             coachRepository.save(coach);
-            return new ResponseEntity<>(HttpStatus.OK);
+
+            return ResponseEntity.status(HttpStatus.OK).body(Long.toString(confirmationToken.getTokenId()));
         }
         return ResponseEntity.status(HttpStatus.FOUND).body("User already exist! please try with another email !");
     }
@@ -100,6 +112,7 @@ public class CoachService implements ICoachService
 
 
     @Override
+    @Transactional
     public void updateCoachSpecialities(Long coachId, List<Long> specialities)
     {
         for (Long speciality : specialities) 
@@ -120,6 +133,7 @@ public class CoachService implements ICoachService
     }
 
     @Override
+    @Transactional
     public void addCoachToActivity(Long coachId, Long activityId)
     {
         Activity activity = activityRepository.findById(activityId).orElse(null);
@@ -146,6 +160,7 @@ public class CoachService implements ICoachService
     }
 
     @Override
+    @Transactional
     public void deleteCoachActivities(Long coachId, Long activityId)
     {
         Activity activity = activityRepository.findById(activityId).orElse(null);

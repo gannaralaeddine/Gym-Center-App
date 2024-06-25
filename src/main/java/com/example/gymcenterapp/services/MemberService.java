@@ -23,6 +23,7 @@ public class MemberService implements IMemberService
     private CoachRepository coachRepository;
     private NotificationMemberCoachRepository notificationRepository;
     private PrivateSessionRepository privateSessionRepository;
+    private EmailServiceImpl emailServiceImpl;
 
     @Override
     public ResponseEntity<String> registerMember(Member member) {
@@ -50,9 +51,10 @@ public class MemberService implements IMemberService
                 }
             });
             member.setRoles(roles);
-            emailService.sendConfirmationEmail(member);
+            ConfirmationToken confirmationToken = emailService.sendConfirmationEmail(member);
             memberRepository.save(member);
-            return new ResponseEntity<>(HttpStatus.OK);
+            
+            return ResponseEntity.status(HttpStatus.OK).body(Long.toString(confirmationToken.getTokenId()));
         }
         return ResponseEntity.status(HttpStatus.FOUND).body("User already exist! please try with another email !");
     }
@@ -201,7 +203,7 @@ public class MemberService implements IMemberService
                 member.setPrivateSessionsNumber(member.getPrivateSessionsNumber() - 1);
                 memberRepository.save(member);
             }
-
+            emailServiceImpl.sendCoachBookingNotificationEmail(privateSession);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -72,9 +73,10 @@ public class UserService implements IUserService, UserDetailsService
                 }
             });
             user.setRoles(roles);
-            emailService.sendConfirmationEmail(user);
+            ConfirmationToken confirmationToken = emailService.sendConfirmationEmail(user);
             userRepository.save(user);
-            return new ResponseEntity<>(HttpStatus.OK);
+
+            return ResponseEntity.status(HttpStatus.OK).body(Long.toString(confirmationToken.getTokenId()));
         }
         return ResponseEntity.status(HttpStatus.FOUND).body("User already exist! please try with another email !");
     }
