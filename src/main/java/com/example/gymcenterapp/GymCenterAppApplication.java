@@ -91,6 +91,8 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/notify").permitAll()
                 .antMatchers("/socket").permitAll()
 
+                .antMatchers("/users/*").permitAll()
+
                 .antMatchers("/user/retrieve-all-users").permitAll()//.hasAnyRole("ADMIN")
                 .antMatchers("/user/register-user").permitAll()
                 .antMatchers("/user/add-role").permitAll()
