@@ -175,10 +175,4 @@ public class CategoryService implements ICategoryService
             return null;
         }
     }
-
-    public Category addCategoryWithOneImage(Category category)
-    {
-        return categoryRepository.save(category);
-    }
-    
 }
