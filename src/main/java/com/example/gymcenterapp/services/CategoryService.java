@@ -40,23 +40,30 @@ public class CategoryService implements ICategoryService
     {
         String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
         String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
-        String filePath = directory + "categories\\" + uniqueName;
+        String filePath = directory + "categories/";
 
         try
         {
+            String currentDirectory = System.getProperty("user.dir");
+            System.out.println("currentDirectory: " + currentDirectory);
+
             ImageModel imageModel = new  ImageModel();
             imageModel.setImageName( uniqueName );
             imageModel.setImageType( file[0].getContentType() );
             imageModel.setImageSize( file[0].getSize() );
-            imageModel.setImageUrl( filePath );
+            imageModel.setImageUrl( filePath + uniqueName );
 
             HashSet<ImageModel> images = new HashSet<>();
             images.add(imageModel);
 
             category.setCatImage(uniqueName);
             category.setImages(images);
-
-            file[0].transferTo(new File(filePath));
+            File fileDirectory = new File(directory);
+            if ( !fileDirectory.exists() )
+            {
+                fileDirectory.mkdirs();
+            }
+            file[0].transferTo(new File(directory, uniqueName));
 
             return categoryRepository.save(category);
         }
