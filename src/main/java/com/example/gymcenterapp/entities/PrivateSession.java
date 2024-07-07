@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -29,12 +28,12 @@ public class PrivateSession
 
     private Boolean privateSessionIsReserved = false;
 
-    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REMOVE })
+    @ManyToOne
     @JoinColumn(name = "member_id")
     private Member privateSessionMember;
 
 
-    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REMOVE })
+    @ManyToOne
     @JoinColumn(name = "coach_id")
     private Coach privateSessionCoach;
 }

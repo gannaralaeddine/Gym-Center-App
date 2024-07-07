@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Set;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/private-session")
@@ -33,4 +36,11 @@ public class PrivateSessionController
     {
         return privateSessionService.cancelPrivateSession(memberEmail, privateSessionId);
     }
+
+    @DeleteMapping(value = "/remove-private-session/{privateSessionId}")
+    public void removePrivateSession(@PathVariable("privateSessionId") Long privateSessionId) 
+    {
+        privateSessionService.removePrivateSession(privateSessionId);
+    }
+    
 }

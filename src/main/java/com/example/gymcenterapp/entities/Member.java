@@ -27,11 +27,11 @@ public class Member extends User
     private List<MyGrantedAuthority> authorities;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private Set<Subscription> memberSubscriptions;
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JsonIgnore
     @JoinTable(
             name = "members_sessions",
@@ -43,12 +43,12 @@ public class Member extends User
     @ManyToMany(mappedBy = "privateMembers")
     private Set<Coach> privateCoaches;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Set<NotificationMemberCoach> notificationMemberCoaches = new HashSet<>();
 
 
-    @OneToMany(mappedBy = "privateSessionMember")
+    @OneToMany(mappedBy = "privateSessionMember", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Set<PrivateSession> memberPrivateSessions;
 }

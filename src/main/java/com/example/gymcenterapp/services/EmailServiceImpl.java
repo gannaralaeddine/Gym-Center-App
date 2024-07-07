@@ -4,11 +4,13 @@ import com.example.gymcenterapp.entities.Coach;
 import com.example.gymcenterapp.entities.ConfirmationToken;
 import com.example.gymcenterapp.entities.Member;
 import com.example.gymcenterapp.entities.PrivateSession;
+import com.example.gymcenterapp.entities.Session;
+import com.example.gymcenterapp.entities.Subscription;
 import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.repositories.ConfirmationTokenRepository;
-
 import java.text.SimpleDateFormat;
-
+import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -122,11 +124,51 @@ public class EmailServiceImpl
             + "Je suis désolé de vous informer que votre session privée prévue avec Coach " + coach.getUserFirstName() + " " + coach.getUserLastName() + " le " + new SimpleDateFormat("dd/MM/yyyy").format(privateSession.getPrivateSessionStartDateTime()) + " à " + new SimpleDateFormat("HH:mm").format(privateSession.getPrivateSessionStartDateTime()) + " a été annulée en raison d'un imprévu. \n\n"
             + "Nous comprenons que cela puisse être un désagrément et nous nous excusons pour la gêne occasionnée. Nous travaillons actuellement à reprogrammer votre session et vous contacterons dès que possible pour fixer une nouvelle date et heure qui vous conviennent. \n\n"
             + "En attendant, n'hésitez pas à me contacter si vous avez des questions ou des préoccupations. Merci pour votre compréhension et votre patience.\n\n"
-            + "Je vous remercie extrêmement pour votre compréhension \n\n"
+            + "Je vous remercie extrêmement une autre fois pour votre compréhension \n\n"
             + "Cordialement,\n"
             + "Gym Center\n");
 
         sendEmail(cancelPrivateSessionNotifiction);
+    }
+
+    public void sendCancelSubscriptionEmail(Subscription subscription)
+    {
+        SimpleMailMessage cancelPrivateSessionNotifiction = new SimpleMailMessage();
+        Member member = subscription.getMember();
+        cancelPrivateSessionNotifiction.setTo(member.getUserEmail());
+        cancelPrivateSessionNotifiction.setSubject("Suppression de votre abonnement à la salle de sport");
+        cancelPrivateSessionNotifiction.setFrom(appEmail);
+        cancelPrivateSessionNotifiction.setText(
+            "Cher/Chère Membre " + member.getUserFirstName() + " " + member.getUserLastName() + ",\n\n"
+            + "Nous espérons que vous allez bien.\n\n"
+            + "Nous souhaitons vous informer que votre abonnement pour l'activité " + subscription.getSubscriptionActivity().getActName() + "  au centre d'entraînement a été supprimé par l'administrateur.\n\nPour toute question ou information complémentaire concernant cette action, nous vous invitons à contacter l'administration du centre de gym. \n\n"
+            + "Nous restons à votre disposition pour toute assistance supplémentaire. \n\n"
+            + "Cordialement,\n"
+            + "Gym Center\n");
+
+        sendEmail(cancelPrivateSessionNotifiction);
+    }
+
+    public void sendCancelSessionEmail(Session session)
+    {
+        SimpleMailMessage cancelPrivateSessionNotifiction = new SimpleMailMessage();
+        Coach coach = session.getSessionCoach();
+        session.getSessionMembers().forEach((Member member) -> {
+            cancelPrivateSessionNotifiction.setTo(member.getUserEmail());
+            cancelPrivateSessionNotifiction.setSubject("Annulation de la Session avec le Coach " + coach.getUserFirstName() + " " + coach.getUserLastName());
+            cancelPrivateSessionNotifiction.setFrom(appEmail);
+            cancelPrivateSessionNotifiction.setText(
+                "Bonjour " + member.getUserFirstName() + " " + member.getUserLastName() + ",\n\n"
+                + "J'espère que vous allez bien.\n\n"
+                + "Je suis désolé de vous informer que la session prévue avec Coach " + coach.getUserFirstName() + " " + coach.getUserLastName() + " le " + new SimpleDateFormat("dd/MM/yyyy").format(session.getSessionDeadline()) + " à " + new SimpleDateFormat("HH:mm").format(session.getSessionDeadline()) + " a été annulée en raison d'un imprévu. \n\n"
+                + "Nous comprenons que cela puisse être un désagrément et nous nous excusons pour la gêne occasionnée. Nous travaillons actuellement à reprogrammer une nouvelle session dès que possible.\n\n"
+                + "En attendant, n'hésitez pas à me contacter si vous avez des questions ou des préoccupations. Merci pour votre compréhension et votre patience.\n\n"
+                + "Je vous remercie extrêmement une autre fois pour votre compréhension \n\n"
+                + "Cordialement,\n"
+                + "Gym Center\n");
+    
+            sendEmail(cancelPrivateSessionNotifiction);
+        });
     }
 
 }

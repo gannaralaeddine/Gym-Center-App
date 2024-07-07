@@ -67,7 +67,7 @@ public class User implements Serializable, UserDetails
     @Column(nullable = true)
     private boolean userIsEnabled;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
         joinColumns = {@JoinColumn (name = "fk_user_id", referencedColumnName = "user_id")},
             inverseJoinColumns = { @JoinColumn(name = "fk_role_id", referencedColumnName = "role_id") }
@@ -75,7 +75,7 @@ public class User implements Serializable, UserDetails
     private Set<Role> roles = new HashSet<>();
 
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinTable(name = "user_images",
             joinColumns = { @JoinColumn (name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "image_id") }

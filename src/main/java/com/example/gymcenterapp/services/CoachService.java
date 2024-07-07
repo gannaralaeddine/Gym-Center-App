@@ -4,7 +4,6 @@ import com.example.gymcenterapp.entities.*;
 import com.example.gymcenterapp.interfaces.ICoachService;
 import com.example.gymcenterapp.repositories.*;
 import lombok.AllArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -22,14 +20,21 @@ public class CoachService implements ICoachService
 {
     @Autowired
     private CoachRepository coachRepository;
+
     @Autowired
     private MemberRepository memberRepository;
+
     @Autowired
     private RoleRepository roleRepository;
+
     @Autowired
     private ActivityRepository activityRepository;
+
     @Autowired
     private EmailServiceImpl emailService;
+
+    @Autowired
+    private ConfirmationTokenRepository confirmationTokenRepository;
 
     private ConfirmationToken confirmationToken = new ConfirmationToken();
 
@@ -80,8 +85,52 @@ public class CoachService implements ICoachService
     public Coach retrieveCoachByEmail(String email) { return coachRepository.findByEmail(email); }
 
     @Override
-    public void deleteCoach(Long id) { coachRepository.deleteById(id);}
+    public void deleteCoach(Long id) 
+    { 
+        Coach coach = coachRepository.findById(id).orElse(null);
+        List<ConfirmationToken> confirmationTokenList = confirmationTokenRepository.findAll();
+        Boolean isFound = false;
+        Integer i = 0;
 
+        if (coach != null)
+        {
+            coach.getCoachPrivateSessions().forEach((privateSession) -> {
+                if (privateSession.getPrivateSessionMember() != null)
+                {
+                    emailService.sendCancelPrivateSessionEmail(privateSession);
+                }
+            });
+            coach.getCoachSessions().forEach((session) -> {
+                if (session.getSessionMembers() != null)
+                {
+                    emailService.sendCancelSessionEmail(session);
+                }
+            });
+            coach.getCoachSpecialities().forEach((activity) -> activity.setActCoaches(null));
+            coach.getCoachSessions().forEach((session) -> {
+                session.getSessionMembers().forEach((member) -> {
+                    member.setMemberSessions(null);
+                });
+            });
+            coach.setPrivateMembers(null);
+            coachRepository.save(coach);
+
+            while (!isFound && i < confirmationTokenList.size() - 1)
+            {
+                if (confirmationTokenList.get(i).getUser().getUserId() == coach.getUserId())
+                {
+                    isFound = true;
+                    break;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+            
+            confirmationTokenRepository.deleteById(confirmationTokenList.get(i).getTokenId());
+        }
+    }
     @Override
     public Coach updateCoach(Long id, Coach coach)
     {

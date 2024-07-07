@@ -16,14 +16,12 @@ import java.util.List;
 
 
 @RestController
-@Slf4j
 @AllArgsConstructor
 @RequestMapping("/user")
 public class UserController
 {
 
     UserService userService;
-
     RoleServiceImpl roleService;
 
     @GetMapping("/retrieve-all-users")
@@ -158,5 +156,11 @@ public class UserController
         return userService.changePassword(email, password);
     }
 
+    @DeleteMapping(value = { "/delete-user/{userId}" })
+    @ResponseBody
+    public void deleteUserImage(@PathVariable Long userId)
+    {
+        userService.deleteUser(userId);
+    }
 
 }

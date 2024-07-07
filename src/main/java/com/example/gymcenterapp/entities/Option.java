@@ -39,7 +39,7 @@ public class Option
     @JoinColumn(name = "option_name")
     private String optionName;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade ={ CascadeType.PERSIST, CascadeType.REMOVE })
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "offer_option",
         joinColumns = { @JoinColumn (name = "option_id") },

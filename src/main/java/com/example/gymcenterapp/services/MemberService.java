@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +22,7 @@ public class MemberService implements IMemberService
     private CoachRepository coachRepository;
     private NotificationMemberCoachRepository notificationRepository;
     private PrivateSessionRepository privateSessionRepository;
+    private ConfirmationTokenRepository confirmationTokenRepository;
     private EmailServiceImpl emailServiceImpl;
 
     @Override
@@ -68,7 +68,35 @@ public class MemberService implements IMemberService
     public Member retrieveMemberById(Long id) { return memberRepository.findById(id).orElse(null); }
 
     @Override
-    public void deleteMember(Long id) { memberRepository.deleteById(id);}
+    public void deleteMember(Long id) 
+    {
+        Member member = memberRepository.findById(id).orElse(null);
+        List<ConfirmationToken> confirmationTokenList = confirmationTokenRepository.findAll();
+        Boolean isFound = false;
+        Integer i = 0;
+
+        if (member != null)
+        {
+            member.setPrivateCoaches(null);
+            member.getMemberPrivateSessions().forEach((privateSession) -> privateSession.setPrivateSessionMember(null));
+            memberRepository.save(member);
+
+            while (!isFound && i < confirmationTokenList.size() - 1)
+            {
+                if (confirmationTokenList.get(i).getUser().getUserId() == member.getUserId())
+                {
+                    isFound = true;
+                    break;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+            
+            confirmationTokenRepository.deleteById(confirmationTokenList.get(i).getTokenId());
+        }
+    }
 
     @Override
     public Member updateMember(Long id, Member member)

@@ -19,6 +19,8 @@ public class SubscriptionService implements ISubscriptionService
     SubscriptionRepository subscriptionRepository;
     MemberRepository memberRepository;
     ActivityRepository activityRepository;
+    MemberService memberService;
+    EmailServiceImpl emailService;
 
     @Override
     public Subscription addSubscription(Subscription subscription, Long memberId) 
@@ -28,6 +30,10 @@ public class SubscriptionService implements ISubscriptionService
         if (member != null)
         {
             subscription.setMember(member);
+            if (!member.getUserIsSubscribed())
+            {
+                member.setUserIsSubscribed(true);
+            }
         }
 
         return subscriptionRepository.save(subscription); 
@@ -39,22 +45,56 @@ public class SubscriptionService implements ISubscriptionService
     @Override
     public Subscription retrieveSubscription(Long id) { return subscriptionRepository.findById(id).orElse(null); }
 
+
     @Override
-    public void deleteSubscription(Long id) { subscriptionRepository.deleteById(id); }
+    public void deleteSubscription(Long id) 
+    { 
+        Subscription subscription = subscriptionRepository.findById(id).orElse(null);
+
+        if (subscription != null)
+        {
+            Member member = subscription.getMember();
+            emailService.sendCancelSubscriptionEmail(subscription);
+
+            subscription.setMember(null);
+            subscription.setSubscriptionActivity(null);
+            subscriptionRepository.deleteById(subscriptionRepository.save(subscription).getSubscriptionId());
+           
+            if (member != null)
+            {
+                if (member.getMemberSubscriptions().size() == 0)
+                {
+                    member.setUserIsSubscribed(false);
+                    memberRepository.save(member);
+                }
+            }
+        }
+
+        
+    }
 
     @Override
     public Subscription updateSubscription(Long id,Long memberId ,Subscription subscription)
     {
         Subscription existingSubscription = subscriptionRepository.findById(id).orElse(null);
-        Member member = memberRepository.findById(memberId).orElse(null);
+        Member newMember = memberRepository.findById(memberId).orElse(null);
 
-        if (existingSubscription != null && member != null)
+        if (existingSubscription != null && newMember != null)
         {
+            Member oldMember = existingSubscription.getMember();
+            if ((oldMember.getMemberSubscriptions().remove(existingSubscription)) && (oldMember.getMemberSubscriptions().size() == 0))
+            {
+                oldMember.setUserIsSubscribed(false);
+                memberRepository.save(oldMember);
+            }
+           
             existingSubscription.setSubscriptionPrice(subscription.getSubscriptionPrice());
             existingSubscription.setSubscriptionStartDate(subscription.getSubscriptionStartDate());
             existingSubscription.setSubscriptionEndDate(subscription.getSubscriptionEndDate());
             existingSubscription.setSubscriptionActivity(subscription.getSubscriptionActivity());
-            existingSubscription.setMember(member);
+            newMember.setUserIsSubscribed(true);
+            existingSubscription.setMember(newMember);
+
             return subscriptionRepository.save(existingSubscription);
         }
         else if (existingSubscription != null)
@@ -63,6 +103,7 @@ public class SubscriptionService implements ISubscriptionService
             existingSubscription.setSubscriptionStartDate(subscription.getSubscriptionStartDate());
             existingSubscription.setSubscriptionEndDate(subscription.getSubscriptionEndDate());
             existingSubscription.setSubscriptionActivity(subscription.getSubscriptionActivity());    
+
             return subscriptionRepository.save(existingSubscription);        
         }
 

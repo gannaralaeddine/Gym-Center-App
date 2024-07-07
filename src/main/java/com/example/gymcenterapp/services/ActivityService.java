@@ -3,10 +3,14 @@ package com.example.gymcenterapp.services;
 import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Coach;
 import com.example.gymcenterapp.entities.ImageModel;
+import com.example.gymcenterapp.entities.Session;
+import com.example.gymcenterapp.entities.Subscription;
 import com.example.gymcenterapp.interfaces.IActivityService;
 import com.example.gymcenterapp.repositories.ActivityRepository;
 import com.example.gymcenterapp.repositories.CoachRepository;
 import com.example.gymcenterapp.repositories.ImageModelRepository;
+import com.example.gymcenterapp.repositories.SessionRepository;
+import com.example.gymcenterapp.repositories.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,14 +28,28 @@ public class ActivityService implements IActivityService
     private final ImageModelRepository imageModelRepository;
     private final ImageModelService imageModelService;
     private final CoachRepository coachRepository;
+    private final CoachService coachService;
+    private final SubscriptionRepository subscriptionRepository;
+    private final SessionRepository sessionRepository;
 
-    private ActivityService(ActivityRepository activityRepository, ImageModelRepository imageModelRepository, ImageModelService imageModelService,
-                            CoachRepository coachRepository)
+
+    private ActivityService(
+        ActivityRepository activityRepository, 
+        ImageModelRepository imageModelRepository, 
+        ImageModelService imageModelService,
+        CoachRepository coachRepository, 
+        CoachService coachService,
+        SessionService sessionService,
+        SessionRepository sessionRepository,
+        SubscriptionRepository subscriptionRepository)
     {
         this.activityRepository = activityRepository;
         this.imageModelRepository = imageModelRepository;
         this.imageModelService = imageModelService;
         this.coachRepository = coachRepository;
+        this.coachService = coachService;
+        this.sessionRepository = sessionRepository;
+        this.subscriptionRepository = subscriptionRepository;
     }
 
     @Override
@@ -43,8 +61,6 @@ public class ActivityService implements IActivityService
 
         try
         {
-
-
             ImageModel imageModel = new  ImageModel();
             imageModel.setImageName( uniqueName );
             imageModel.setImageType( file[0].getContentType() );
@@ -69,7 +85,6 @@ public class ActivityService implements IActivityService
     }
 
 
-
     @Override
     public Activity addActivity(Activity activity) { return activityRepository.save(activity); }
 
@@ -80,7 +95,40 @@ public class ActivityService implements IActivityService
     public Activity retrieveActivity(Long id) { return activityRepository.findById(id).orElse(null); }
 
     @Override
-    public void deleteActivity(Long id) { activityRepository.deleteById(id);}
+    public void deleteActivity(Long id) 
+    { 
+        Activity activity = activityRepository.findById(id).orElse(null);
+
+        if (activity != null)
+        {
+            List<Subscription> subscriptions = new ArrayList<>();
+            List<Session> sessions = new ArrayList<>();
+
+            activity.getActivityImages().forEach((image) -> {
+                imageModelService.removeFile(directory + "activities", image.getImageName());
+            });
+
+            activity.getActSubscriptions().forEach((subscription) -> {
+                Subscription subscriptionObject = subscription;
+                subscriptionObject.setMember(null);
+                subscriptions.add(subscriptionObject);
+            });
+            
+          
+            activity.getActSessions().forEach((session) -> {
+                Session sessionObject = session;
+                sessionObject.setSessionCoach(null);
+                sessions.add(sessionObject);
+            });
+            
+
+            subscriptions.forEach((subscription) -> subscriptionRepository.save(subscription));
+            sessions.forEach((session) -> sessionRepository.save(session));
+            activity.getActCoaches().forEach((coach) -> coachService.deleteCoachActivities(coach.getUserId(), activity.getActId()));
+            
+            activityRepository.deleteById(id);
+        } 
+    }
 
     @Override
     public Activity updateActivity(Long id, Activity activity)

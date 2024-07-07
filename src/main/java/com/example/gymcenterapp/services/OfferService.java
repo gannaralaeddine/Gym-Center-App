@@ -41,7 +41,16 @@ public class OfferService implements IOfferService
     public Offer retrieveOffer(Long id) { return offerRepository.findById(id).orElse(null); }
 
     @Override
-    public void deleteOffer(Long id) { offerRepository.deleteById(id); }
+    public void deleteOffer(Long id) 
+    { 
+        Offer offer = offerRepository.findById(id).orElse(null);
+
+        if (offer != null)
+        {
+            offer.setOfferActivity(null);
+            offerRepository.deleteById(offerRepository.save(offer).getOfferId()); 
+        }
+    }
 
     @Override
     public Offer updateOffer(Long id, Offer offer) 

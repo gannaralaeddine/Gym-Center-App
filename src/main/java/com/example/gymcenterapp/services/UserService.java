@@ -348,4 +348,27 @@ public class UserService implements IUserService, UserDetailsService
         System.out.println("User not found !");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found !");
     }
+
+    public void deleteUser(Long id)
+    {
+        User user = userRepository.findById(id).orElse(null);
+        List<ConfirmationToken> confirmationTokenList = confirmationTokenRepository.findAll();
+        Boolean isFound = false;
+        Integer i = 0;
+
+        while (!isFound && i < confirmationTokenList.size() - 1)
+        {
+            if (confirmationTokenList.get(i).getUser().getUserId() == user.getUserId())
+            {
+                isFound = true;
+                break;
+            }
+            else
+            {
+                i++;
+            }
+        }
+        
+        confirmationTokenRepository.deleteById(confirmationTokenList.get(i).getTokenId());
+    }
 }

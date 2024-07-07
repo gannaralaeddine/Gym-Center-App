@@ -36,7 +36,7 @@ public class Category implements Serializable
 
 
     @JsonIgnore
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE)
     //@JoinColumn(name = "categoryId")
     private List<Activity> categoryActivities;
 
@@ -45,8 +45,7 @@ public class Category implements Serializable
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "category_images",
-            joinColumns = { @JoinColumn (name = "category_id") },
-            inverseJoinColumns = { @JoinColumn(name = "image_id") }
-    )
+        joinColumns = { @JoinColumn (name = "category_id") },
+        inverseJoinColumns = { @JoinColumn(name = "image_id") })
     private Set<ImageModel> images;
 }

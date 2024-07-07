@@ -5,12 +5,12 @@ import com.example.gymcenterapp.interfaces.ISessionService;
 import com.example.gymcenterapp.repositories.ImageModelRepository;
 import com.example.gymcenterapp.repositories.MemberRepository;
 import com.example.gymcenterapp.repositories.SessionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.util.HashSet;
 import java.util.List;
@@ -24,16 +24,25 @@ public class SessionService implements ISessionService
     private String directory;
 
     private final SessionRepository sessionRepository;
+    @Autowired
+    private SessionService sessionService;
+    @Autowired
+    private EmailServiceImpl emailService;
     private final ImageModelService imageModelService;
     private final ImageModelRepository imageModelRepository;
     private final MemberRepository memberRepository;
 
-    public SessionService(SessionRepository sessionRepository, ImageModelService imageModelService, ImageModelRepository imageModelRepository, MemberRepository memberRepository) {
-        this.sessionRepository = sessionRepository;
-        this.imageModelService = imageModelService;
-        this.imageModelRepository = imageModelRepository;
-        this.memberRepository = memberRepository;
-    }
+    public SessionService(
+        SessionRepository sessionRepository, 
+        ImageModelService imageModelService, 
+        ImageModelRepository imageModelRepository, 
+        MemberRepository memberRepository) 
+        {
+            this.sessionRepository = sessionRepository;
+            this.imageModelService = imageModelService;
+            this.imageModelRepository = imageModelRepository;
+            this.memberRepository = memberRepository;
+        }
 
     @Override
     public List<Session> retrieveAllSessions() { return sessionRepository.findAll(); }
@@ -42,7 +51,21 @@ public class SessionService implements ISessionService
     public Session retrieveSession(Long id) { return sessionRepository.findById(id).orElse(null); }
 
     @Override
-    public void deleteSession(Long id) { sessionRepository.deleteById(id);}
+    public void deleteSession(Long id) 
+    { 
+        Session session = sessionRepository.findById(id).orElse(null);
+
+        if (session != null)
+        {
+            emailService.sendCancelSessionEmail(session);
+            session.setSessionActivity(null);
+            session.setSessionCoach(null);
+            session.getSessionMembers().forEach((member) -> {
+                member.getMemberSessions().remove(session);
+            });
+            sessionRepository.deleteById(sessionRepository.save(session).getSessionId());
+        }
+    }
 
     @Override
     public Session updateSession(Long id, Session session)

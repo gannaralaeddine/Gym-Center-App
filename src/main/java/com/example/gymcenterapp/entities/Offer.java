@@ -41,11 +41,11 @@ public class Offer
     @Column(name = "offer_price")
     private Double offerPrice;
 
-    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REMOVE })
+    @ManyToOne
     @JoinColumn(name = "offer_activity")
     private Activity offerActivity;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "offer_option",
         joinColumns = { @JoinColumn (name = "offer_id") },

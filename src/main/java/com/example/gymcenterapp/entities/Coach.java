@@ -24,7 +24,7 @@ public class Coach extends User
     @ElementCollection
     private List<MyGrantedAuthority> authorities;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "coaches_activities",
             joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "user_id"),
@@ -34,11 +34,11 @@ public class Coach extends User
     private Set<Activity> coachSpecialities;
 
 
-    @OneToMany(mappedBy = "sessionCoach")
+    @OneToMany(mappedBy = "sessionCoach", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Set<Session> coachSessions;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "private_coaches_members",
             joinColumns = @JoinColumn(name = "privateCoaches",referencedColumnName = "user_id"),
@@ -47,12 +47,12 @@ public class Coach extends User
     private Set<Member> privateMembers;
 
 
-    @OneToMany(mappedBy = "coach")
+    @OneToMany(mappedBy = "coach", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Set<NotificationMemberCoach> notificationMemberCoaches = new HashSet<>();
 
 
-    @OneToMany(mappedBy = "privateSessionCoach")
+    @OneToMany(mappedBy = "privateSessionCoach", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Set<PrivateSession> coachPrivateSessions;
 }

@@ -57,4 +57,17 @@ public class PrivateSessionService
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    public void removePrivateSession(Long privateSessionId) 
+    {
+        PrivateSession privateSession = privateSessionRepository.findById(privateSessionId).orElse(null);
+
+        if (privateSession != null)
+        {
+            privateSession.setPrivateSessionCoach(null);
+            privateSession.setPrivateSessionMember(null);
+            privateSessionRepository.deleteById(privateSessionRepository.save(privateSession).getPrivateSessionId());
+        }
+       
+    }
+
 }

@@ -107,6 +107,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/user/send-verification-code/{email}").permitAll()
                 .antMatchers("/user/check-verification-code/{code}").permitAll()
                 .antMatchers("/user/change-password/{email}/{password}").permitAll()
+                .antMatchers("/user/delete-user/{userId}").permitAll()
 
                 .antMatchers("/category/add-category").permitAll()
                 .antMatchers("/category/update-category").permitAll()
@@ -200,6 +201,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/private-session/retrieve-all-private-sessions").permitAll()
                 .antMatchers("/private-session/retrieve-private-session/{id}").permitAll()
                 .antMatchers("/private-session/cancel-private-session/{memberEmail}/{privateSessionId}").permitAll()
+                .antMatchers("/private-session/remove-private-session/{privateSessionId}").permitAll()
 
                 .anyRequest().authenticated().and().httpBasic();
     }

@@ -37,23 +37,23 @@ public class Activity implements Serializable
     private String actImage;
 
 
-    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REMOVE })
+    @ManyToOne
     @JoinColumn(name = "categoryId")
     private Category category;
 
 
-    @OneToMany(mappedBy = "subscriptionActivity")
+    @OneToMany(mappedBy = "subscriptionActivity", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private  Set<Subscription> actSubscriptions;
 
 
-    @OneToMany(mappedBy = "sessionActivity")
+    @OneToMany(mappedBy = "sessionActivity", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private  Set<Session> actSessions;
 
 
     @ManyToMany(mappedBy = "coachSpecialities")
-private Set<Coach> actCoaches;
+    private Set<Coach> actCoaches;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "activity_images",
@@ -62,7 +62,7 @@ private Set<Coach> actCoaches;
     )
     private Set<ImageModel> activityImages;
 
-    @OneToMany(mappedBy = "offerActivity")
+    @OneToMany(mappedBy = "offerActivity", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Set<Offer> activityOffers;
 }

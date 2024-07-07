@@ -32,11 +32,11 @@ public class Subscription implements Serializable
     @JoinColumn(name = "subscription_end_date")
     private Date subscriptionEndDate;
 
-    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REMOVE })
+    @ManyToOne
     @JoinColumn(name = "activity_id",referencedColumnName = "actId")
     private Activity subscriptionActivity;
 
-    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REMOVE })
-    @JoinColumn(name = "userId")
+    @ManyToOne
+    @JoinColumn(name = "member_id")
     private Member member;
 }

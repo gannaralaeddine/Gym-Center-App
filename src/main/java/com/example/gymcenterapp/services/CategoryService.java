@@ -1,14 +1,21 @@
 package com.example.gymcenterapp.services;
 
+import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Category;
 import com.example.gymcenterapp.entities.ImageModel;
+import com.example.gymcenterapp.entities.Session;
+import com.example.gymcenterapp.entities.Subscription;
 import com.example.gymcenterapp.interfaces.ICategoryService;
 import com.example.gymcenterapp.repositories.CategoryRepository;
 import com.example.gymcenterapp.repositories.ImageModelRepository;
+import com.example.gymcenterapp.repositories.SessionRepository;
+import com.example.gymcenterapp.repositories.SubscriptionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +32,10 @@ public class CategoryService implements ICategoryService
     private String directory;
 
     private final CategoryRepository categoryRepository;
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
+    @Autowired
+    private SessionRepository sessionRepository;
     private final ImageModelService imageModelService;
     private final ImageModelRepository imageModelRepository;
 
@@ -76,6 +87,40 @@ public class CategoryService implements ICategoryService
     @Override
     public void deleteCategory(Long id)
     {
+        Category category = categoryRepository.findById(id).orElse(null);
+
+        if (category != null)
+        {
+            List<Activity> activities = category.getCategoryActivities();
+            List<Subscription> subscriptions = new ArrayList<>();
+            List<Session> sessions = new ArrayList<>();
+
+            activities.forEach((activity) -> {
+                if (activity.getActSubscriptions().size() > 0)
+                {
+                    activity.getActSubscriptions().forEach((subscription) -> {
+                        Subscription subscriptionObject = subscription;
+                        subscriptionObject.setMember(null);
+                        subscriptions.add(subscriptionObject);
+                    });
+                }
+            });
+
+            activities.forEach((activity) -> {
+                if (activity.getActSessions().size() > 0)
+                {
+                    activity.getActSessions().forEach((session) -> {
+                        Session sessionObject = session;
+                        sessionObject.setSessionCoach(null);
+                        sessions.add(sessionObject);
+                    });
+                }
+            });
+
+            subscriptions.forEach((subscription) -> subscriptionRepository.save(subscription));
+            sessions.forEach((session) -> sessionRepository.save(session));
+        }
+        
         categoryRepository.deleteById(id);
     }
 
