@@ -28,8 +28,16 @@ public class CategoryService implements ICategoryService
 
 //    final String directory = "http://localhost:8089/categories/";
 
-    @Value("${app.directory}")
+//    @Value("${app.directory}")
+//    private String directory;
+
+    @Value("${image.storage.path}")
     private String directory;
+
+    @Value("${app.directory}")
+    private String localDirectory;
+
+    String baseDirectory = System.getProperty("user.dir");
 
     private final CategoryRepository categoryRepository;
     @Autowired
@@ -51,7 +59,10 @@ public class CategoryService implements ICategoryService
     {
         String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
         String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
-        String filePath = directory + "categories\\" + uniqueName;
+        String filePath = /*baseDirectory +*/ directory + "/categories/" + uniqueName;
+        String localPath = localDirectory + "\\categories\\"+ uniqueName;
+
+        System.out.println("Full directory: " + filePath);
 
         try
         {
@@ -59,15 +70,20 @@ public class CategoryService implements ICategoryService
             imageModel.setImageName( uniqueName );
             imageModel.setImageType( file[0].getContentType() );
             imageModel.setImageSize( file[0].getSize() );
-            imageModel.setImageUrl( filePath );
+            imageModel.setImageUrl(  filePath );
 
             HashSet<ImageModel> images = new HashSet<>();
             images.add(imageModel);
 
             category.setCatImage(uniqueName);
             category.setImages(images);
-
+            File fileDirectory = new File(filePath);
+            if ( !fileDirectory.exists() )
+            {
+                fileDirectory.mkdirs();
+            }
             file[0].transferTo(new File(filePath));
+            file[0].transferTo(new File(localPath));
 
             return categoryRepository.save(category);
         }
@@ -213,10 +229,4 @@ public class CategoryService implements ICategoryService
             return null;
         }
     }
-
-    public Category addCategoryWithOneImage(Category category)
-    {
-        return categoryRepository.save(category);
-    }
-    
 }

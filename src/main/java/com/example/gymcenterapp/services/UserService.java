@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -25,8 +24,14 @@ import java.util.*;
 @Service
 public class UserService implements IUserService, UserDetailsService
 {
-    @Value("${app.directory}")
+//    @Value("${app.directory}")
+//    private String directory;
+
+    @Value("${image.storage.path}")
     private String directory;
+
+    String baseDirectory = System.getProperty("user.dir");
+
 
     @Value("${app.email}")
     private String appEmail;
@@ -177,7 +182,7 @@ public class UserService implements IUserService, UserDetailsService
 
             if (existingUser != null)
             {
-                Set<ImageModel> images =  imageModelService.prepareFiles(files, existingUser.getUserImages(), directory + "users\\");
+                Set<ImageModel> images =  imageModelService.prepareFiles(files, existingUser.getUserImages(),  directory + "users\\");
 
                 existingUser.setUserImages(images);
 
@@ -195,7 +200,9 @@ public class UserService implements IUserService, UserDetailsService
     {
         String[] imageType = Objects.requireNonNull(files[0].getContentType()).split("/");
         String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
-        String filePath = directory + "users\\" + uniqueName;
+        String filePath =  directory + "users\\" + uniqueName;
+
+        System.out.println("Full directory: " + filePath);
 
         ImageModel imageModel = new ImageModel();
         imageModel.setImageName(uniqueName);
@@ -214,7 +221,7 @@ public class UserService implements IUserService, UserDetailsService
             ImageModel existingImageModel = imageModelService.findImageByName(existingUser.getUserPicture());
             existingImages.remove(existingImageModel);
             imageModelRepository.delete(existingImageModel);
-            imageModelService.removeFile(directory + "users\\", existingUser.getUserPicture());
+            imageModelService.removeFile( directory + "users\\", existingUser.getUserPicture());
 
             existingUser.setUserPicture(uniqueName);
             existingUser.setUserImages(existingImages);
@@ -230,7 +237,7 @@ public class UserService implements IUserService, UserDetailsService
     {
         String[] imageType = Objects.requireNonNull(files[0].getContentType()).split("/");
         String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
-        String filePath = directory + "users\\" + uniqueName;
+        String filePath =  directory + "users\\" + uniqueName;
 
         ImageModel imageModel = new ImageModel();
         imageModel.setImageName(uniqueName);
@@ -261,7 +268,7 @@ public class UserService implements IUserService, UserDetailsService
         if (user != null && imageModel != null)
         {
             user.getUserImages().remove(imageModel);
-            imageModelService.removeFile(directory + "users\\", imageName);
+            imageModelService.removeFile(  directory + "users\\", imageName);
             imageModelRepository.delete(imageModel);
             return userRepository.save(user);
         }

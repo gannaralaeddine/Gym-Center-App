@@ -20,7 +20,7 @@ import java.util.Set;
 @Service
 public class SessionService implements ISessionService
 {
-    @Value("${app.directory}")
+    @Value("${image.storage.path}")
     private String directory;
 
     private final SessionRepository sessionRepository;

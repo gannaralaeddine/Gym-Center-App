@@ -3,6 +3,8 @@ package com.example.gymcenterapp;
 import com.example.gymcenterapp.authentication.JwtTokenFilter;
 import com.example.gymcenterapp.services.UserService;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +35,7 @@ import java.util.Arrays;
 @SpringBootApplication//(exclude = { SecurityAutoConfiguration.class })
 public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
 {
-
+    private static final Logger logger = LoggerFactory.getLogger(GymCenterAppApplication.class);
     UserService userService;
 
     JwtTokenFilter jwtTokenFilter;
@@ -86,10 +88,16 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
 
                 .antMatchers("/auth/login").permitAll()
 
+                .antMatchers("/public/**").permitAll()
+                .antMatchers("static/**").permitAll()
+
 //                .anyRequest().authenticated();
                 .antMatchers("/hhh").permitAll()
                 .antMatchers("/notify").permitAll()
                 .antMatchers("/socket").permitAll()
+
+                .antMatchers("/users/*").permitAll()
+                .antMatchers("/categories/*").permitAll()
 
                 .antMatchers("/user/retrieve-all-users").permitAll()//.hasAnyRole("ADMIN")
                 .antMatchers("/user/register-user").permitAll()
@@ -210,7 +218,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://localhost:4500"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://localhost:4500", "http://localhost:3000"));
         corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
                 "Accept", "Authorization", "Origin, Accept", "X-Requested-With",
                 "Access-Control-Request-Method", "Access-Control-Request-Headers"));
