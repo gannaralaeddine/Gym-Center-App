@@ -21,8 +21,15 @@ public class CategoryService implements ICategoryService
 
 //    final String directory = "http://localhost:8089/categories/";
 
-    @Value("${app.directory}")
+//    @Value("${app.directory}")
+//    private String directory;
+
+    @Value("${image.storage.path}")
     private String directory;
+
+    @Value("${app.directory}")
+    private String localDirectory;
+
     String baseDirectory = System.getProperty("user.dir");
 
     private final CategoryRepository categoryRepository;
@@ -41,7 +48,8 @@ public class CategoryService implements ICategoryService
     {
         String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
         String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
-        String filePath = baseDirectory + directory + "categories\\" + uniqueName;
+        String filePath = /*baseDirectory +*/ directory + "/categories/" + uniqueName;
+        String localPath = localDirectory + "\\categories\\"+ uniqueName;
 
         System.out.println("Full directory: " + filePath);
 
@@ -64,6 +72,7 @@ public class CategoryService implements ICategoryService
                 fileDirectory.mkdirs();
             }
             file[0].transferTo(new File(filePath));
+            file[0].transferTo(new File(localPath));
 
             return categoryRepository.save(category);
         }

@@ -16,7 +16,7 @@ import java.util.*;
 @Service
 public class ActivityService implements IActivityService
 {
-    @Value("${app.directory}")
+    @Value("${image.storage.path}")
     private String directory;
 
 
@@ -185,10 +185,8 @@ public class ActivityService implements IActivityService
                 imageModelRepository.delete(existingImageModel);
                 imageModelService.removeFile(directory + "activities\\", existingActivity.getActImage());
 
-
                 existingActivity.setActImage( uniqueName );
                 existingActivity.setActivityImages(images);
-
 
                 return activityRepository.save(existingActivity);
             }
