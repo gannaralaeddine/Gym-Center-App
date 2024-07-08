@@ -20,7 +20,7 @@ import java.util.*;
 @Service
 public class ActivityService implements IActivityService
 {
-    @Value("${image.storage.path}")
+    @Value("${app.directory}")
     private String directory;
 
 
@@ -58,6 +58,7 @@ public class ActivityService implements IActivityService
         String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
         String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
         String filePath = directory + "activities\\" + uniqueName;
+
 
         try
         {

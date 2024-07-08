@@ -26,16 +26,8 @@ public class CategoryService implements ICategoryService
 {
 
 
-//    final String directory = "http://localhost:8089/categories/";
-
-//    @Value("${app.directory}")
-//    private String directory;
-
-    @Value("${image.storage.path}")
-    private String directory;
-
     @Value("${app.directory}")
-    private String localDirectory;
+    private String directory;
 
     String baseDirectory = System.getProperty("user.dir");
 
@@ -59,8 +51,8 @@ public class CategoryService implements ICategoryService
     {
         String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
         String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
-        String filePath = /*baseDirectory +*/ directory + "/categories/" + uniqueName;
-        String localPath = localDirectory + "\\categories\\"+ uniqueName;
+        // String filePath = /*baseDirectory +*/ directory + "/categories/" + uniqueName;
+        String filePath = directory + "categories\\"+ uniqueName;
 
         System.out.println("Full directory: " + filePath);
 
@@ -83,7 +75,7 @@ public class CategoryService implements ICategoryService
                 fileDirectory.mkdirs();
             }
             file[0].transferTo(new File(filePath));
-            file[0].transferTo(new File(localPath));
+            // file[0].transferTo(new File(localPath));
 
             return categoryRepository.save(category);
         }
@@ -111,6 +103,8 @@ public class CategoryService implements ICategoryService
             List<Subscription> subscriptions = new ArrayList<>();
             List<Session> sessions = new ArrayList<>();
 
+            category.getImages().forEach((image) -> imageModelService.removeFile(directory+"categories", image.getImageName()));
+            
             activities.forEach((activity) -> {
                 if (activity.getActSubscriptions().size() > 0)
                 {
@@ -135,9 +129,11 @@ public class CategoryService implements ICategoryService
 
             subscriptions.forEach((subscription) -> subscriptionRepository.save(subscription));
             sessions.forEach((session) -> sessionRepository.save(session));
+
+            categoryRepository.deleteById(id);
         }
         
-        categoryRepository.deleteById(id);
+       
     }
 
     @Override
