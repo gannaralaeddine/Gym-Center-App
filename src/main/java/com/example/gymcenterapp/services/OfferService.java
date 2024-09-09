@@ -7,7 +7,6 @@ import com.example.gymcenterapp.entities.Offer;
 import com.example.gymcenterapp.entities.Option;
 import com.example.gymcenterapp.interfaces.IOfferService;
 import com.example.gymcenterapp.repositories.OfferRepository;
-
 import lombok.AllArgsConstructor;
 
 @Service

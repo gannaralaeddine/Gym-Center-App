@@ -9,11 +9,8 @@ import com.example.gymcenterapp.entities.Subscription;
 import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.repositories.ConfirmationTokenRepository;
 import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
@@ -147,6 +144,24 @@ public class EmailServiceImpl
             + "Gym Center\n");
 
         sendEmail(cancelPrivateSessionNotifiction);
+    }
+
+    public void sendConfirmationSubscriptionEmail(Subscription subscription)
+    {
+        SimpleMailMessage confirmationSubscriptionEmail = new SimpleMailMessage();
+        Member member = subscription.getMember();
+        confirmationSubscriptionEmail.setTo(member.getUserEmail());
+        confirmationSubscriptionEmail.setSubject("Confirmation de votre adhésion chez notre Gym Center");
+        confirmationSubscriptionEmail.setFrom(appEmail);
+        confirmationSubscriptionEmail.setText(
+            "Cher/Chère Membre " + member.getUserFirstName() + " " + member.getUserLastName() + ",\n\n"
+            + "Nous avons le plaisir de vous informer que votre adhésion chez nous a été confirmée avec succès. Nous vous remercions d’avoir choisi notre centre et nous sommes ravis de vous accueillir parmi nos membres.\n\n"
+            + "Votre abonnement pour l'activité " + subscription.getSubscriptionActivity().getActName() + " a été créé le " + new SimpleDateFormat("dd/MM/yyyy").format(subscription.getSubscriptionStartDate()) + " jusqu'à " + new SimpleDateFormat("dd/MM/yyyy").format(subscription.getSubscriptionEndDate())+ " et vous pouvez désormais, durant cette période, profiter de toutes nos installations et service.\n\n"
+            + "Nous restons à votre disposition pour toute assistance supplémentaire. \n\n"
+            + "Cordialement,\n"
+            + "Gym Center\n");
+
+        sendEmail(confirmationSubscriptionEmail);
     }
 
     public void sendCancelSessionEmail(Session session)

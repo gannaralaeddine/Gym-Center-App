@@ -6,12 +6,10 @@ import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.services.RoleServiceImpl;
 import com.example.gymcenterapp.services.UserService;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
 

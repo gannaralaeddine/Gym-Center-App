@@ -1,9 +1,9 @@
 package com.example.gymcenterapp.controllers;
+
 import com.example.gymcenterapp.entities.Subscription;
 import com.example.gymcenterapp.services.SubscriptionService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Set;
 

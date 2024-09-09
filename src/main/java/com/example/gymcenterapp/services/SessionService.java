@@ -5,6 +5,9 @@ import com.example.gymcenterapp.interfaces.ISessionService;
 import com.example.gymcenterapp.repositories.ImageModelRepository;
 import com.example.gymcenterapp.repositories.MemberRepository;
 import com.example.gymcenterapp.repositories.SessionRepository;
+
+import lombok.AllArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -18,15 +21,14 @@ import java.util.Objects;
 import java.util.Set;
 
 @Service
+@AllArgsConstructor
 public class SessionService implements ISessionService
 {
-    @Value("${image.storage.path}")
+    @Value("${app.directory}")
     private String directory;
 
     private final SessionRepository sessionRepository;
-    @Autowired
-    private SessionService sessionService;
-    @Autowired
+   
     private EmailServiceImpl emailService;
     private final ImageModelService imageModelService;
     private final ImageModelRepository imageModelRepository;

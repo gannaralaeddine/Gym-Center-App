@@ -1,20 +1,15 @@
 package com.example.gymcenterapp.controllers;
 
-import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Category;
-import com.example.gymcenterapp.entities.Subscription;
 import com.example.gymcenterapp.services.CategoryService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
-import java.util.Set;
 
 @RestController
-@Slf4j
 @RequestMapping("/category")
 @AllArgsConstructor
 @CrossOrigin(origins = "")

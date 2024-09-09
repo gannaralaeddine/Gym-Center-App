@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.util.*;
 
@@ -27,7 +26,7 @@ public class UserService implements IUserService, UserDetailsService
 //    @Value("${app.directory}")
 //    private String directory;
 
-    @Value("${image.storage.path}")
+    @Value("${app.directory}")
     private String directory;
 
     String baseDirectory = System.getProperty("user.dir");

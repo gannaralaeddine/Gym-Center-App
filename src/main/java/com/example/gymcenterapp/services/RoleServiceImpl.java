@@ -4,7 +4,6 @@ import com.example.gymcenterapp.entities.Role;
 import com.example.gymcenterapp.repositories.RoleRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @AllArgsConstructor

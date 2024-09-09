@@ -4,7 +4,6 @@ import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Coach;
 import com.example.gymcenterapp.entities.Session;
 import org.springframework.http.ResponseEntity;
-
 import java.util.List;
 import java.util.Set;
 

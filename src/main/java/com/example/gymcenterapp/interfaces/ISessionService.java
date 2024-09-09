@@ -1,9 +1,7 @@
 package com.example.gymcenterapp.interfaces;
 
 import com.example.gymcenterapp.entities.Session;
-
 import java.util.List;
-
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ISessionService

@@ -1,7 +1,6 @@
 package com.example.gymcenterapp.services;
 
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 import com.example.gymcenterapp.entities.Option;
 import com.example.gymcenterapp.interfaces.IOptionService;

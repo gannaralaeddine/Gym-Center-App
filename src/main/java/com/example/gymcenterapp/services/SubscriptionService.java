@@ -35,7 +35,7 @@ public class SubscriptionService implements ISubscriptionService
                 member.setUserIsSubscribed(true);
             }
         }
-
+        emailService.sendConfirmationSubscriptionEmail(subscription);
         return subscriptionRepository.save(subscription); 
     }
 
