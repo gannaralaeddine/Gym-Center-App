@@ -211,6 +211,11 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/private-session/cancel-private-session/{memberEmail}/{privateSessionId}").permitAll()
                 .antMatchers("/private-session/remove-private-session/{privateSessionId}").permitAll()
 
+                .antMatchers("/training-history/create-history/{user-id}").permitAll()
+                .antMatchers("/training-history/delete-history/{id}").permitAll()
+                .antMatchers("/training-history/retrieve-all-histories").permitAll()
+                .antMatchers("/training-history/retrieve-history/{id}").permitAll()
+
                 .anyRequest().authenticated().and().httpBasic();
     }
 

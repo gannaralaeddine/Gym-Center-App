@@ -7,6 +7,7 @@ import com.example.gymcenterapp.repositories.MemberRepository;
 import com.example.gymcenterapp.repositories.SessionRepository;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,30 +22,17 @@ import java.util.Objects;
 import java.util.Set;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SessionService implements ISessionService
 {
     @Value("${app.directory}")
     private String directory;
 
     private final SessionRepository sessionRepository;
-   
-    private EmailServiceImpl emailService;
+    private final EmailServiceImpl emailService;
     private final ImageModelService imageModelService;
     private final ImageModelRepository imageModelRepository;
     private final MemberRepository memberRepository;
-
-    public SessionService(
-        SessionRepository sessionRepository, 
-        ImageModelService imageModelService, 
-        ImageModelRepository imageModelRepository, 
-        MemberRepository memberRepository) 
-        {
-            this.sessionRepository = sessionRepository;
-            this.imageModelService = imageModelService;
-            this.imageModelRepository = imageModelRepository;
-            this.memberRepository = memberRepository;
-        }
 
     @Override
     public List<Session> retrieveAllSessions() { return sessionRepository.findAll(); }

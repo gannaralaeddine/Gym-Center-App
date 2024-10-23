@@ -11,6 +11,9 @@ import com.example.gymcenterapp.repositories.CoachRepository;
 import com.example.gymcenterapp.repositories.ImageModelRepository;
 import com.example.gymcenterapp.repositories.SessionRepository;
 import com.example.gymcenterapp.repositories.SubscriptionRepository;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +21,7 @@ import java.io.File;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class ActivityService implements IActivityService
 {
     @Value("${app.directory}")
@@ -32,25 +36,6 @@ public class ActivityService implements IActivityService
     private final SubscriptionRepository subscriptionRepository;
     private final SessionRepository sessionRepository;
 
-
-    private ActivityService(
-        ActivityRepository activityRepository, 
-        ImageModelRepository imageModelRepository, 
-        ImageModelService imageModelService,
-        CoachRepository coachRepository, 
-        CoachService coachService,
-        SessionService sessionService,
-        SessionRepository sessionRepository,
-        SubscriptionRepository subscriptionRepository)
-    {
-        this.activityRepository = activityRepository;
-        this.imageModelRepository = imageModelRepository;
-        this.imageModelService = imageModelService;
-        this.coachRepository = coachRepository;
-        this.coachService = coachService;
-        this.sessionRepository = sessionRepository;
-        this.subscriptionRepository = subscriptionRepository;
-    }
 
     @Override
     public Activity addActivityWithOneImage(Activity activity, MultipartFile[] file)

@@ -7,6 +7,9 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.io.Serializable;
@@ -61,6 +64,10 @@ public class User implements Serializable, UserDetails
     private String userPassword;
 
     private Boolean userIsSubscribed = false;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<TrainingHistory> trainingHistory;
 
 
     @Column(nullable = true)
