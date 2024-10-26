@@ -1,5 +1,7 @@
 package com.example.gymcenterapp.services;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -20,17 +22,20 @@ public class TrainingHistoryService implements ITrainingHistoryService
     @Override
     public TrainingHistory addHistory(Long userId) 
     {
-      TrainingHistory trainingHistory = new TrainingHistory();
-      User user = userService.retrieveUser(userId);
-
-      if (user != null)
-      {
-        trainingHistory.setUser(user);
-        trainingHistory.setCheckInTime(new Date());
-        return trainingHistoryRepository.save(trainingHistory);
-      }
-      
-      return null;
+        if (!isGreaterThanOne(userId))
+        {
+            TrainingHistory trainingHistory = new TrainingHistory();
+            User user = userService.retrieveUser(userId);
+    
+            if (user != null)
+            {
+                trainingHistory.setUser(user);
+                trainingHistory.setCheckInTime(new Date());
+                return trainingHistoryRepository.save(trainingHistory);
+            }
+        }
+        
+        return null;
     }
 
     @Override
@@ -55,6 +60,30 @@ public class TrainingHistoryService implements ITrainingHistoryService
     public void deleteHistory(Long id) 
     {
         trainingHistoryRepository.deleteById(id);
+    }
+
+    private Boolean isGreaterThanOne(Long userId)
+    {
+        User user = userService.retrieveUser(userId);
+        List<TrainingHistory> userTrainingHistories = trainingHistoryRepository.findByUser(user);
+        Integer number = 1;
+
+        if (userTrainingHistories.size() > 0)
+        {
+            for (TrainingHistory history : userTrainingHistories) 
+            {
+                if ((history.getCheckOutTime() == null) && (history.getIsCheckedIn() == true))
+                {
+                    number = number + 1;
+                }
+
+            }
+        }
+
+        if (number == 1)
+            return false;
+
+        return true;
     }
     
 }
