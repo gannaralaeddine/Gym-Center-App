@@ -1,11 +1,7 @@
 package com.example.gymcenterapp.services;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import com.example.gymcenterapp.entities.TrainingHistory;
 import com.example.gymcenterapp.entities.User;
@@ -39,8 +35,31 @@ public class TrainingHistoryService implements ITrainingHistoryService
     }
 
     @Override
-    public TrainingHistory updateHistory(TrainingHistory oldHistory, TrainingHistory newHistory) 
+    public TrainingHistory updateHistory(Long userId) 
     {
+        User user = userService.retrieveUser(userId);
+
+        if (user != null)
+        {
+            List<TrainingHistory> userHistories = trainingHistoryRepository.findByUser(user);
+
+            if (userHistories.size() > 0)
+            {
+                userHistories.forEach(history -> {
+                    if ((history.getIsCheckedIn() == true) && (history.getCheckOutTime() == null))
+                    {
+                        history.setCheckOutTime(new Date());
+                        history.setIsCheckedIn(false);
+
+                        if (trainingHistoryRepository.save(history) != null)
+                        {
+                            return;
+                        }
+                    }
+                });
+            }
+        }
+        
         return null;
     }
 

@@ -65,7 +65,7 @@ public class User implements Serializable, UserDetails
 
     private Boolean userIsSubscribed = false;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<TrainingHistory> trainingHistory;
 

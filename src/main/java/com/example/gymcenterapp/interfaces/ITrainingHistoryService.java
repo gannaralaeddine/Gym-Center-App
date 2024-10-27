@@ -8,7 +8,7 @@ public interface ITrainingHistoryService
 {
     TrainingHistory addHistory (Long userId);
 
-    TrainingHistory updateHistory (TrainingHistory oldHistory, TrainingHistory newHistory);
+    TrainingHistory updateHistory (Long userId);
 
     List<TrainingHistory> retrieveAllHistories();
 

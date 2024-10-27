@@ -20,6 +20,12 @@ public class TrainingHistoryController
     {
         return trainingHistoryService.addHistory(userId);
     }
+
+    @PutMapping("/update-history/{user-id}")
+    public TrainingHistory updateHistory(@PathVariable("user-id") Long userId) 
+    {
+        return trainingHistoryService.updateHistory(userId);
+    }
     
     @GetMapping("/retrieve-all-histories")
     public List<TrainingHistory> retrieveAllHistories() 
