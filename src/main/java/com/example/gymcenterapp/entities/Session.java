@@ -46,6 +46,9 @@ public class Session
     @Column(name = "session_reserved_places")
     private Integer sessionReservedPlaces = 0;
 
+    @Column(name = "session_price")
+    private Integer sessionPrice;
+
     @ManyToOne
     @JoinColumn(name = "activityId")
     private Activity sessionActivity;
