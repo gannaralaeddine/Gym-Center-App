@@ -216,6 +216,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/training-history/delete-history/{id}").permitAll()
                 .antMatchers("/training-history/retrieve-all-histories").permitAll()
                 .antMatchers("/training-history/retrieve-history/{id}").permitAll()
+                .antMatchers("/training-history/retrieve-distinct-users").permitAll()
 
                 .anyRequest().authenticated().and().httpBasic();
     }

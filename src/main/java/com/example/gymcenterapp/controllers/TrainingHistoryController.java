@@ -1,6 +1,7 @@
 package com.example.gymcenterapp.controllers;
 
 import com.example.gymcenterapp.entities.TrainingHistory;
+import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.services.TrainingHistoryService;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
@@ -31,6 +32,12 @@ public class TrainingHistoryController
     public List<TrainingHistory> retrieveAllHistories() 
     {
         return trainingHistoryService.retrieveAllHistories();
+    }
+
+    @GetMapping("/retrieve-distinct-users")
+    public List<User> findDistinctUsers()
+    {
+        return trainingHistoryService.findDistinctUsers();
     }
 
     @GetMapping("/retrieve-history/{id}")

@@ -6,10 +6,8 @@ import com.example.gymcenterapp.repositories.ImageModelRepository;
 import com.example.gymcenterapp.repositories.MemberRepository;
 import com.example.gymcenterapp.repositories.SessionRepository;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +23,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class SessionService implements ISessionService
 {
-    @Value("${app.directory}")
+    @Value("${image.storage.path}")
     private String directory;
 
     private final SessionRepository sessionRepository;
@@ -66,7 +64,7 @@ public class SessionService implements ISessionService
         {
             existingSession.setSessionName(session.getSessionName());
             existingSession.setSessionDescription(session.getSessionDescription());
-            existingSession.setSessionDeadline(session.getSessionDeadline());
+            existingSession.setSessionDate(session.getSessionDate());
             existingSession.setSessionTotalPlaces(session.getSessionTotalPlaces());
             existingSession.setSessionDescription(session.getSessionDescription());
             existingSession.setSessionActivity(session.getSessionActivity());
@@ -148,6 +146,7 @@ public class SessionService implements ISessionService
             existingSession.setSessionDescription(session.getSessionDescription());
             existingSession.setSessionActivity(session.getSessionActivity());
             existingSession.setSessionCoach(session.getSessionCoach());
+            existingSession.setSessionPrice(session.getSessionPrice());
 
             String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
             String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];

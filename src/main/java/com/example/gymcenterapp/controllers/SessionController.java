@@ -3,6 +3,7 @@ package com.example.gymcenterapp.controllers;
 import com.example.gymcenterapp.entities.Session;
 import com.example.gymcenterapp.services.SessionService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +12,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/session")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SessionController
 {
-    SessionService sessionService;
+    private final SessionService sessionService;
 
     @PostMapping(value = { "/create-session" }, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public Session addSessionWithOneImage(@RequestPart("session") Session session,

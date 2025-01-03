@@ -41,7 +41,7 @@ public class SessionServiceTest
         List<Activity> activities = activityService.retrieveAllActivities();
         assertNotNull(coaches);
         assertNotNull(activities);
-        Session session = sessionService.addSessionWithOneImage(new Session(null, "séance karaté", "description séance karaté", new Date(), 20, null, activities.get(0), null, coaches.get(0), null, null));
+        Session session = sessionService.addSessionWithOneImage(new Session(null, "séance karaté", "description séance karaté", new Date(), 20, 10, null, activities.get(0), null, coaches.get(0), null, null));
         assertNotNull(session);
         session.setSessionCoach(null);
         session.setSessionActivity(null);
@@ -58,7 +58,7 @@ public class SessionServiceTest
         List<Activity> activities = activityService.retrieveAllActivities();
         assertNotNull(coaches);
         assertNotNull(activities);
-        Session session = sessionService.addSessionWithOneImage(new Session(null, "séance karaté", "description séance karaté", new Date(), 20, null, activities.get(0), null, coaches.get(0), null, null));
+        Session session = sessionService.addSessionWithOneImage(new Session(null, "séance karaté", "description séance karaté", new Date(), 20, 10, null, activities.get(0), null, coaches.get(0), null, null));
         assertNotNull(sessionService.retrieveSession(session.getSessionId()));
         session.setSessionCoach(null);
         session.setSessionActivity(null);
@@ -72,9 +72,9 @@ public class SessionServiceTest
         List<Activity> activities = activityService.retrieveAllActivities();
         assertNotNull(coaches);
         assertNotNull(activities);
-        Session session = sessionService.addSessionWithOneImage(new Session(null, "séance karaté", "description séance karaté", new Date(), 20, null, activities.get(0), null, coaches.get(0), null, null));
+        Session session = sessionService.addSessionWithOneImage(new Session(null, "séance karaté", "description séance karaté", new Date(), 20, 10, null, activities.get(0), null, coaches.get(0), null, null));
         assertNotNull(session);
-        session = sessionService.updateSession(session.getSessionId(), new Session(null, "séance body building", "description séance body  building", new Date(), 20, null, activities.get(0), null, coaches.get(0), null, null));
+        session = sessionService.updateSession(session.getSessionId(), new Session(null, "séance body building", "description séance body  building", new Date(), 20, 10, null, activities.get(0), null, coaches.get(0), null, null));
         assertNotNull(session);
         session.setSessionCoach(null);
         session.setSessionActivity(null);

@@ -26,10 +26,8 @@ public class CategoryService implements ICategoryService
 {
 
 
-    @Value("${app.directory}")
+    @Value("${image.storage.path}")
     private String directory;
-
-    String baseDirectory = System.getProperty("user.dir");
 
     private final CategoryRepository categoryRepository;
     @Autowired
@@ -51,10 +49,7 @@ public class CategoryService implements ICategoryService
     {
         String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
         String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
-        // String filePath = /*baseDirectory +*/ directory + "/categories/" + uniqueName;
-        String filePath = directory + "categories\\"+ uniqueName;
-
-        System.out.println("Full directory: " + filePath);
+         String filePath = directory + "/categories/" + uniqueName;
 
         try
         {
@@ -75,7 +70,6 @@ public class CategoryService implements ICategoryService
                 fileDirectory.mkdirs();
             }
             file[0].transferTo(new File(filePath));
-            // file[0].transferTo(new File(localPath));
 
             return categoryRepository.save(category);
         }
@@ -103,7 +97,7 @@ public class CategoryService implements ICategoryService
             List<Subscription> subscriptions = new ArrayList<>();
             List<Session> sessions = new ArrayList<>();
 
-            category.getImages().forEach((image) -> imageModelService.removeFile(directory+"categories", image.getImageName()));
+            category.getImages().forEach((image) -> imageModelService.removeFile(directory + "/categories", image.getImageName()));
             
             activities.forEach((activity) -> {
                 if (activity.getActSubscriptions().size() > 0)
@@ -163,7 +157,7 @@ public class CategoryService implements ICategoryService
 
             String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
             String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
-            String filePath = directory + "categories\\" + uniqueName;
+            String filePath = directory + "/categories/" + uniqueName;
 
             try
             {
@@ -182,7 +176,7 @@ public class CategoryService implements ICategoryService
 
                 images.remove(existingImageModel);
                 imageModelRepository.delete(existingImageModel);
-                imageModelService.removeFile(directory + "categories\\", existingCategory.getCatImage());
+                imageModelService.removeFile(directory + "/categories/", existingCategory.getCatImage());
 
 
                 existingCategory.setCatImage( uniqueName );

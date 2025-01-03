@@ -175,7 +175,7 @@ public class EmailServiceImpl
             cancelPrivateSessionNotifiction.setText(
                 "Bonjour " + member.getUserFirstName() + " " + member.getUserLastName() + ",\n\n"
                 + "J'espère que vous allez bien.\n\n"
-                + "Je suis désolé de vous informer que la session prévue avec Coach " + coach.getUserFirstName() + " " + coach.getUserLastName() + " le " + new SimpleDateFormat("dd/MM/yyyy").format(session.getSessionDeadline()) + " à " + new SimpleDateFormat("HH:mm").format(session.getSessionDeadline()) + " a été annulée en raison d'un imprévu. \n\n"
+                + "Je suis désolé de vous informer que la session prévue avec Coach " + coach.getUserFirstName() + " " + coach.getUserLastName() + " le " + new SimpleDateFormat("dd/MM/yyyy").format(session.getSessionDate()) + " à " + new SimpleDateFormat("HH:mm").format(session.getSessionDate()) + " a été annulée en raison d'un imprévu. \n\n"
                 + "Nous comprenons que cela puisse être un désagrément et nous nous excusons pour la gêne occasionnée. Nous travaillons actuellement à reprogrammer une nouvelle session dès que possible.\n\n"
                 + "En attendant, n'hésitez pas à me contacter si vous avez des questions ou des préoccupations. Merci pour votre compréhension et votre patience.\n\n"
                 + "Je vous remercie extrêmement une autre fois pour votre compréhension \n\n"

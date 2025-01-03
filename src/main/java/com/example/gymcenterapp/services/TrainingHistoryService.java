@@ -70,6 +70,12 @@ public class TrainingHistoryService implements ITrainingHistoryService
     }
 
     @Override
+    public List<User> findDistinctUsers()
+    {
+        return trainingHistoryRepository.findDistinctUsers();
+    }
+
+    @Override
     public TrainingHistory retrieveHistoryById(Long id) 
     {
         return trainingHistoryRepository.findById(id).orElse(null);

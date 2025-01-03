@@ -24,7 +24,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ActivityService implements IActivityService
 {
-    @Value("${app.directory}")
+    @Value("${image.storage.path}")
     private String directory;
 
 
@@ -42,7 +42,7 @@ public class ActivityService implements IActivityService
     {
         String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
         String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
-        String filePath = directory + "activities\\" + uniqueName;
+        String filePath = directory + "/activities/" + uniqueName;
 
 
         try
@@ -91,7 +91,7 @@ public class ActivityService implements IActivityService
             List<Session> sessions = new ArrayList<>();
 
             activity.getActivityImages().forEach((image) -> {
-                imageModelService.removeFile(directory + "activities", image.getImageName());
+                imageModelService.removeFile(directory + "/activities", image.getImageName());
             });
 
             activity.getActSubscriptions().forEach((subscription) -> {
@@ -152,7 +152,7 @@ public class ActivityService implements IActivityService
             Activity activity = activityRepository.findById(actId).orElse(null);
 
             assert activity != null;
-            Set<ImageModel> images =  imageModelService.prepareFiles(files, activity.getActivityImages(), directory + "activities\\");
+            Set<ImageModel> images =  imageModelService.prepareFiles(files, activity.getActivityImages(), directory + "/activities/");
 
             activity.setActivityImages(images);
 
@@ -174,7 +174,7 @@ public class ActivityService implements IActivityService
         if (activity != null && imageModel != null)
         {
             activity.getActivityImages().remove(imageModel);
-            imageModelService.removeFile(directory + "activities\\", imageName);
+            imageModelService.removeFile(directory + "/activities/", imageName);
             imageModelRepository.delete(imageModel);
             return activityRepository.save(activity);
         }
@@ -198,7 +198,7 @@ public class ActivityService implements IActivityService
 
             String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
             String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
-            String filePath = directory + "activities\\" + uniqueName;
+            String filePath = directory + "/activities/" + uniqueName;
 
             try
             {
@@ -217,7 +217,7 @@ public class ActivityService implements IActivityService
 
                 images.remove(existingImageModel);
                 imageModelRepository.delete(existingImageModel);
-                imageModelService.removeFile(directory + "activities\\", existingActivity.getActImage());
+                imageModelService.removeFile(directory + "/activities/", existingActivity.getActImage());
 
                 existingActivity.setActImage( uniqueName );
                 existingActivity.setActivityImages(images);
