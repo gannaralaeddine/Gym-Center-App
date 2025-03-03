@@ -219,4 +219,17 @@ public class CategoryService implements ICategoryService
             return null;
         }
     }
+
+    public List<Activity> retrieveCategoryActivities(Long categoryId)
+    {
+        Category category = retrieveCategory(categoryId);
+        List<Activity> activities = new ArrayList<Activity>();
+
+        if (category != null)
+        {
+            activities = category.getCategoryActivities();
+        }
+
+        return activities;
+    }
 }

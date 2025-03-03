@@ -29,6 +29,9 @@ public class CategoryController
     @ResponseBody
     public Category retrieveCategory(@PathVariable("id") Long idCategory) { return categoryService.retrieveCategory(idCategory);}
 
+    @GetMapping("/retrieve-category-activities/{id}")
+    @ResponseBody
+    public List<Activity> retrieveCategoryActivities(@PathVariable("id") Long categoryId) {return categoryService.retrieveCategoryActivities(categoryId);}
 
     @PutMapping(value= "/update-category/{id}")
     @ResponseBody

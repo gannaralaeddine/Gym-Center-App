@@ -125,6 +125,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/category/retrieve-all-categories").permitAll()
                 .antMatchers("/category/create-category").permitAll()
                 .antMatchers("/category/add-images-to-category").permitAll()
+                .antMatchers("/category/retrieve-category-activities/{id}").permitAll()
 
                 .antMatchers("/coach/register-coach").permitAll()
                 .antMatchers("/coach/update-coach/{coach-id}").permitAll()
