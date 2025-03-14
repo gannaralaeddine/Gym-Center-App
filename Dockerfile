@@ -1,6 +1,8 @@
 # Get an image of jdk from docker hub
 FROM openjdk:8-jdk-alpine
 
+#RUN mvn clean package -DskipTests
+
 # COPY ./target/Devops-Test-1.0.jar /usr/app/
 COPY target/Gym-Center-App-1.0.jar Gym-Center-App-1.0.jar
 #WORKDIR /usr/app

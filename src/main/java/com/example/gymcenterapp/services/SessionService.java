@@ -14,10 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -105,6 +104,8 @@ public class SessionService implements ISessionService
             // save image to specific directory
             file[0].transferTo(new File(filePath));
 
+            session.setSessionDate(subtractOneHour(session.getSessionDate()));
+
             return sessionRepository.save(session);
         }
         catch (Exception e)
@@ -147,6 +148,7 @@ public class SessionService implements ISessionService
             existingSession.setSessionActivity(session.getSessionActivity());
             existingSession.setSessionCoach(session.getSessionCoach());
             existingSession.setSessionPrice(session.getSessionPrice());
+            existingSession.setSessionDate(subtractOneHour(session.getSessionDate()));
 
             String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
             String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
@@ -175,6 +177,7 @@ public class SessionService implements ISessionService
                 existingSession.setSessionImage( uniqueName );
                 existingSession.setSessionImages(images);
 
+                existingSession.setSessionDate(subtractOneHour(session.getSessionDate()));
 
                 return sessionRepository.save(existingSession);
             }
@@ -300,5 +303,18 @@ public class SessionService implements ISessionService
     public Session addSessionWithOneImage(Session session) 
     {
         return sessionRepository.save(session);
+    }
+
+    public Date subtractOneHour(Date date) {
+        // Convert Date to LocalDateTime
+        LocalDateTime localDateTime = date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+
+        // Subtract one hour
+        LocalDateTime adjustedDateTime = localDateTime.minusHours(1);
+
+        // Convert LocalDateTime back to Date
+        return Date.from(adjustedDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 }

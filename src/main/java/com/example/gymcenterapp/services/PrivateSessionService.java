@@ -8,6 +8,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.Set;
 
 @Service
@@ -20,6 +24,9 @@ public class PrivateSessionService
 
     public PrivateSession addPrivateSession(PrivateSession privateSession)
     {
+        privateSession.setPrivateSessionStartDateTime(subtractOneHour(privateSession.getPrivateSessionStartDateTime()));
+        privateSession.setPrivateSessionEndDateTime(subtractOneHour(privateSession.getPrivateSessionEndDateTime()));
+
         return privateSessionRepository.save(privateSession);
     }
 
@@ -69,4 +76,16 @@ public class PrivateSessionService
        
     }
 
+    public static Date subtractOneHour(Date date) {
+        // Convert Date to LocalDateTime
+        LocalDateTime localDateTime = date.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+
+        // Subtract one hour
+        LocalDateTime adjustedDateTime = localDateTime.minusHours(1);
+
+        // Convert LocalDateTime back to Date
+        return Date.from(adjustedDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.gymcenterapp.controllers;
 
+import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Category;
 import com.example.gymcenterapp.services.CategoryService;
 import lombok.AllArgsConstructor;
