@@ -27,44 +27,37 @@ import java.util.Arrays;
 
 @EnableWebSecurity
 @AllArgsConstructor
-@EnableGlobalMethodSecurity(
-        prePostEnabled = true,
-        securedEnabled = false,
-        jsr250Enabled = true
-)
-@SpringBootApplication//(exclude = { SecurityAutoConfiguration.class })
-public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
-{
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = false, jsr250Enabled = true)
+@SpringBootApplication // (exclude = { SecurityAutoConfiguration.class })
+public class GymCenterAppApplication extends WebSecurityConfigurerAdapter {
     private static final Logger logger = LoggerFactory.getLogger(GymCenterAppApplication.class);
     UserService userService;
 
     JwtTokenFilter jwtTokenFilter;
 
-    public static void main(String[] args) { SpringApplication.run(GymCenterAppApplication.class, args); }
+    public static void main(String[] args) {
+        SpringApplication.run(GymCenterAppApplication.class, args);
+    }
 
     @Bean
-    PasswordEncoder bcryptPasswordEncoder()
-    {
+    PasswordEncoder bcryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth)
-    {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(daoAuthenticationProvider());
 
     }
 
     @Bean
     @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception
-    {
+    public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
     @Bean
-    DaoAuthenticationProvider daoAuthenticationProvider ()
-    {
+    DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
 
         daoAuthenticationProvider.setPasswordEncoder(bcryptPasswordEncoder());
@@ -72,13 +65,11 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
         return daoAuthenticationProvider;
     }
 
-
     @Override
-    protected void configure(HttpSecurity http) throws Exception
-    {
-        http.exceptionHandling().authenticationEntryPoint( (request, response, exception) -> {
+    protected void configure(HttpSecurity http) throws Exception {
+        http.exceptionHandling().authenticationEntryPoint((request, response, exception) -> {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, exception.getMessage());
-        } );
+        });
 
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -91,7 +82,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/public/**").permitAll()
                 .antMatchers("static/**").permitAll()
 
-//                .anyRequest().authenticated();
+                // .anyRequest().authenticated();
                 .antMatchers("/hhh").permitAll()
                 .antMatchers("/notify").permitAll()
                 .antMatchers("/socket").permitAll()
@@ -99,7 +90,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/users/*").permitAll()
                 .antMatchers("/categories/*").permitAll()
 
-                .antMatchers("/user/retrieve-all-users").permitAll()//.hasAnyRole("ADMIN")
+                .antMatchers("/user/retrieve-all-users").permitAll()// .hasAnyRole("ADMIN")
                 .antMatchers("/user/register-user").permitAll()
                 .antMatchers("/user/add-role").permitAll()
                 .antMatchers("/user/number-of-users").permitAll()
@@ -157,8 +148,11 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/member/get-member-private-sessions/{memberEmail}").permitAll()
                 .antMatchers("/member/get-member-subscriptions/{memberEmail}").permitAll()
                 .antMatchers("/member/retrieve-member-by-id/{id}").permitAll()
-                .antMatchers("/member/update-member-private-sessions-number/{memberEmail}/{newPrivateSessionsNumber}").permitAll()
-                .antMatchers("/member/replace-old-member-private-sessions-number/{member-id}/{newPrivateSessionsNumber}").permitAll()
+                .antMatchers("/member/update-member-private-sessions-number/{memberEmail}/{newPrivateSessionsNumber}")
+                .permitAll()
+                .antMatchers(
+                        "/member/replace-old-member-private-sessions-number/{member-id}/{newPrivateSessionsNumber}")
+                .permitAll()
 
                 .antMatchers("/session/create-session").permitAll()
                 .antMatchers("/session/update-session/{session-id}").permitAll()
@@ -179,7 +173,6 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/subscription/retrieve-all-subscriptions").permitAll()
                 .antMatchers("/subscription/retrieve-activity-subscriptions/{activity-id}").permitAll()
                 .antMatchers("/subscription/assign-member-to-subscription/{subscriptionId}/{memberId}").permitAll()
-                
 
                 .antMatchers("/activity/retrieve-all-activities").permitAll()
                 .antMatchers("/activity/add-activity").permitAll()
@@ -192,6 +185,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
                 .antMatchers("/activity/add-images-to-activity").permitAll()
                 .antMatchers("/activity/delete-activity-image/{actId}/{imageName}").permitAll()
                 .antMatchers("/activity/add-coach-to-activity/{coachId}/{activityId}").permitAll()
+                .antMatchers("/activity/retrieve-activity-offers/{activity-id}").permitAll()
                 .antMatchers("/image/get-image/{image-name}").permitAll()
 
                 .antMatchers("/offer/add-offer").permitAll()
@@ -226,7 +220,8 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://localhost:4500", "http://localhost:3000"));
+        corsConfiguration.setAllowedOrigins(
+                Arrays.asList("http://localhost:4200", "http://localhost:4500", "http://localhost:3000"));
         corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
                 "Accept", "Authorization", "Origin, Accept", "X-Requested-With",
                 "Access-Control-Request-Method", "Access-Control-Request-Headers"));
