@@ -18,7 +18,7 @@ import com.example.gymcenterapp.services.PrivateSessionService;
 
 
 @SpringBootTest
-public class PrivateSessionServiceTest
+class PrivateSessionServiceTest
 {
 
     @Autowired
@@ -40,7 +40,7 @@ public class PrivateSessionServiceTest
     private MemberService memberService;
 
     @Test
-    public void addPrivateSession() 
+    void addPrivateSession()
     {
         List<Coach> coaches = coachService.retrieveAllCoaches();
         List<Member> members = memberService.retrieveAllMembers();
@@ -62,10 +62,10 @@ public class PrivateSessionServiceTest
     }
 
     @Test
-    public void retrieveAvailablePrivateSessions() { assertNotNull(privateSessionService.retrieveAvailablePrivateSessions()); }
+    void retrieveAvailablePrivateSessions() { assertNotNull(privateSessionService.retrieveAvailablePrivateSessions()); }
 
     @Test
-    public void retrievePrivateSession() 
+    void retrievePrivateSession()
     {
         List<Coach> coaches = coachService.retrieveAllCoaches();
         List<Member> members = memberService.retrieveAllMembers();
@@ -89,7 +89,7 @@ public class PrivateSessionServiceTest
     }
 
     @Test
-    public void cancelPrivateSession()
+    void cancelPrivateSession()
     {
         List<Coach> coaches = coachService.retrieveAllCoaches();
         List<Member> members = memberService.retrieveAllMembers();

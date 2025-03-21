@@ -19,7 +19,7 @@ import com.example.gymcenterapp.repositories.ConfirmationTokenRepository;
 import com.example.gymcenterapp.repositories.UserRepository;
 
 @SpringBootTest
-public class UserServiceTest 
+class UserServiceTest
 {
     @Autowired
     private UserService userService;
@@ -34,7 +34,7 @@ public class UserServiceTest
     private ConfirmationTokenRepository confirmationTokenRepository;
 
     @Test
-    public void addUser()
+    void addUser()
     {
         User user = new User();
         user.setUserEmail("hello@gmail.com");
@@ -51,7 +51,7 @@ public class UserServiceTest
     }
 
     @Test
-    public void changePassword()
+    void changePassword()
     {
         User user = new User();
         user.setUserEmail("hello@gmail.com");
@@ -73,7 +73,7 @@ public class UserServiceTest
     }
 
     @Test
-    public void confirmUserAccount()
+    void confirmUserAccount()
     {
         User user = new User();
         user.setUserEmail("hello@gmail.com");
@@ -92,7 +92,7 @@ public class UserServiceTest
     }
 
     @Test
-    public void updateUserData()
+    void updateUserData()
     {
         User user = new User();
         user.setUserEmail("hello@gmail.com");
@@ -113,10 +113,10 @@ public class UserServiceTest
     }
 
     @Test
-    public void retrieveAllUsers() { assertNotNull(userService.retrieveAllUsers()); }
+    void retrieveAllUsers() { assertNotNull(userService.retrieveAllUsers()); }
 
     @Test
-    public void retrieveUser()
+    void retrieveUser()
     {
         User user = new User();
         user.setUserEmail("hello@gmail.com");

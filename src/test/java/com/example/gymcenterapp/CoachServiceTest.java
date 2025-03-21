@@ -16,7 +16,7 @@ import com.example.gymcenterapp.services.CoachService;
 import com.example.gymcenterapp.repositories.ConfirmationTokenRepository;
 
 @SpringBootTest
-public class CoachServiceTest 
+class CoachServiceTest
 {
     @Autowired
     private CoachService coachService;
@@ -28,7 +28,7 @@ public class CoachServiceTest
     private ConfirmationTokenRepository confirmationTokenRepository;
 
     @Test
-    public void registerCoach() 
+    void registerCoach()
     {
         Coach coach = new Coach();
         coach.setUserEmail("hello@gmail.com");
@@ -45,7 +45,7 @@ public class CoachServiceTest
     }
 
     @Test
-    public void retrieveCoachByEmail()
+    void retrieveCoachByEmail()
     {
         Coach coach = new Coach();
         coach.setUserEmail("hello@gmail.com");
@@ -68,10 +68,10 @@ public class CoachServiceTest
     }
 
     @Test
-    public void retrieveAllCoaches() { assertNotNull(coachService.retrieveAllCoaches()); }
+    void retrieveAllCoaches() { assertNotNull(coachService.retrieveAllCoaches()); }
 
     @Test
-    public void updateCoach() 
+    void updateCoach()
     {
         Coach coach = new Coach();
         coach.setUserEmail("hello@gmail.com");
@@ -103,7 +103,7 @@ public class CoachServiceTest
     }
 
     @Test
-    public void updateCoachSpecialities() 
+    void updateCoachSpecialities()
     {
         Coach coach = new Coach();
         coach.setUserEmail("hello@gmail.com");
@@ -137,7 +137,7 @@ public class CoachServiceTest
     }
 
     @Test
-    public void addCoachToActivity() 
+    void addCoachToActivity()
     {
         List<Activity> activities = activityService.retrieveAllActivities();
         Coach coach = new Coach();
@@ -164,7 +164,7 @@ public class CoachServiceTest
     }
 
     @Test
-    public void retrieveCoachSpecialities() 
+    void retrieveCoachSpecialities()
     {
         List<Coach> coaches = coachService.retrieveAllCoaches();
         assertNotNull(coaches);
@@ -172,7 +172,7 @@ public class CoachServiceTest
     }
 
     @Test
-    public void deleteCoachActivities() 
+    void deleteCoachActivities()
     {
         List<Activity> activities = activityService.retrieveAllActivities();
         Coach coach = new Coach();
@@ -198,21 +198,21 @@ public class CoachServiceTest
     }
     
     @Test
-    public void retrieveCoachSessions()
+    void retrieveCoachSessions()
     {
         List<Coach> coaches = coachService.retrieveAllCoaches();
         assertNotNull(coachService.retrieveCoachSessions(coaches.get(0).getUserEmail()));
     }
 
     @Test
-    public void retrievePrivateMembers()
+    void retrievePrivateMembers()
     {
         List<Coach> coaches = coachService.retrieveAllCoaches();
         assertNotNull(coachService.retrievePrivateMembers(coaches.get(0).getUserEmail()));
     }
 
     @Test
-    public void retrieveCoachPrivateSessions()
+    void retrieveCoachPrivateSessions()
     {
         List<Coach> coaches = coachService.retrieveAllCoaches();
         assertNotNull(coachService.retrieveCoachSessions(coaches.get(0).getUserEmail()));

@@ -2,10 +2,7 @@ package com.example.gymcenterapp.controllers;
 
 import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Offer;
-import com.example.gymcenterapp.repositories.ActivityRepository;
-import com.example.gymcenterapp.repositories.CategoryRepository;
 import com.example.gymcenterapp.services.ActivityService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.MediaType;
@@ -21,12 +18,6 @@ import java.util.Set;
 public class ActivityController {
 
     private final ActivityService activityService;
-
-    /*
-     * CategoryRepository categoryRepository;
-     * 
-     * ActivityRepository activityRepository;
-     */
 
     @GetMapping("/retrieve-all-activities")
     @ResponseBody

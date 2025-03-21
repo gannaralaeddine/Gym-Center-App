@@ -9,7 +9,7 @@ import com.example.gymcenterapp.services.CategoryService;
 
 
 @SpringBootTest
-public class CategoryServiceTest 
+class CategoryServiceTest
 {
     @Autowired
     private CategoryService categoryService;

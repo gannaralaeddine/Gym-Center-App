@@ -1,6 +1,5 @@
 package com.example.gymcenterapp.services;
 
-import com.example.gymcenterapp.controllers.ActivityController;
 import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Coach;
 import com.example.gymcenterapp.entities.ImageModel;
@@ -36,19 +35,12 @@ public class ActivityService implements IActivityService {
     private final CoachService coachService;
     private final SubscriptionRepository subscriptionRepository;
     private final SessionRepository sessionRepository;
-    // private final ActivityController activityController;
-
-    /*
-     * ActivityService(ActivityController activityController) {
-     * this.activityController = activityController;
-     * }
-     */
 
     @Override
     public Activity addActivityWithOneImage(Activity activity, MultipartFile[] file) {
         String[] imageType = Objects.requireNonNull(file[0].getContentType()).split("/");
         String uniqueName = imageModelService.generateUniqueName() + "." + imageType[1];
-        String filePath = directory + "/activities/" + uniqueName;
+        final String filePath = directory + "/activities/" + uniqueName;
 
         try {
             ImageModel imageModel = new ImageModel();
@@ -95,11 +87,9 @@ public class ActivityService implements IActivityService {
             List<Subscription> subscriptions = new ArrayList<>();
             List<Session> sessions = new ArrayList<>();
 
-            activity.getActivityImages().forEach((image) -> {
-                imageModelService.removeFile(directory + "/activities", image.getImageName());
-            });
+            activity.getActivityImages().forEach( image -> imageModelService.removeFile(directory + "/activities", image.getImageName()));
 
-            activity.getActSubscriptions().forEach((subscription) -> {
+            activity.getActSubscriptions().forEach( subscription -> {
                 Subscription subscriptionObject = subscription;
                 subscriptionObject.setMember(null);
                 subscriptions.add(subscriptionObject);
@@ -111,10 +101,10 @@ public class ActivityService implements IActivityService {
                 sessions.add(sessionObject);
             });
 
-            subscriptions.forEach((subscription) -> subscriptionRepository.save(subscription));
-            sessions.forEach((session) -> sessionRepository.save(session));
+            subscriptions.forEach( subscription -> subscriptionRepository.save(subscription));
+            sessions.forEach( session -> sessionRepository.save(session));
             activity.getActCoaches()
-                    .forEach((coach) -> coachService.deleteCoachActivities(coach.getUserId(), activity.getActId()));
+                    .forEach( coach -> coachService.deleteCoachActivities(coach.getUserId(), activity.getActId()));
 
             activityRepository.deleteById(id);
         }

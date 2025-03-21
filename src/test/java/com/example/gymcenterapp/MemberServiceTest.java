@@ -18,7 +18,7 @@ import com.example.gymcenterapp.repositories.ConfirmationTokenRepository;
 import com.example.gymcenterapp.repositories.MemberRepository;
 
 @SpringBootTest
-public class MemberServiceTest 
+class MemberServiceTest
 {
     @Autowired
     private MemberService memberService;
@@ -36,7 +36,7 @@ public class MemberServiceTest
     private ConfirmationTokenRepository confirmationTokenRepository;
 
     @Test
-    public void registerMember() 
+    void registerMember()
     {
         Member member = new Member();
         member.setUserEmail("hello@gmail.com");
@@ -53,10 +53,10 @@ public class MemberServiceTest
     }
 
     @Test
-    public void retrieveAllMembers() { assertNotNull(memberService.retrieveAllMembers()); }
+    void retrieveAllMembers() { assertNotNull(memberService.retrieveAllMembers()); }
 
     @Test
-    public void retrieveMember() 
+    void retrieveMember()
     {
         Member member = new Member();
         member.setUserEmail("hello@gmail.com");
@@ -74,14 +74,14 @@ public class MemberServiceTest
     }
 
     @Test
-    public void retrieveMemberSessions()
+    void retrieveMemberSessions()
     {
         List<Member> members = memberService.retrieveAllMembers();
         assertNotNull(memberService.retrieveMemberSessions(members.get(0).getUserEmail()));
     }
 
     @Test
-    public void updateMember()
+    void updateMember()
     {
         Member member = new Member();
         member.setUserEmail("hello@gmail.com");
@@ -102,14 +102,14 @@ public class MemberServiceTest
     }
 
     @Test
-    public void retrievePrivateCoaches()
+    void retrievePrivateCoaches()
     {
         List<Member> members = memberService.retrieveAllMembers();
         assertNotNull(memberService.retrievePrivateCoaches(members.get(0).getUserEmail()));
     }
 
     @Test
-    public void privateCoachBooking()
+    void privateCoachBooking()
     {
         List<Member> members = memberService.retrieveAllMembers();
         Set<PrivateSession> privateSessions = privateSessionService.retrieveAvailablePrivateSessions();
@@ -119,7 +119,7 @@ public class MemberServiceTest
     }
 
     @Test
-    public void updateMemberPrivateSessionsNumber()
+    void updateMemberPrivateSessionsNumber()
     {
         Member member = memberService.retrieveAllMembers().get(0);
         Integer oldPrivateSessionsNumber = member.getPrivateSessionsNumber();
@@ -131,7 +131,7 @@ public class MemberServiceTest
     }
 
     @Test
-    public void replaceMemberPrivateSessionsNumber()
+    void replaceMemberPrivateSessionsNumber()
     {
         Member member = memberService.retrieveAllMembers().get(0);
         Integer oldPrivateSessionsNumber = member.getPrivateSessionsNumber();
@@ -143,14 +143,14 @@ public class MemberServiceTest
     }
 
     @Test
-    public void retrieveMemberSubscriptions()
+    void retrieveMemberSubscriptions()
     {
         Member member = memberService.retrieveAllMembers().get(0);
         assertNotNull(memberService.getMemberSubscriptions(member.getUserEmail()));
     }
 
     @Test
-    public void retrieveMemberPrivateSessions()
+    void retrieveMemberPrivateSessions()
     {
         Member member = memberService.retrieveAllMembers().get(0);
         assertNotNull(memberService.getMemberPrivateSessions(member.getUserEmail()));

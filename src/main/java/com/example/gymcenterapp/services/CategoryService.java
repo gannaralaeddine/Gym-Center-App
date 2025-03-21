@@ -97,12 +97,12 @@ public class CategoryService implements ICategoryService
             List<Subscription> subscriptions = new ArrayList<>();
             List<Session> sessions = new ArrayList<>();
 
-            category.getImages().forEach((image) -> imageModelService.removeFile(directory + "/categories", image.getImageName()));
+            category.getImages().forEach( image -> imageModelService.removeFile(directory + "/categories", image.getImageName()));
             
-            activities.forEach((activity) -> {
+            activities.forEach( activity -> {
                 if (activity.getActSubscriptions().size() > 0)
                 {
-                    activity.getActSubscriptions().forEach((subscription) -> {
+                    activity.getActSubscriptions().forEach( subscription -> {
                         Subscription subscriptionObject = subscription;
                         subscriptionObject.setMember(null);
                         subscriptions.add(subscriptionObject);
@@ -113,7 +113,7 @@ public class CategoryService implements ICategoryService
             activities.forEach((activity) -> {
                 if (activity.getActSessions().size() > 0)
                 {
-                    activity.getActSessions().forEach((session) -> {
+                    activity.getActSessions().forEach( session -> {
                         Session sessionObject = session;
                         sessionObject.setSessionCoach(null);
                         sessions.add(sessionObject);
@@ -121,8 +121,8 @@ public class CategoryService implements ICategoryService
                 }
             });
 
-            subscriptions.forEach((subscription) -> subscriptionRepository.save(subscription));
-            sessions.forEach((session) -> sessionRepository.save(session));
+            subscriptions.forEach( subscription -> subscriptionRepository.save(subscription));
+            sessions.forEach( session -> sessionRepository.save(session));
 
             categoryRepository.deleteById(id);
         }

@@ -98,17 +98,15 @@ public class CoachService implements ICoachService
                     emailService.sendCancelPrivateSessionEmail(privateSession);
                 }
             });
-            coach.getCoachSessions().forEach((session) -> {
+            coach.getCoachSessions().forEach( session -> {
                 if (session.getSessionMembers() != null)
                 {
                     emailService.sendCancelSessionEmail(session);
                 }
             });
-            coach.getCoachSpecialities().forEach((activity) -> activity.setActCoaches(null));
-            coach.getCoachSessions().forEach((session) -> {
-                session.getSessionMembers().forEach((member) -> {
-                    member.setMemberSessions(null);
-                });
+            coach.getCoachSpecialities().forEach(activity -> activity.setActCoaches(null));
+            coach.getCoachSessions().forEach( session -> {
+                session.getSessionMembers().forEach( member -> member.setMemberSessions(null) );
             });
             coach.setPrivateMembers(null);
             coachRepository.save(coach);

@@ -19,7 +19,7 @@ import com.example.gymcenterapp.services.OptionService;
 
 
 @SpringBootTest
-public class OptionServiceTest 
+class OptionServiceTest
 {
     @Autowired
     private ActivityService activityService;
@@ -34,7 +34,7 @@ public class OptionServiceTest
     private OfferService offerService;
 
     @Test
-    public void addOption() 
+    void addOption()
     {
         Option option = optionService.createOption(new Option(null, "option 1", null));
         assertNotNull(option);
@@ -42,10 +42,10 @@ public class OptionServiceTest
     }
 
     @Test
-    public void retrieveAllOptions() { assertNotNull(optionService.retrieveAllOptions()); }
+    void retrieveAllOptions() { assertNotNull(optionService.retrieveAllOptions()); }
 
     @Test
-    public void retrieveOption() 
+    void retrieveOption()
     { 
         Option option = optionService.createOption(new Option(null, "oprion 1", null));
         assertNotNull(optionService.retrieveOption(option.getOptionId()));
@@ -53,7 +53,7 @@ public class OptionServiceTest
     }
 
     @Test
-    public void updateOption()
+    void updateOption()
     {
         Option option = optionService.createOption(new Option(null, "option 1", null));
         assertNotNull(option);
@@ -63,7 +63,7 @@ public class OptionServiceTest
     }
 
     @Test
-    public void deleteOption()
+    void deleteOption()
     {
        addOption(); 
     }

@@ -16,8 +16,10 @@ import com.example.gymcenterapp.services.CategoryService;
 import com.example.gymcenterapp.services.OfferService;
 import com.example.gymcenterapp.services.OptionService;
 
+
 @SpringBootTest
-public class OfferServiceTest {
+class OfferServiceTest
+{
     @Autowired
     private ActivityService activityService;
 
@@ -28,47 +30,48 @@ public class OfferServiceTest {
     private OfferService offerService;
 
     @Test
-    public void addOffer() {
+    void addOffer()
+    {
         List<Activity> activities = activityService.retrieveAllActivities();
         assertNotNull(activities);
-        Offer offer = offerService.addOffer(new Offer(null, "offre", 12, 30.0, activities.get(0), null, null));
+        Offer offer = offerService.addOffer(new Offer(null, "offre", 12, 30.0, activities.get(0), null));
         assertNotNull(offer);
         offer.setOfferActivity(null);
         offerService.deleteOffer(offerService.addOffer(offer).getOfferId());
     }
 
     @Test
-    public void retrieveAllOffers() {
-        assertNotNull(offerService.retrieveAllOffers());
-    }
+    void retrieveAllOffers() { assertNotNull(offerService.retrieveAllOffers()); }
 
     @Test
-    public void retrieveOffer() {
+    void retrieveOffer()
+    { 
         List<Activity> activities = activityService.retrieveAllActivities();
         assertNotNull(activities);
-        Offer offer = offerService.addOffer(new Offer(null, "offre", 12, 30.0, activities.get(0), null, null));
+        Offer offer = offerService.addOffer(new Offer(null, "offre", 12, 30.0, activities.get(0), null));
         assertNotNull(offerService.retrieveOffer(offer.getOfferId()));
         offer.setOfferActivity(null);
         offerService.deleteOffer(offerService.addOffer(offer).getOfferId());
     }
 
     @Test
-    public void updateOffer() {
+    void updateOffer()
+    {
         List<Activity> activities = activityService.retrieveAllActivities();
         List<Option> options = optionService.retrieveAllOptions();
         assertNotNull(options);
         assertNotNull(activities);
-        Offer offer = offerService.addOffer(new Offer(null, "offre", 12, 30.0, activities.get(0), null, null));
+        Offer offer = offerService.addOffer(new Offer(null, "offre", 12, 30.0, activities.get(0), null));
         assertNotNull(offer);
-        offer = offerService.updateOffer(offer.getOfferId(),
-                new Offer(null, "offre 2", 12, 30.0, activities.get(0), options, null));
+        offer = offerService.updateOffer(offer.getOfferId(),new Offer(null, "offre 2", 12, 30.0, activities.get(0), options));
         offer.setOfferActivity(null);
         offer.setOfferOption(null);
         offerService.deleteOffer(offerService.addOffer(offer).getOfferId());
     }
 
     @Test
-    public void deleteOffer() {
-        addOffer();
+    void deleteOffer()
+    {
+       addOffer();
     }
 }

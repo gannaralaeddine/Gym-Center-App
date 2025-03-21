@@ -14,7 +14,7 @@ import com.example.gymcenterapp.services.CategoryService;
 
 
 @SpringBootTest
-public class ActivityServiceTest 
+class ActivityServiceTest
 {
     @Autowired
     private ActivityService activityService;
@@ -23,7 +23,7 @@ public class ActivityServiceTest
     private CategoryService categoryService;
 
     @Test
-    public void addActivity() 
+    void addActivity()
     {
         List<Category> categories = categoryService.retrieveAllCategories();
         assertNotNull(categories);
@@ -34,10 +34,10 @@ public class ActivityServiceTest
     }
 
     @Test
-    public void retrieveAllActivities() { assertNotNull(activityService.retrieveAllActivities()); }
+    void retrieveAllActivities() { assertNotNull(activityService.retrieveAllActivities()); }
 
     @Test
-    public void retrieveActivity() 
+    void retrieveActivity()
     { 
         List<Category> categories = categoryService.retrieveAllCategories();
         assertNotNull(categories);
@@ -48,7 +48,7 @@ public class ActivityServiceTest
     }
 
     @Test
-    public void updateActivity()
+    void updateActivity()
     {
         List<Category> categories = categoryService.retrieveAllCategories();
         assertNotNull(categories);
@@ -60,7 +60,7 @@ public class ActivityServiceTest
     }
 
     @Test
-    public void deleteActivity()
+    void deleteActivity()
     {
         addActivity();
     }

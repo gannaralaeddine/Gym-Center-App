@@ -19,7 +19,7 @@ import com.example.gymcenterapp.services.SessionService;
 
 
 @SpringBootTest
-public class SessionServiceTest 
+class SessionServiceTest
 {
 
     @Autowired
@@ -35,7 +35,7 @@ public class SessionServiceTest
     private CoachService coachService;
 
     @Test
-    public void addSession() 
+    void addSession()
     {
         List<Coach> coaches = coachService.retrieveAllCoaches();
         List<Activity> activities = activityService.retrieveAllActivities();
@@ -49,10 +49,10 @@ public class SessionServiceTest
     }
 
     @Test
-    public void retrieveAllSessions() { assertNotNull(sessionService.retrieveAllSessions()); }
+    void retrieveAllSessions() { assertNotNull(sessionService.retrieveAllSessions()); }
 
     @Test
-    public void retrieveSession() 
+    void retrieveSession()
     { 
         List<Coach> coaches = coachService.retrieveAllCoaches();
         List<Activity> activities = activityService.retrieveAllActivities();
@@ -66,7 +66,7 @@ public class SessionServiceTest
     }
 
     @Test
-    public void updateSession()
+    void updateSession()
     {
         List<Coach> coaches = coachService.retrieveAllCoaches();
         List<Activity> activities = activityService.retrieveAllActivities();
@@ -82,7 +82,7 @@ public class SessionServiceTest
     }
 
     @Test
-    public void deleteSession()
+    void deleteSession()
     {
         addSession();
     }

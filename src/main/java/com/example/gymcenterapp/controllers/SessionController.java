@@ -2,7 +2,6 @@ package com.example.gymcenterapp.controllers;
 
 import com.example.gymcenterapp.entities.Session;
 import com.example.gymcenterapp.services.SessionService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

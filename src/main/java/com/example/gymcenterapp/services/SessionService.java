@@ -47,9 +47,7 @@ public class SessionService implements ISessionService
             emailService.sendCancelSessionEmail(session);
             session.setSessionActivity(null);
             session.setSessionCoach(null);
-            session.getSessionMembers().forEach((member) -> {
-                member.getMemberSessions().remove(session);
-            });
+            session.getSessionMembers().forEach( member -> member.getMemberSessions().remove(session) );
             sessionRepository.deleteById(sessionRepository.save(session).getSessionId());
         }
     }
