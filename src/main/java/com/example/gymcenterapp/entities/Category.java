@@ -16,8 +16,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Embeddable
-public class Category implements Serializable
-{
+public class Category implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -34,18 +33,12 @@ public class Category implements Serializable
 
     private String catImage;
 
-
     @JsonIgnore
     @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE)
-    //@JoinColumn(name = "categoryId")
     private List<Activity> categoryActivities;
 
-
-
-
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "category_images",
-        joinColumns = { @JoinColumn (name = "category_id") },
-        inverseJoinColumns = { @JoinColumn(name = "image_id") })
+    @JoinTable(name = "category_images", joinColumns = { @JoinColumn(name = "category_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "image_id") })
     private Set<ImageModel> images;
 }

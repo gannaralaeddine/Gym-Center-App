@@ -14,8 +14,7 @@ import java.util.Date;
 @Setter
 @Entity
 @Embeddable
-public class Subscription implements Serializable
-{
+public class Subscription implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -33,10 +32,14 @@ public class Subscription implements Serializable
     private Date subscriptionEndDate;
 
     @ManyToOne
-    @JoinColumn(name = "activity_id",referencedColumnName = "actId")
+    @JoinColumn(name = "activity_id", referencedColumnName = "actId")
     private Activity subscriptionActivity;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToOne
+    @JoinColumn(name = "offer_id")
+    private Offer subscriptionOffer;
 }

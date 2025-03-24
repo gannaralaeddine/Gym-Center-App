@@ -15,10 +15,8 @@ import com.example.gymcenterapp.services.CategoryService;
 import com.example.gymcenterapp.services.MemberService;
 import com.example.gymcenterapp.services.SubscriptionService;
 
-
 @SpringBootTest
-public class SubscriptionServiceTest 
-{
+public class SubscriptionServiceTest {
     @Autowired
     private ActivityService activityService;
 
@@ -32,57 +30,68 @@ public class SubscriptionServiceTest
     private SubscriptionService subscriptionService;
 
     @Test
-    public void addSubscription() 
-    {
+    public void addSubscription() {
         List<Member> members = memberService.retrieveAllMembers();
         List<Activity> activities = activityService.retrieveAllActivities();
         assertNotNull(members);
         assertNotNull(activities);
-        Subscription subscription = subscriptionService.addSubscription(new Subscription(null, 0, new Date(), null, activities.get(0), members.get(0)),  members.get(0).getUserId());
+        Subscription subscription = subscriptionService.addSubscription(
+                new Subscription(null, 0, new Date(), null, activities.get(0), members.get(0), null),
+                members.get(0).getUserId());
         assertNotNull(subscription);
         Long memberId = subscription.getSubscriptionId();
         subscription.setMember(null);
-        subscription.setSubscriptionActivity(null);;
-        subscriptionService.deleteSubscription(subscriptionService.addSubscription(subscription, memberId).getSubscriptionId());
+        subscription.setSubscriptionActivity(null);
+        ;
+        subscriptionService
+                .deleteSubscription(subscriptionService.addSubscription(subscription, memberId).getSubscriptionId());
     }
 
     @Test
-    public void retrieveAllSubscriptions() { assertNotNull(subscriptionService.retrieveAllSubscriptions()); }
+    public void retrieveAllSubscriptions() {
+        assertNotNull(subscriptionService.retrieveAllSubscriptions());
+    }
 
-     @Test
-    public void retrieveSubscription() 
-    { 
+    @Test
+    public void retrieveSubscription() {
         List<Member> members = memberService.retrieveAllMembers();
         List<Activity> activities = activityService.retrieveAllActivities();
         assertNotNull(members);
         assertNotNull(activities);
-        Subscription subscription = subscriptionService.addSubscription(new Subscription(null, 0, new Date(), null, activities.get(0), members.get(0)),  members.get(0).getUserId());
+        Subscription subscription = subscriptionService.addSubscription(
+                new Subscription(null, 0, new Date(), null, activities.get(0), members.get(0), null),
+                members.get(0).getUserId());
         assertNotNull(subscriptionService.retrieveSubscription(subscription.getSubscriptionId()));
         Long memberId = subscription.getSubscriptionId();
         subscription.setMember(null);
-        subscription.setSubscriptionActivity(null);;
-        subscriptionService.deleteSubscription(subscriptionService.addSubscription(subscription, memberId).getSubscriptionId());
+        subscription.setSubscriptionActivity(null);
+        ;
+        subscriptionService
+                .deleteSubscription(subscriptionService.addSubscription(subscription, memberId).getSubscriptionId());
     }
 
     @Test
-    public void updateSubscription()
-    {
+    public void updateSubscription() {
         List<Member> members = memberService.retrieveAllMembers();
         List<Activity> activities = activityService.retrieveAllActivities();
         assertNotNull(members);
         assertNotNull(activities);
-        Subscription subscription = subscriptionService.addSubscription(new Subscription(null, 0, new Date(), null, activities.get(0), members.get(0)),  members.get(0).getUserId());
+        Subscription subscription = subscriptionService.addSubscription(
+                new Subscription(null, 0, new Date(), null, activities.get(0), members.get(0), null),
+                members.get(0).getUserId());
         assertNotNull(subscription);
         Long memberId = subscription.getSubscriptionId();
-        subscription = subscriptionService.updateSubscription(subscription.getSubscriptionId(), memberId, new Subscription(null, 100, new Date(), null, activities.get(0), members.get(1)));
+        subscription = subscriptionService.updateSubscription(subscription.getSubscriptionId(), memberId,
+                new Subscription(null, 100, new Date(), null, activities.get(0), members.get(1), null));
         subscription.setMember(null);
-        subscription.setSubscriptionActivity(null);;
-        subscriptionService.deleteSubscription(subscriptionService.addSubscription(subscription, memberId).getSubscriptionId());
+        subscription.setSubscriptionActivity(null);
+        ;
+        subscriptionService
+                .deleteSubscription(subscriptionService.addSubscription(subscription, memberId).getSubscriptionId());
     }
 
     @Test
-    public void deleteSubscription()
-    {
+    public void deleteSubscription() {
         addSubscription();
     }
 }
