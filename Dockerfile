@@ -1,5 +1,6 @@
 # Get an image of jdk from docker hub
-FROM openjdk:8-jdk-alpine
+# FROM openjdk:8-jdk-alpine
+FROM eclipse-temurin:8-jdk-alpine
 
 #RUN mvn clean package -DskipTests
 
