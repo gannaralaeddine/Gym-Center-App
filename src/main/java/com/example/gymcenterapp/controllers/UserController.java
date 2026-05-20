@@ -70,13 +70,6 @@ public class UserController
     }
 
 
-// Manage roles
-    @PostMapping(value = "/add-role")
-    @ResponseBody
-    public Role addURole(@RequestBody Role role) {
-        return roleService.addRole(role);
-    }
-
     @GetMapping("/retrieve-all-roles")
     @ResponseBody
 //    @RolesAllowed({ "ROLE_ADMIN" })

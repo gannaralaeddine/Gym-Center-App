@@ -8,11 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.example.gymcenterapp.entities.Activity;
-import com.example.gymcenterapp.entities.Category;
 import com.example.gymcenterapp.entities.Offer;
 import com.example.gymcenterapp.entities.Option;
 import com.example.gymcenterapp.services.ActivityService;
-import com.example.gymcenterapp.services.CategoryService;
 import com.example.gymcenterapp.services.OfferService;
 import com.example.gymcenterapp.services.OptionService;
 

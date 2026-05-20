@@ -2,18 +2,13 @@ package com.example.gymcenterapp;
 
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
-import com.example.gymcenterapp.entities.Activity;
-import com.example.gymcenterapp.entities.Coach;
 import com.example.gymcenterapp.entities.ConfirmationToken;
 import com.example.gymcenterapp.entities.User;
 import com.example.gymcenterapp.services.ActivityService;
-import com.example.gymcenterapp.services.CoachService;
 import com.example.gymcenterapp.services.UserService;
 import com.example.gymcenterapp.repositories.ConfirmationTokenRepository;
 import com.example.gymcenterapp.repositories.UserRepository;

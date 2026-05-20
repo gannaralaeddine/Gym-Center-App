@@ -1,10 +1,7 @@
 package com.example.gymcenterapp;
 
-import static org.junit.Assert.assertNotNull;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.example.gymcenterapp.entities.Category;
 import com.example.gymcenterapp.services.CategoryService;
 
 

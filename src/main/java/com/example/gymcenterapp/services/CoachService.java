@@ -3,6 +3,7 @@ package com.example.gymcenterapp.services;
 import com.example.gymcenterapp.entities.*;
 import com.example.gymcenterapp.interfaces.ICoachService;
 import com.example.gymcenterapp.repositories.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Slf4j
 @Service
 public class CoachService implements ICoachService
 {
@@ -40,33 +42,29 @@ public class CoachService implements ICoachService
     @Override
     public ResponseEntity<String> registerCoach(Coach coach)
     {
+        System.out.println("number of coaches");
+        System.out.println(coachRepository.numberOfUsersByEmail(coach.getUserEmail()));
+
         if (coachRepository.numberOfUsersByEmail(coach.getUserEmail()) == 0)
         {
-            Set<Role> roles = new HashSet<>();
+            Role role = roleRepository.findByRoleName("COACH");
+
+            if(role == null) {
+                throw new RuntimeException("Role not found");
+            }
+            System.out.println("role id: " + role.getRoleId());
+            System.out.println("role name: " + role.getRoleName());
+
+            Set<Role> managedRoles = new HashSet<>();
+            managedRoles.add(role);
+            coach.setRoles(managedRoles);
 
             coach.setUserPassword(new BCryptPasswordEncoder().encode(coach.getUserPassword()));
 
-            coach.getRoles().forEach(role -> {
+            Coach savedCoach = coachRepository.save(coach);
+            System.out.println("getUserEmail: " + savedCoach.getUserEmail());
 
-                if (role.getRoleId() != null)
-                {
-                    Role newRole = roleRepository.findById(role.getRoleId()).orElse(null);
-
-                    assert newRole != null;
-                    newRole.getUsers().add(coach);
-
-                    roles.add(newRole);
-                }
-                else
-                {
-                    roles.add(role);
-                }
-            });
-            coach.setRoles(roles);
-
-            confirmationToken = emailService.sendConfirmationEmail(coach);
-
-            coachRepository.save(coach);
+            confirmationToken = emailService.sendConfirmationEmail(savedCoach);
 
             return ResponseEntity.status(HttpStatus.OK).body(Long.toString(confirmationToken.getTokenId()));
         }

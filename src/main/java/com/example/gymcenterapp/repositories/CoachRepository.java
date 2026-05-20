@@ -14,4 +14,5 @@ public interface CoachRepository extends JpaRepository<Coach, Long> {
     @Query("SELECT COUNT(*) FROM Coach user WHERE user.userEmail = :email ")
     int numberOfUsersByEmail(String email);
 
+
 }

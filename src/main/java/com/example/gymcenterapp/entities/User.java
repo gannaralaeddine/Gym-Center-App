@@ -73,7 +73,7 @@ public class User implements Serializable, UserDetails
     @Column(nullable = true)
     private boolean userIsEnabled;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE }, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
         joinColumns = {@JoinColumn (name = "fk_user_id", referencedColumnName = "user_id")},
             inverseJoinColumns = { @JoinColumn(name = "fk_role_id", referencedColumnName = "role_id") }

@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.example.gymcenterapp.entities.Activity;
-import com.example.gymcenterapp.entities.Category;
 import com.example.gymcenterapp.entities.Coach;
 import com.example.gymcenterapp.entities.Session;
 import com.example.gymcenterapp.services.ActivityService;

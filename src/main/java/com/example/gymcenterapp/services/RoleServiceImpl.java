@@ -12,10 +12,10 @@ public class RoleServiceImpl
 {
     private RoleRepository roleRepository;
 
-    public Role addRole(Role role)
-    {
-        return roleRepository.save(role);
-    }
+//    public Role addRole(Role role)
+//    {
+//        return roleRepository.save(role);
+//    }
 
     public List<Role> retrieveAllRoles()
     {

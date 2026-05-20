@@ -5,9 +5,11 @@ import com.example.gymcenterapp.services.UserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -34,6 +36,12 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter {
     UserService userService;
 
     JwtTokenFilter jwtTokenFilter;
+
+//    @Value("${app.ADMIN}")
+//    private String appADMIN;
+//
+//    @Value("${app.CLIENT}")
+//    private String appCLIENT;
 
     public static void main(String[] args) {
         SpringApplication.run(GymCenterAppApplication.class, args);
@@ -74,8 +82,12 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         http
+
+                .cors()
+                .and()
                 .csrf().disable()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                 .antMatchers("/auth/login").permitAll()
 
@@ -87,34 +99,35 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter {
                 .antMatchers("/notify").permitAll()
                 .antMatchers("/socket").permitAll()
 
-                .antMatchers("/users/*").permitAll()
-                .antMatchers("/categories/*").permitAll()
 
-                .antMatchers("/user/retrieve-all-users").permitAll()// .hasAnyRole("ADMIN")
-                .antMatchers("/user/register-user").permitAll()
-                .antMatchers("/user/add-role").permitAll()
-                .antMatchers("/user/number-of-users").permitAll()
+
+                .antMatchers("/user/retrieve-all-users").hasAnyRole("ADMIN", "SUPER_ADMIN")
+                .antMatchers("/user/register-user").authenticated()
+//                .antMatchers("/user/add-role").
+                .antMatchers("/user/number-of-users").hasAnyRole("ADMIN")
                 .antMatchers("/user/retrieve-all-roles").permitAll()
-                .antMatchers("/user/retrieve-user-by-email/{email}").permitAll()
-                .antMatchers("/user/retrieve-user/{user-id}").permitAll()
-                .antMatchers("/user/update-profile-picture").permitAll()
-                .antMatchers("/user/update-user").permitAll()
-                .antMatchers("/user/add-images-to-user").permitAll()
-                .antMatchers("/user/delete-user-image/{userId}/{imageName}").permitAll()
+                .antMatchers("/user/retrieve-user-by-email/**").permitAll()
+                 .antMatchers("/user/retrieve-user/{user-id}").permitAll()
+                .antMatchers("/user/update-profile-picture").authenticated()
+                .antMatchers("/user/update-user").authenticated()
+                .antMatchers("/user/add-images-to-user").authenticated()
+                .antMatchers("/user/delete-user-image/{userId}/{imageName}").authenticated()
+                .antMatchers("/user/delete-user/{userId}").hasAnyRole("SUPER_ADMIN")
+
                 .antMatchers("/user/confirm-account").permitAll()
                 .antMatchers("/user/send-contact-us-email").permitAll()
                 .antMatchers("/user/send-verification-code/{email}").permitAll()
                 .antMatchers("/user/check-verification-code/{code}").permitAll()
                 .antMatchers("/user/change-password/{email}/{password}").permitAll()
-                .antMatchers("/user/delete-user/{userId}").permitAll()
 
-                .antMatchers("/category/add-category").permitAll()
+
+                .antMatchers("/category/add-category").hasAnyRole("ADMIN")
                 .antMatchers("/category/update-category").permitAll()
                 .antMatchers("/category/update-category/{id}").permitAll()
                 .antMatchers("/category/delete-category/{id}").permitAll()
                 .antMatchers("/category/retrieve-category/{id}").permitAll()
                 .antMatchers("/category/retrieve-all-categories").permitAll()
-                .antMatchers("/category/create-category").permitAll()
+                .antMatchers("/category/create-category").hasAnyRole("ADMIN")
                 .antMatchers("/category/add-images-to-category").permitAll()
                 .antMatchers("/category/retrieve-category-activities/{id}").permitAll()
 
@@ -135,7 +148,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/member/register-member").permitAll()
                 .antMatchers("/member/update-member/{member-id}").permitAll()
-                .antMatchers("/member/delete-member/{member-id}").permitAll()
+                .antMatchers("/member/delete-member/{member-id}").authenticated()
                 .antMatchers("/member/retrieve-member/{email}").permitAll()
                 .antMatchers("/member/retrieve-all-members").permitAll()
                 .antMatchers("/member/retrieve-member-sessions/{email}").permitAll()
@@ -213,7 +226,12 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter {
                 .antMatchers("/training-history/retrieve-history/{id}").permitAll()
                 .antMatchers("/training-history/retrieve-distinct-users").permitAll()
 
-                .anyRequest().authenticated().and().httpBasic();
+                .anyRequest().authenticated();
+
+        http.addFilterBefore(
+                jwtTokenFilter,
+                UsernamePasswordAuthenticationFilter.class
+        );
     }
 
     @Bean

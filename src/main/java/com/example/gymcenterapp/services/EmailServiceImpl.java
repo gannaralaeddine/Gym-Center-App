@@ -13,8 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 @Service
 public class EmailServiceImpl
@@ -25,6 +29,8 @@ public class EmailServiceImpl
     @Value("${app.API}")
     private String appAPI;
     private JavaMailSender javaMailSender;
+    @Autowired
+    private JavaMailSender mailSender;
     private ConfirmationTokenRepository confirmationTokenRepository;
 
     public EmailServiceImpl(ConfirmationTokenRepository confirmationTokenRepository) {
@@ -42,46 +48,75 @@ public class EmailServiceImpl
     }
 
 
-    public ConfirmationToken sendConfirmationEmail(User user)
-    {
+    public ConfirmationToken sendConfirmationEmail(User user) {
         ConfirmationToken confirmationToken = new ConfirmationToken(user);
+        String confirmationLink = appAPI + "/gym-center/user/confirm-account?token=" + confirmationToken.getConfirmationToken();
 
-        SimpleMailMessage RegistrationConfirmation = new SimpleMailMessage();
-        RegistrationConfirmation.setTo(user.getUserEmail());
-        RegistrationConfirmation.setSubject("Votre compte est prêt");
-        RegistrationConfirmation.setFrom(appEmail);
-        RegistrationConfirmation.setText("Votre compte a été créé avec succès !");
-        sendEmail(RegistrationConfirmation);
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            String htmlContent = buildHtmlEmail(user, confirmationLink);
 
 
-        SimpleMailMessage accountValidation = new SimpleMailMessage();
-        accountValidation.setTo(user.getUserEmail());
-        accountValidation.setSubject("Confirmer votre inscription");
-        accountValidation.setFrom(appEmail);
+            helper.setTo(user.getUserEmail());
+            helper.setSubject("Confirmez votre compte - Gym Center");
+            helper.setText(htmlContent, true);   // true = HTML
 
-        accountValidation.setText(
-                "Hey " + user.getUserFirstName() + " " + user.getUserLastName() +
-                        "\n" +
-                        "Merci d’avoir choisi Gym Center, Pour assurer le plus haut niveau de sécurité et de confiance, nous avons besoin d’un processus de vérification d’identité unique. Cette étape aide à vous protéger, vous et notre communauté, contre les accès non autorisés et les activités frauduleuses.\n" +
-                        "Nous comprenons la sensibilité de vos informations, c’est pourquoi notre processus de vérification d’identité est conçu pour être sécurisé et confidentiel.\n" +
-                        "\n" +
-                        "Pour valider votre compte, veuillez cliquer sur le lien ci-dessous:\n" +
-                        appAPI + "/gym-center/user/confirm-account?token=" + confirmationToken.getConfirmationToken() +
-                        "\n" +
-                        "\n" +
-                        "Une fois votre identité vérifiée, vous aurez accès à toutes les fonctionnalités de la plateforme Gym Center, tout en contribuant à un environnement numérique plus sûr pour tous les utilisateurs.\n" +
-                        "\n" +
-                        "Si vous avez des questions ou avez besoin d’aide pendant ce processus, notre équipe d’assistance est là pour vous aider. Contactez-nous à gannarala@gmail.com ou au +216 25 944 019.\n" +
-                        "\n" +
-                        "Cordialement,\n" +
-                        "Gym Center"
-        );
-        sendEmail(accountValidation);
+            mailSender.send(message);
+        }
+        catch (MessagingException e)
+        {
+            throw new RuntimeException("Failed to send email", e);
+        }
+
 
         System.out.println("Registration successful !");
 
         return confirmationTokenRepository.save(confirmationToken);
     }
+
+    private String buildHtmlEmail(User user, String confirmationLink) {
+        return "<!DOCTYPE html>" +
+                "<html>" +
+                "<head>" +
+                "    <meta charset=\"UTF-8\">" +
+                "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" +
+                "    <title>Confirmez votre compte</title>" +
+                "    <style>" +
+                "        body {font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;}" +
+                "        .container {max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);}" +
+                "        .header {background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white; padding: 30px; text-align: center;}" +
+                "        .content {padding: 40px; color: #333333; line-height: 1.7;}" +
+                "        .button {display: inline-block; background-color: #2563eb; color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 25px 0; font-size: 16px;}" +
+                "        .footer {background-color: #f8fafc; padding: 25px; text-align: center; color: #64748b; font-size: 14px; border-top: 1px solid #e2e8f0;}" +
+                "        .highlight {color: #1e40af; font-weight: 600;}" +
+                "    </style>" +
+                "</head>" +
+                "<body>" +
+                "    <div class=\"container\">" +
+                "        <div class=\"header\">" +
+                "            <h1>Gym Center</h1>" +
+                "        </div>" +
+                "        <div class=\"content\">" +
+                "            <p style=\"font-size: 18px;\">Bonjour <strong>" + user.getUserFirstName() + " " + user.getUserLastName() + "</strong>,</p>" +
+                "            <p>Merci d’avoir choisi <span class=\"highlight\">Gym Center</span> !</p>" +
+                "            <p>Pour assurer le plus haut niveau de sécurité, nous devons vérifier votre identité.</p>" +
+                "            <p style=\"text-align: center; margin: 35px 0;\">" +
+                "                <a href=\"" + confirmationLink + "\" class=\"button\">VÉRIFIER MON COMPTE</a>" +
+                "            </p>" +
+                "            <p>Une fois vérifié, vous aurez accès à toutes les fonctionnalités.</p>" +
+                "            <p>Si vous avez besoin d’aide, contactez-nous :</p>" +
+                "            <p>📧 gannarala@gmail.com<br>📞 +216 25 944 019</p>" +
+                "        </div>" +
+                "        <div class=\"footer\">" +
+                "            <p><strong>Cordialement,<br>L'équipe Gym Center</strong></p>" +
+                "        </div>" +
+                "    </div>" +
+                "</body>" +
+                "</html>";
+    }
+
 
     public void sendCoachBookingNotificationEmail(PrivateSession privateSession)
     {
@@ -92,7 +127,7 @@ public class EmailServiceImpl
         coachBookingNotification.setSubject("Réservation Privée de Coach par un Membre");
         coachBookingNotification.setFrom(appEmail);
         coachBookingNotification.setText(
-            "Bonjour Coach " + coach.getUserFirstName() + " " + coach.getUserLastName() + ",\n\n"
+            "Bonjour " + coach.getUserFirstName() + " " + coach.getUserLastName() + ",\n\n"
             + "J'espère que vous allez bien.\n\n"
             + "Je vous écris pour vous informer qu'un de nos membres a réservé vos services pour une séance privée. Voici les détails de la réservation :\n\n"
             + "Nom du membre: " + member.getUserFirstName() + " " + member.getUserLastName() + "\n"

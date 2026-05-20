@@ -30,33 +30,53 @@ public class MemberService implements IMemberService
 
         if (memberRepository.numberOfUsersByEmail(member.getUserEmail()) == 0)
         {
-            Set<Role> roles = new HashSet<>();
-
             member.setUserPassword(new BCryptPasswordEncoder().encode(member.getUserPassword()));
+            member.setRoles(resolveRoles(member.getRoles()));
 
-            member.getRoles().forEach(role -> {
+            Member savedMember = memberRepository.save(member);
+            ConfirmationToken confirmationToken = emailService.sendConfirmationEmail(savedMember);
 
-                if (role.getRoleId() != null)
-                {
-                    Role newRole = roleRepository.findById(role.getRoleId()).orElse(null);
-
-                    assert newRole != null;
-                    newRole.getUsers().add(member);
-
-                    roles.add(newRole);
-                }
-                else
-                {
-                    roles.add(role);
-                }
-            });
-            member.setRoles(roles);
-            ConfirmationToken confirmationToken = emailService.sendConfirmationEmail(member);
-            memberRepository.save(member);
-            
             return ResponseEntity.status(HttpStatus.OK).body(Long.toString(confirmationToken.getTokenId()));
         }
         return ResponseEntity.status(HttpStatus.FOUND).body("User already exist! please try with another email !");
+    }
+
+    private Set<Role> resolveRoles(Set<Role> requestedRoles)
+    {
+        Set<Role> roles = new HashSet<>();
+
+        if (requestedRoles == null || requestedRoles.isEmpty())
+        {
+            Role memberRole = roleRepository.findByRoleName("MEMBER");
+            if (memberRole == null)
+            {
+                throw new RuntimeException("Role MEMBER not found");
+            }
+            roles.add(memberRole);
+            return roles;
+        }
+
+        for (Role role : requestedRoles)
+        {
+            Role managedRole = null;
+
+            if (role.getRoleId() != null)
+            {
+                managedRole = roleRepository.findById(role.getRoleId()).orElse(null);
+            }
+            else if (role.getRoleName() != null)
+            {
+                managedRole = roleRepository.findByRoleName(role.getRoleName());
+            }
+
+            if (managedRole == null)
+            {
+                throw new RuntimeException("Role not found");
+            }
+            roles.add(managedRole);
+        }
+
+        return roles;
     }
 
     @Override
