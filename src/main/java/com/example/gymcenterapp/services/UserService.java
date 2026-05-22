@@ -352,8 +352,8 @@ public class UserService implements IUserService, UserDetailsService
     {
         User user = userRepository.findById(id).orElse(null);
         List<ConfirmationToken> confirmationTokenList = confirmationTokenRepository.findAll();
-        Boolean isFound = false;
-        Integer i = 0;
+        boolean isFound = false;
+        int i = 0;
 
         while (!isFound && i < confirmationTokenList.size() - 1)
         {

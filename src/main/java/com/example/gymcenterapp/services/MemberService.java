@@ -92,8 +92,8 @@ public class MemberService implements IMemberService
     {
         Member member = memberRepository.findById(id).orElse(null);
         List<ConfirmationToken> confirmationTokenList = confirmationTokenRepository.findAll();
-        Boolean isFound = false;
-        Integer i = 0;
+        boolean isFound = false;
+        int i = 0;
 
         if (member != null)
         {

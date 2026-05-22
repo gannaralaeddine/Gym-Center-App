@@ -5,7 +5,6 @@ import com.example.gymcenterapp.services.UserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +31,6 @@ import java.util.Arrays;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = false, jsr250Enabled = true)
 @SpringBootApplication // (exclude = { SecurityAutoConfiguration.class })
 public class GymCenterAppApplication extends WebSecurityConfigurerAdapter {
-    private static final Logger logger = LoggerFactory.getLogger(GymCenterAppApplication.class);
     UserService userService;
 
     JwtTokenFilter jwtTokenFilter;

@@ -37,8 +37,6 @@ public class CoachService implements ICoachService
     @Autowired
     private ConfirmationTokenRepository confirmationTokenRepository;
 
-    private ConfirmationToken confirmationToken = new ConfirmationToken();
-
 
     @Override
     public ResponseEntity<String> registerCoach(Coach coach)
@@ -65,7 +63,7 @@ public class CoachService implements ICoachService
             Coach savedCoach = coachRepository.save(coach);
             System.out.println("getUserEmail: " + savedCoach.getUserEmail());
 
-            confirmationToken = emailService.sendAccountVerificationEmail(savedCoach);
+            ConfirmationToken confirmationToken = emailService.sendAccountVerificationEmail(savedCoach);
 
             return ResponseEntity.status(HttpStatus.OK).body(Long.toString(confirmationToken.getTokenId()));
         }
@@ -86,8 +84,8 @@ public class CoachService implements ICoachService
     { 
         Coach coach = coachRepository.findById(id).orElse(null);
         List<ConfirmationToken> confirmationTokenList = confirmationTokenRepository.findAll();
-        Boolean isFound = false;
-        Integer i = 0;
+        boolean isFound = false;
+        int i = 0;
 
         if (coach != null)
         {
