@@ -32,7 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 
-src/main/resources/activities
-src/main/resources/categories
-src/main/resources/sessions
-src/main/resources/users
+src/main/resources/static
