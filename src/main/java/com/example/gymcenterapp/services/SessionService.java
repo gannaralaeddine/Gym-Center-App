@@ -1,5 +1,6 @@
 package com.example.gymcenterapp.services;
 
+import com.example.gymcenterapp.email.service.EmailService;
 import com.example.gymcenterapp.entities.*;
 import com.example.gymcenterapp.interfaces.ISessionService;
 import com.example.gymcenterapp.repositories.ImageModelRepository;
@@ -26,7 +27,7 @@ public class SessionService implements ISessionService
     private String directory;
 
     private final SessionRepository sessionRepository;
-    private final EmailServiceImpl emailService;
+    private final EmailService emailService;
     private final ImageModelService imageModelService;
     private final ImageModelRepository imageModelRepository;
     private final MemberRepository memberRepository;

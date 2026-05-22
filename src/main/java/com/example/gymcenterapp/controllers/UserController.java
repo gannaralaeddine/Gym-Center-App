@@ -112,9 +112,12 @@ public class UserController
 
 // Confirm account
 //----------------------------------------------------------------------------------------------------------------------
-    @RequestMapping("/confirm-account")
-    public String confirmUserAccountCompany(@RequestParam("token")String confirmationToken) {
-        return userService.confirmUserAccount(confirmationToken);
+    @RequestMapping(value = "/confirm-account", produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity<?> confirmUserAccountCompany(
+            @RequestParam("token") String confirmationToken,
+            @RequestParam(value = "redirect", defaultValue = "false") boolean immediateRedirect)
+    {
+        return userService.confirmUserAccount(confirmationToken, immediateRedirect);
     }
 
     @PostMapping(value = "/send-contact-us-email")

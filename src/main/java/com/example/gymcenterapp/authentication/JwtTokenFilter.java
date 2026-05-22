@@ -25,10 +25,14 @@ public class JwtTokenFilter extends OncePerRequestFilter
     JwtTokenUtils jwtTokenUtils;
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request)
+    {
+        return request.getRequestURI().endsWith("/auth/login");
+    }
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException
     {
-
-
         if (!hasAuthorizationHeader(request))
         {
             filterChain.doFilter(request, response);

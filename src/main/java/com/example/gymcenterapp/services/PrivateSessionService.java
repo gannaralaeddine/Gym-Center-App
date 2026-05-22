@@ -1,5 +1,6 @@
 package com.example.gymcenterapp.services;
 
+import com.example.gymcenterapp.email.service.EmailService;
 import com.example.gymcenterapp.entities.Member;
 import com.example.gymcenterapp.entities.PrivateSession;
 import com.example.gymcenterapp.repositories.MemberRepository;
@@ -20,7 +21,7 @@ public class PrivateSessionService
 {
     private PrivateSessionRepository privateSessionRepository;
     private MemberRepository memberRepository;
-    private EmailServiceImpl emailServiceImpl;
+    private EmailService emailService;
 
     public PrivateSession addPrivateSession(PrivateSession privateSession)
     {
@@ -52,7 +53,7 @@ public class PrivateSessionService
 
         if (privateSession != null && member != null)
         {
-            emailServiceImpl.sendCancelPrivateSessionEmail(privateSession);
+            emailService.sendCancelPrivateSessionEmail(privateSession);
             privateSession.setPrivateSessionMember(null);
             privateSession.setPrivateSessionIsReserved(false);
             member.setPrivateSessionsNumber(member.getPrivateSessionsNumber() + 1);

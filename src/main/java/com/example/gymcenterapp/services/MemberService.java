@@ -2,6 +2,7 @@ package com.example.gymcenterapp.services;
 
 import com.example.gymcenterapp.entities.*;
 import com.example.gymcenterapp.interfaces.IMemberService;
+import com.example.gymcenterapp.email.service.EmailService;
 import com.example.gymcenterapp.repositories.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,12 +19,11 @@ public class MemberService implements IMemberService
 { 
     private MemberRepository memberRepository;
     private RoleRepository roleRepository;
-    private EmailServiceImpl emailService;
+    private EmailService emailService;
     private CoachRepository coachRepository;
     private NotificationMemberCoachRepository notificationRepository;
     private PrivateSessionRepository privateSessionRepository;
     private ConfirmationTokenRepository confirmationTokenRepository;
-    private EmailServiceImpl emailServiceImpl;
 
     @Override
     public ResponseEntity<String> registerMember(Member member) {
@@ -34,7 +34,7 @@ public class MemberService implements IMemberService
             member.setRoles(resolveRoles(member.getRoles()));
 
             Member savedMember = memberRepository.save(member);
-            ConfirmationToken confirmationToken = emailService.sendConfirmationEmail(savedMember);
+            ConfirmationToken confirmationToken = emailService.sendAccountVerificationEmail(savedMember);
 
             return ResponseEntity.status(HttpStatus.OK).body(Long.toString(confirmationToken.getTokenId()));
         }
@@ -251,7 +251,7 @@ public class MemberService implements IMemberService
                 member.setPrivateSessionsNumber(member.getPrivateSessionsNumber() - 1);
                 memberRepository.save(member);
             }
-            emailServiceImpl.sendCoachBookingNotificationEmail(privateSession);
+            emailService.sendCoachBookingNotificationEmail(privateSession);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

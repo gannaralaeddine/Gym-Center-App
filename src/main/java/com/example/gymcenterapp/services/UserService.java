@@ -1,5 +1,7 @@
 package com.example.gymcenterapp.services;
 
+import com.example.gymcenterapp.email.config.AppEmailProperties;
+import com.example.gymcenterapp.email.service.EmailService;
 import com.example.gymcenterapp.entities.*;
 import com.example.gymcenterapp.interfaces.IUserService;
 import com.example.gymcenterapp.repositories.ConfirmationTokenRepository;
@@ -27,25 +29,35 @@ public class UserService implements IUserService, UserDetailsService
     @Value("${image.storage.path}")
     private String directory;
 
-    @Value("${app.email}")
-    private String appEmail;
-
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final ImageModelService imageModelService;
     private final ImageModelRepository imageModelRepository;
     private final ConfirmationTokenRepository confirmationTokenRepository;
-    private final EmailServiceImpl emailService;
+    private final EmailService emailService;
+    private final AppEmailProperties emailProperties;
+    private final AccountVerificationService accountVerificationService;
 
     private int verificationCode;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, ImageModelService imageModelService, ImageModelRepository imageModelRepository, ConfirmationTokenRepository confirmationTokenRepository, EmailServiceImpl emailService) {
+    public UserService(
+            UserRepository userRepository,
+            RoleRepository roleRepository,
+            ImageModelService imageModelService,
+            ImageModelRepository imageModelRepository,
+            ConfirmationTokenRepository confirmationTokenRepository,
+            EmailService emailService,
+            AppEmailProperties emailProperties,
+            AccountVerificationService accountVerificationService)
+    {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.imageModelService = imageModelService;
         this.imageModelRepository = imageModelRepository;
         this.confirmationTokenRepository = confirmationTokenRepository;
         this.emailService = emailService;
+        this.emailProperties = emailProperties;
+        this.accountVerificationService = accountVerificationService;
     }
 
     @Override
@@ -72,7 +84,7 @@ public class UserService implements IUserService, UserDetailsService
                 }
             });
             user.setRoles(roles);
-            ConfirmationToken confirmationToken = emailService.sendConfirmationEmail(user);
+            ConfirmationToken confirmationToken = emailService.sendAccountVerificationEmail(user);
             userRepository.save(user);
 
             return ResponseEntity.status(HttpStatus.OK).body(Long.toString(confirmationToken.getTokenId()));
@@ -271,27 +283,16 @@ public class UserService implements IUserService, UserDetailsService
     }
 
 
-    public String confirmUserAccount(String confirmationToken)
+    public ResponseEntity<?> confirmUserAccount(String confirmationToken, boolean immediateRedirect)
     {
-        ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
-        if(token != null)
-        {
-            User user = userRepository.findByEmail(token.getUser().getUserEmail());
-            user.setUserIsEnabled(true);
-            userRepository.save(user);
-            return "<h1>Account Verified successfully</h1>";
-        }
-        else
-        {
-            return "<h1>Invalid token!</h1>";
-        }
+        return accountVerificationService.confirmAccount(confirmationToken, immediateRedirect);
     }
 
 
     public void sendContactUsEmail(EmailModel email)
     {
         SimpleMailMessage contactUs = new SimpleMailMessage();
-        contactUs.setTo(appEmail);
+        contactUs.setTo(emailProperties.getSupport());
         contactUs.setSubject(email.getSubject());
         contactUs.setFrom(email.getSenderEmail());
         contactUs.setText(email.getText() + "\n\n" + email.getSenderName());
@@ -300,23 +301,23 @@ public class UserService implements IUserService, UserDetailsService
 
     public void sendVerificationCode(String email)
     {
-        System.out.println("________________________________________________");
-        System.out.println(email);
-        int code = new Random().nextInt(999999-100000)+100000;
-        System.out.println("random: " + code);
-
+        int code = new Random().nextInt(999999 - 100000) + 100000;
         verificationCode = code;
 
-        SimpleMailMessage forgotPassword = new SimpleMailMessage();
-        forgotPassword.setTo(email);
-        forgotPassword.setSubject("Gym Center App Récupérer votre mot de passe");
-        forgotPassword.setFrom(appEmail);
-        forgotPassword.setText("Salut,\n\n" +
-                "Vous avez oublié votre mot de passe ?\n" +
-                "Vous pouvez utiliser ce code pour récupérer votre compte: " + code + "\n" +
-                "Si vous ne souhaitez pas modifier votre mot de passe ou si vous ne l’avez pas demandé, veuillez ignorer et supprimer ce message.\n\n" +
-                "Cordialement,");
-        emailService.sendEmail(forgotPassword);
+        User user = userRepository.findByEmail(email);
+        String recipientName = "Utilisateur";
+        if (user != null)
+        {
+            String firstName = user.getUserFirstName() == null ? "" : user.getUserFirstName().trim();
+            String lastName = user.getUserLastName() == null ? "" : user.getUserLastName().trim();
+            String fullName = (firstName + " " + lastName).trim();
+            if (!fullName.isEmpty())
+            {
+                recipientName = fullName;
+            }
+        }
+
+        emailService.sendPasswordResetEmail(email, recipientName, code);
     }
 
     public ResponseEntity<String> checkVerificationCode(int code)

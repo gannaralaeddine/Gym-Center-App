@@ -1,5 +1,6 @@
 package com.example.gymcenterapp.services;
 
+import com.example.gymcenterapp.email.service.EmailService;
 import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Member;
 import com.example.gymcenterapp.entities.Subscription;
@@ -18,8 +19,7 @@ public class SubscriptionService implements ISubscriptionService {
     SubscriptionRepository subscriptionRepository;
     MemberRepository memberRepository;
     ActivityRepository activityRepository;
-    MemberService memberService;
-    EmailServiceImpl emailService;
+    EmailService emailService;
 
     @Override
     public Subscription addSubscription(Subscription subscription, Long memberId) {

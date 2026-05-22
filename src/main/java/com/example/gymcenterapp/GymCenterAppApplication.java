@@ -79,17 +79,16 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, exception.getMessage());
         });
 
-        http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-
         http
-
                 .cors()
                 .and()
                 .csrf().disable()
+                .formLogin().disable()
+                .httpBasic().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                .antMatchers("/auth/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
 
                 .antMatchers("/public/**").permitAll()
                 .antMatchers("static/**").permitAll()
@@ -107,7 +106,7 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/number-of-users").hasAnyRole("ADMIN")
                 .antMatchers("/user/retrieve-all-roles").permitAll()
                 .antMatchers("/user/retrieve-user-by-email/**").permitAll()
-                 .antMatchers("/user/retrieve-user/{user-id}").permitAll()
+                .antMatchers("/user/retrieve-user/{user-id}").permitAll()
                 .antMatchers("/user/update-profile-picture").authenticated()
                 .antMatchers("/user/update-user").authenticated()
                 .antMatchers("/user/add-images-to-user").authenticated()
@@ -226,12 +225,9 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter {
                 .antMatchers("/training-history/retrieve-history/{id}").permitAll()
                 .antMatchers("/training-history/retrieve-distinct-users").permitAll()
 
-                .anyRequest().authenticated();
-
-        http.addFilterBefore(
-                jwtTokenFilter,
-                UsernamePasswordAuthenticationFilter.class
-        );
+                .anyRequest().authenticated()
+                .and()
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean

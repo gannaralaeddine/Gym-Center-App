@@ -1,5 +1,6 @@
 package com.example.gymcenterapp.services;
 
+import com.example.gymcenterapp.email.service.EmailService;
 import com.example.gymcenterapp.entities.*;
 import com.example.gymcenterapp.interfaces.ICoachService;
 import com.example.gymcenterapp.repositories.*;
@@ -31,7 +32,7 @@ public class CoachService implements ICoachService
     private ActivityRepository activityRepository;
 
     @Autowired
-    private EmailServiceImpl emailService;
+    private EmailService emailService;
 
     @Autowired
     private ConfirmationTokenRepository confirmationTokenRepository;
@@ -64,7 +65,7 @@ public class CoachService implements ICoachService
             Coach savedCoach = coachRepository.save(coach);
             System.out.println("getUserEmail: " + savedCoach.getUserEmail());
 
-            confirmationToken = emailService.sendConfirmationEmail(savedCoach);
+            confirmationToken = emailService.sendAccountVerificationEmail(savedCoach);
 
             return ResponseEntity.status(HttpStatus.OK).body(Long.toString(confirmationToken.getTokenId()));
         }
