@@ -1,14 +1,13 @@
 package com.example.gymcenterapp;
 
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import com.example.gymcenterapp.entities.ConfirmationToken;
 import com.example.gymcenterapp.entities.User;
-import com.example.gymcenterapp.services.ActivityService;
 import com.example.gymcenterapp.services.UserService;
 import com.example.gymcenterapp.repositories.ConfirmationTokenRepository;
 import com.example.gymcenterapp.repositories.UserRepository;
@@ -21,9 +20,6 @@ class UserServiceTest
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private ActivityService activityService;
 
     @Autowired
     private ConfirmationTokenRepository confirmationTokenRepository;
@@ -82,7 +78,7 @@ class UserServiceTest
         ResponseEntity<String> confirmationTokResponseEntity = userService.addUser(user);
         ConfirmationToken confirmationToken = confirmationTokenRepository.findById(Long.valueOf(confirmationTokResponseEntity.getBody())).orElse(null);
         assertNotNull(confirmationToken);
-        assertNotEquals("<h1>Invalid token!</h1>",userService.confirmUserAccount(confirmationToken.getConfirmationToken()));
+        assertNotEquals("<h1>Invalid token!</h1>", userService.confirmUserAccount(confirmationToken.getConfirmationToken(), false).getBody());
         confirmationTokenRepository.deleteById(confirmationToken.getTokenId());
     }
 

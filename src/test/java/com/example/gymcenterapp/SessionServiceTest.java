@@ -1,6 +1,6 @@
 package com.example.gymcenterapp;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Date;
 import java.util.List;
@@ -12,7 +12,6 @@ import com.example.gymcenterapp.entities.Activity;
 import com.example.gymcenterapp.entities.Coach;
 import com.example.gymcenterapp.entities.Session;
 import com.example.gymcenterapp.services.ActivityService;
-import com.example.gymcenterapp.services.CategoryService;
 import com.example.gymcenterapp.services.CoachService;
 import com.example.gymcenterapp.services.SessionService;
 
@@ -26,9 +25,6 @@ class SessionServiceTest
 
     @Autowired
     private ActivityService activityService;
-
-    @Autowired
-    private CategoryService categoryService;
 
     @Autowired
     private CoachService coachService;

@@ -1,15 +1,11 @@
 package com.example.gymcenterapp;
 
-import static org.junit.Assert.assertNotNull;
-
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.example.gymcenterapp.entities.Option;
-import com.example.gymcenterapp.services.ActivityService;
-import com.example.gymcenterapp.services.CategoryService;
-import com.example.gymcenterapp.services.OfferService;
 import com.example.gymcenterapp.services.OptionService;
 
 
@@ -17,16 +13,7 @@ import com.example.gymcenterapp.services.OptionService;
 class OptionServiceTest
 {
     @Autowired
-    private ActivityService activityService;
-
-    @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
     private OptionService optionService;
-
-    @Autowired
-    private OfferService offerService;
 
     @Test
     void addOption()

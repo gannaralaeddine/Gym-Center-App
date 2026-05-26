@@ -3,8 +3,6 @@ package com.example.gymcenterapp;
 import com.example.gymcenterapp.authentication.JwtTokenFilter;
 import com.example.gymcenterapp.services.UserService;
 import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -28,7 +26,7 @@ import java.util.Arrays;
 
 @EnableWebSecurity
 @AllArgsConstructor
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = false, jsr250Enabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true)
 @SpringBootApplication // (exclude = { SecurityAutoConfiguration.class })
 public class GymCenterAppApplication extends WebSecurityConfigurerAdapter {
     UserService userService;

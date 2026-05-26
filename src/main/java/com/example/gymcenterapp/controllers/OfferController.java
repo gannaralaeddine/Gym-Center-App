@@ -1,13 +1,11 @@
 package com.example.gymcenterapp.controllers;
 
-import com.example.gymcenterapp.entities.Member;
 import com.example.gymcenterapp.entities.Offer;
 import com.example.gymcenterapp.repositories.OfferRepository;
 import com.example.gymcenterapp.services.OfferService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Set;
 
 
 @RestController
@@ -17,7 +15,6 @@ import java.util.Set;
 public class OfferController
 {
     OfferService offerService;
-    OfferRepository offerRepository;
 
     @GetMapping("/retrieve-all-offers")
     @ResponseBody

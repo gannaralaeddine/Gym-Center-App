@@ -1,8 +1,11 @@
 package com.example.gymcenterapp;
 
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.example.gymcenterapp.services.CategoryService;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 @SpringBootTest
@@ -11,6 +14,10 @@ class CategoryServiceTest
     @Autowired
     private CategoryService categoryService;
 
+    @Test
+    void retrieveAllCategories() {
+        assertNotNull(categoryService.retrieveAllCategories());
+    }
 
 //    @Test
 //    public void addCategory()
