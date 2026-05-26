@@ -1,5 +1,6 @@
 package com.example.gymcenterapp.controllers;
 
+import com.example.gymcenterapp.entities.Member;
 import com.example.gymcenterapp.entities.Subscription;
 import com.example.gymcenterapp.services.SubscriptionService;
 import lombok.AllArgsConstructor;
@@ -47,4 +48,18 @@ public class SubscriptionController
 //    {
 //        subscriptionService.addMemberToSubscription(subscriptionId, memberId);
 //    }
+
+    @PostMapping(value = "/create/{member-id}/{offer-id}")
+    @ResponseBody
+    public Subscription createSubscription(@PathVariable("member-id") Long memberId,  @PathVariable("offer-id") Long offerId)
+    {
+        return subscriptionService.createSubscription( memberId,  offerId);
+    }
+
+    @GetMapping("/available-members/{offerId}")
+    public List<Member> getAvailableMembers( @PathVariable Long offerId )
+    {
+        return subscriptionService.getAvailableMembersForOffer(offerId);
+    }
+
 }

@@ -1,11 +1,13 @@
 package com.example.gymcenterapp.controllers;
 
+import com.example.gymcenterapp.entities.Member;
 import com.example.gymcenterapp.entities.Offer;
 import com.example.gymcenterapp.repositories.OfferRepository;
 import com.example.gymcenterapp.services.OfferService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Set;
 
 
 @RestController
@@ -37,4 +39,9 @@ public class OfferController
 
     @DeleteMapping(value = "/delete-offer/{offer-id}")
     public void deleteOffer(@PathVariable("offer-id") Long offerId) { offerService.deleteOffer(offerId); }
+
+
+//    @GetMapping("/retrieve-offer-members")
+//    @ResponseBody
+//    public Set<Member> getOfferMembers(Offer offer) { return offerService.getOfferMembers(offer); }
 }

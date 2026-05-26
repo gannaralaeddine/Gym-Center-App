@@ -1,9 +1,11 @@
 package com.example.gymcenterapp.entities;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,10 +25,9 @@ public class Member extends User
     @ElementCollection
     private List<MyGrantedAuthority> authorities;
 
+    @OneToMany(mappedBy = "member")
     @JsonIgnore
-    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
-    private Set<Subscription> memberSubscriptions;
-
+    private List<Subscription> memberSubscriptions = new ArrayList<>();
 
     @ManyToMany
     @JsonIgnore
@@ -48,4 +49,6 @@ public class Member extends User
     @OneToMany(mappedBy = "privateSessionMember", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private Set<PrivateSession> memberPrivateSessions;
+
+
 }

@@ -1,11 +1,14 @@
 package com.example.gymcenterapp.entities;
 
+import com.example.gymcenterapp.enumerated.SubscriptionStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @NoArgsConstructor
@@ -23,13 +26,16 @@ public class Subscription implements Serializable {
     private Long subscriptionId;
 
     @JoinColumn(name = "subscription_price")
-    private float subscriptionPrice;
+    private Double subscriptionPrice;
 
     @JoinColumn(name = "subscription_start_date")
-    private Date subscriptionStartDate;
+    private LocalDateTime subscriptionStartDate;
 
     @JoinColumn(name = "subscription_end_date")
-    private Date subscriptionEndDate;
+    private LocalDateTime subscriptionEndDate;
+
+    @Enumerated(EnumType.STRING)
+    private SubscriptionStatus status;
 
     @ManyToOne
     @JoinColumn(name = "activity_id", referencedColumnName = "actId")
@@ -39,7 +45,8 @@ public class Subscription implements Serializable {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "offer_id")
+    @JsonIgnore
     private Offer subscriptionOffer;
 }

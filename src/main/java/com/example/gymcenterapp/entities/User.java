@@ -81,7 +81,7 @@ public class User implements Serializable, UserDetails
     private Set<Role> roles = new HashSet<>();
 
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "user_images",
             joinColumns = { @JoinColumn (name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "image_id") }

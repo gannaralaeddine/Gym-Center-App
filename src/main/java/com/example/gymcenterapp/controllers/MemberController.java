@@ -23,12 +23,12 @@ public class MemberController
 
     @GetMapping("/retrieve-member/{email}")
     @ResponseBody
-    public Member retrieveMember(@PathVariable("email") String email) { return memberService.retrieveMember(email); }
+    public Member retrieveMember(@PathVariable String email) { return memberService.retrieveMember(email); }
 
 
     @GetMapping("/retrieve-member-by-id/{id}")
     @ResponseBody
-    public Member retrieveMemberById(@PathVariable("id") Long id) { return memberService.retrieveMemberById(id); }
+    public Member retrieveMemberById(@PathVariable Long id) { return memberService.retrieveMemberById(id); }
 
 
     @PostMapping(value = "/register-member")
@@ -48,7 +48,7 @@ public class MemberController
 
     @GetMapping("/retrieve-member-sessions/{email}")
     @ResponseBody
-    public Set<Session> retrieveMemberSessions(@PathVariable("email") String email) { return memberService.retrieveMemberSessions(email); }
+    public Set<Session> retrieveMemberSessions(@PathVariable String email) { return memberService.retrieveMemberSessions(email); }
 
     @PutMapping(value = "/private-coach-booking/{memberEmail}/{coachEmail}")
     @ResponseBody
@@ -56,7 +56,7 @@ public class MemberController
 
     @GetMapping("/retrieve-private-coaches/{memberEmail}")
     @ResponseBody
-    public Set<Coach> retrievePrivateCoaches(@PathVariable("memberEmail") String memberEmail) { return memberService.retrievePrivateCoaches(memberEmail); }
+    public Set<Coach> retrievePrivateCoaches(@PathVariable String memberEmail) { return memberService.retrievePrivateCoaches(memberEmail); }
 
 
     @GetMapping("/is-my-private-coach/{memberEmail}/{coachEmail}")
@@ -96,7 +96,7 @@ public class MemberController
 
     @GetMapping("/get-member-subscriptions/{memberEmail}")
     @ResponseBody
-    public Set<Subscription> getMemberSubscriptions(@PathVariable String memberEmail)
+    public List<Subscription> getMemberSubscriptions(@PathVariable String memberEmail)
     {
         return memberService.getMemberSubscriptions(memberEmail);
     }

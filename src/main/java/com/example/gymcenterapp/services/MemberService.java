@@ -267,7 +267,7 @@ public class MemberService implements IMemberService
         return null;
     }
 
-    public Set<Subscription> getMemberSubscriptions(String memberEmail)
+    public List<Subscription> getMemberSubscriptions(String memberEmail)
     {
         Member member = memberRepository.findByEmail(memberEmail);
         if (member != null)

@@ -53,7 +53,6 @@ public class TrainingHistoryService implements ITrainingHistoryService
 
                         if (trainingHistoryRepository.save(history) != null)
                         {
-                            return;
                         }
                     }
                 });
@@ -105,10 +104,7 @@ public class TrainingHistoryService implements ITrainingHistoryService
             }
         }
 
-        if (number == 1)
-            return false;
-
-        return true;
+        return number != 1;
     }
     
 }

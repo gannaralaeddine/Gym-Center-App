@@ -2,6 +2,9 @@ package com.example.gymcenterapp.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import com.example.gymcenterapp.entities.Member;
 import org.springframework.stereotype.Service;
 import com.example.gymcenterapp.entities.Offer;
 import com.example.gymcenterapp.entities.Option;
@@ -77,5 +80,6 @@ public class OfferService implements IOfferService
             return null;
         }
     }
+
 
 }

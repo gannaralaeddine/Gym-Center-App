@@ -5,6 +5,8 @@ import java.util.List;
 
 public interface ISubscriptionService
 {
+    Subscription createSubscription(Long memberId, Long offerId);
+
     Subscription addSubscription(Subscription subscription, Long memberId);
 
     List<Subscription> retrieveAllSubscriptions();

@@ -41,7 +41,7 @@ class SubscriptionServiceTest
         assertNotNull(subscription);
         Long memberId = subscription.getSubscriptionId();
         subscription.setMember(null);
-        subscription.setSubscriptionActivity(null);;
+        subscription.setSubscriptionActivity(null);
         subscriptionService.deleteSubscription(subscriptionService.addSubscription(subscription, memberId).getSubscriptionId());
     }
 
@@ -59,7 +59,7 @@ class SubscriptionServiceTest
         assertNotNull(subscriptionService.retrieveSubscription(subscription.getSubscriptionId()));
         Long memberId = subscription.getSubscriptionId();
         subscription.setMember(null);
-        subscription.setSubscriptionActivity(null);;
+        subscription.setSubscriptionActivity(null);
         subscriptionService.deleteSubscription(subscriptionService.addSubscription(subscription, memberId).getSubscriptionId());
     }
 
@@ -75,7 +75,7 @@ class SubscriptionServiceTest
         Long memberId = subscription.getSubscriptionId();
         subscription = subscriptionService.updateSubscription(subscription.getSubscriptionId(), memberId, new Subscription(null, 100, new Date(), null, activities.get(0), members.get(1)));
         subscription.setMember(null);
-        subscription.setSubscriptionActivity(null);;
+        subscription.setSubscriptionActivity(null);
         subscriptionService.deleteSubscription(subscriptionService.addSubscription(subscription, memberId).getSubscriptionId());
     }
 
