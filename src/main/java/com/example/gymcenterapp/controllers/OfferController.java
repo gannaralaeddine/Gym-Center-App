@@ -1,7 +1,6 @@
 package com.example.gymcenterapp.controllers;
 
 import com.example.gymcenterapp.entities.Offer;
-import com.example.gymcenterapp.repositories.OfferRepository;
 import com.example.gymcenterapp.services.OfferService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

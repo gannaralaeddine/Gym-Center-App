@@ -93,14 +93,14 @@ public class GymCenterAppApplication extends WebSecurityConfigurerAdapter {
                 .antMatchers("/hhh").permitAll()
                 .antMatchers("/notify").permitAll()
                 .antMatchers("/socket").permitAll()
-
+                .antMatchers("/**").hasAnyRole("SUPER_ADMIN")
 
                 .antMatchers("/subscription/create/{member-id}/{offer-id}").permitAll()
                 .antMatchers("/subscription/available-members/**").permitAll()
 
 
                 .antMatchers("/offer/retrieve-offer-members").permitAll()
-                .antMatchers("/user/retrieve-all-users").hasAnyRole("ADMIN", "SUPER_ADMIN")
+                .antMatchers("/user/retrieve-all-users").hasAnyRole("ADMIN")
                 .antMatchers("/user/register-user").authenticated()
 //                .antMatchers("/user/add-role").
                 .antMatchers("/user/number-of-users").hasAnyRole("ADMIN")
